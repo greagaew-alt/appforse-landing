@@ -1,0 +1,491 @@
+<title>AppForse — прототип лендинга</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --surface-alt: #f1f0eb;
+    --border: #d8d6cd;
+    --border-strong: #b8b6ab;
+    --text: #1c1b17;
+    --text-muted: #6b6a5f;
+    --text-faint: #9c9b8f;
+    --accent: #1c1b17;
+    --placeholder-stripe: #e4e2d8;
+    --tag-bg: #1c1b17;
+    --tag-text: #faf9f6;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171613;
+      --surface: #1f1e1a;
+      --surface-alt: #26251f;
+      --border: #3a3931;
+      --border-strong: #525044;
+      --text: #f2f0e8;
+      --text-muted: #a8a698;
+      --text-faint: #77766a;
+      --accent: #f2f0e8;
+      --placeholder-stripe: #2c2b24;
+      --tag-bg: #f2f0e8;
+      --tag-text: #171613;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #171613;
+    --surface: #1f1e1a;
+    --surface-alt: #26251f;
+    --border: #3a3931;
+    --border-strong: #525044;
+    --text: #f2f0e8;
+    --text-muted: #a8a698;
+    --text-faint: #77766a;
+    --accent: #f2f0e8;
+    --placeholder-stripe: #2c2b24;
+    --tag-bg: #f2f0e8;
+    --tag-text: #171613;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .draft-banner {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .layout {
+    display: flex;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .toc {
+    display: none;
+  }
+  @media (min-width: 1040px) {
+    .toc {
+      display: block;
+      position: sticky;
+      top: 52px;
+      align-self: flex-start;
+      width: 200px;
+      padding: 32px 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+    .toc a {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 5px 0;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+    }
+    .toc a:hover, .toc a:focus-visible {
+      color: var(--text);
+      border-left-color: var(--text);
+    }
+  }
+
+  main { flex: 1; min-width: 0; }
+
+  section {
+    padding: 64px 24px;
+    border-bottom: 1px solid var(--border);
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  section.alt { background: var(--surface-alt); max-width: none; }
+  section.alt > .inner { max-width: 760px; margin: 0 auto; }
+  section.narrow-off { max-width: none; }
+  section.narrow-off > .inner { max-width: 900px; margin: 0 auto; }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0 0 14px; font-weight: 700; }
+  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.15; }
+  h2 { font-size: clamp(22px, 3.4vw, 30px); line-height: 1.2; }
+  h3 { font-size: 17px; }
+  p { margin: 0 0 14px; color: var(--text); max-width: 65ch; }
+  .lede { font-size: 18px; color: var(--text-muted); max-width: 60ch; }
+  .muted { color: var(--text-muted); }
+  .note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    border-left: 2px solid var(--border-strong);
+    padding-left: 10px;
+    margin: 10px 0 0;
+  }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 8px; align-items: center; }
+  .btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-secondary { background: transparent; color: var(--text); }
+
+  .grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  .card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .card .num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ph {
+    background: repeating-linear-gradient(45deg, var(--placeholder-stripe), var(--placeholder-stripe) 8px, transparent 8px, transparent 16px);
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+    padding: 12px;
+  }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 500; }
+  .table-wrap { overflow-x: auto; }
+
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 18px; padding: 18px 0; border-top: 1px solid var(--border); }
+  .step:first-child { border-top: none; }
+  .step .idx { font-family: var(--font-mono); font-size: 13px; color: var(--text-faint); min-width: 26px; padding-top: 2px; }
+
+  .faq-item { border-top: 1px solid var(--border); padding: 18px 0; }
+  .faq-item:first-child { border-top: none; }
+  .faq-q { font-weight: 600; margin-bottom: 8px; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; text-align: center; }
+  .stat-num { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat-label { font-size: 13px; color: var(--text-muted); }
+
+  .price-box { border: 1px solid var(--border-strong); border-radius: 10px; padding: 28px; background: var(--surface); }
+  .price-amount { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  @media (max-width: 640px) {
+    section { padding: 44px 20px; }
+  }
+</style>
+
+<div class="draft-banner">Прототип · чёрно-белый костяк · тексты черновые, финальный дизайн будет на этапе 2</div>
+
+<div class="layout">
+  <nav class="toc" aria-label="Оглавление блоков">
+    <a href="#b1">01 Hero</a>
+    <a href="#b2">02 Проблема</a>
+    <a href="#b3">03 Решение</a>
+    <a href="#b4">04 Для кого</a>
+    <a href="#b5">05 Как работает</a>
+    <a href="#b6">06 Демо</a>
+    <a href="#b7">07 Кейс</a>
+    <a href="#b8">08 Сравнение</a>
+    <a href="#b9">09 Изнутри</a>
+    <a href="#b10">10 Соцсети</a>
+    <a href="#b11">11 Цифры</a>
+    <a href="#b12">12 Тариф</a>
+    <a href="#b13">13 FAQ</a>
+    <a href="#b14">14 Заявка</a>
+  </nav>
+
+  <main>
+
+    <section id="b1">
+      <span class="tag">Блок 01 · Hero</span>
+      <h1>Своё мобильное приложение для клиентов — от заявки до запуска за 2–4 недели</h1>
+      <p class="lede">AppForse — готовая платформа: клиентское приложение, CRM и админка под вашим брендом. Без своей команды разработчиков.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#b14">Обсудить запуск для своего бизнеса</a>
+        <a class="btn btn-secondary" href="#b14">Написать в Telegram</a>
+      </div>
+      <p class="note">Бесплатный разбор задачи — 15 минут, без обязательств.<br>УТОЧНИТЬ У КЛИЕНТА: реальный срок базового запуска (сейчас стоит 2–4 недели как рабочая гипотеза).</p>
+    </section>
+
+    <section id="b2" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 02 · Проблема</span>
+        <h2>Сайт приводит клиента. Что удерживает его после первой покупки?</h2>
+        <p>Клиент купил один раз — и забыл о вас, если вы сами не напомнили. Push-уведомление из собственного приложения лежит в телефоне рядом с банком и мессенджерами. Это самый близкий канал к клиенту, какой у бизнеса вообще может быть.</p>
+        <div class="grid" style="margin-top:24px">
+          <div class="card"><h3>Повторные продажи</h3><p class="muted">История заказов, избранное, бонусы и push сокращают путь до следующей покупки.</p></div>
+          <div class="card"><h3>Своя клиентская база</h3><p class="muted">Данные и коммуникации остаются внутри бизнеса, а не у агрегатора.</p></div>
+          <div class="card"><h3>Меньше ручной работы</h3><p class="muted">Заказы, статусы, клиенты и операционка — в одной системе.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="b3">
+      <span class="tag">Блок 03 · Решение</span>
+      <h2>Не просто приложение — весь цифровой контур бизнеса</h2>
+      <p>Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов, товары и аналитику в одной системе.</p>
+      <div class="grid-2" style="display:grid;margin-top:20px">
+        <div class="card">
+          <h3>Клиентское приложение</h3>
+          <p class="muted">Каталог · Корзина · Профиль · Бонусы · Избранное · История заказов</p>
+        </div>
+        <div class="card">
+          <h3>Управление бизнесом</h3>
+          <p class="muted">Админ-панель · CRM · Аналитика · Склады · Push · Роли сотрудников</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="b4" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 04 · Для кого</span>
+        <h2>Бизнесам, где важны повторные покупки и своя клиентская база</h2>
+        <div class="grid" style="margin-top:20px">
+          <div class="card"><span class="num">Доставка</span><h3>Еда и товары повседневного спроса</h3><p class="muted">Быстрый повторный заказ и собственная программа лояльности.</p></div>
+          <div class="card"><span class="num">Розница</span><h3>Магазины и specialty retail</h3><p class="muted">Каталог, цены, остатки, акции и персональные предложения.</p></div>
+          <div class="card"><span class="num">Сети</span><h3>Несколько точек и городов</h3><p class="muted">Единое управление заказами, ассортиментом и зонами доставки.</p></div>
+          <div class="card"><span class="num">Сервисы</span><h3>Повторяющиеся услуги</h3><p class="muted">История клиента, уведомления и меньше ручной работы менеджеров.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="b5">
+      <span class="tag">Блок 05 · Как это работает — НОВЫЙ БЛОК</span>
+      <h2>От заявки до запуска — четыре шага</h2>
+      <div class="steps" style="margin-top:16px">
+        <div class="step"><span class="idx">1</span><div><h3>Бесплатный разбор задачи</h3><p class="muted">15 минут — сразу понятно, подходит ли конфигурация вашему бизнесу.</p></div></div>
+        <div class="step"><span class="idx">2</span><div><h3>Настройка под ваш бренд</h3><p class="muted">Цвета, логотип, структура каталога, интеграция с вашими товарами.</p></div></div>
+        <div class="step"><span class="idx">3</span><div><h3>Тестовый запуск</h3><p class="muted">Проверяем на реальных клиентах, прежде чем открывать всем.</p></div></div>
+        <div class="step"><span class="idx">4</span><div><h3>Полный запуск и обучение команды</h3><p class="muted">Показываем, как пользоваться админкой и CRM.</p></div></div>
+      </div>
+      <p class="note">Закрывает возражение «а что вообще происходит после заявки» — этого блока не было в черновике.</p>
+    </section>
+
+    <section id="b6" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 06 · Демо — НОВЫЙ БЛОК (просила клиентка)</span>
+        <h2>Не верьте на слово — попробуйте сами</h2>
+        <p>Скачайте демо-версию клиентского приложения и посмотрите, как это выглядит для конечного покупателя.</p>
+        <div class="grid-2" style="display:grid;margin-top:20px">
+          <div class="ph" style="aspect-ratio:3/2">[ QR-код / кнопка скачать демо ]</div>
+          <div>
+            <div class="cta-row" style="margin-top:0">
+              <a class="btn btn-primary" href="#b14">Скачать демо-приложение</a>
+            </div>
+            <p class="note">УТОЧНИТЬ У КЛИЕНТА: есть ли уже готовая демо-сборка приложения и ссылка на неё (App Store / Google Play / TestFlight / APK).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="b7">
+      <span class="tag">Блок 07 · Кейс — ВИДОИЗМЕНЁН (просила клиентка)</span>
+      <h2>Показываем реальные интерфейсы, а не абстрактные макеты</h2>
+      <p class="muted">Ниже — примеры уже реализованной платформы. Для нового клиента бренд, дизайн и сценарии будут выглядеть иначе — под ваш бизнес.</p>
+      <div class="grid-2" style="display:grid;margin-top:20px">
+        <div class="card">
+          <span class="num">Доставка / розница</span>
+          <h3>«Синица»</h3>
+          <p class="muted">Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.</p>
+          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">[ Скриншоты приложения ]</div>
+          <p class="note">УТОЧНИТЬ У КЛИЕНТА: реальная цифра — например «повторные заказы выросли на N%» или отзыв от владельца.</p>
+        </div>
+        <div class="card">
+          <span class="num">Операционка</span>
+          <h3>Менеджерское приложение</h3>
+          <p class="muted">Заказы, клиенты, статусы и исполнение — в одном рабочем интерфейсе.</p>
+          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">[ Скриншоты приложения ]</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="b8" class="alt narrow-off">
+      <div class="inner">
+        <span class="tag">Блок 08 · Сравнение</span>
+        <h2>Сайт остаётся точкой входа. Приложение добавляет прямой канал продаж</h2>
+        <p class="muted">Мы не противопоставляем приложение сайту. AppForse нужен, когда бизнесу уже важны повторные покупки, CRM и операционная система.</p>
+        <div class="table-wrap" style="margin-top:16px">
+          <table>
+            <thead><tr><th>Задача</th><th>AppForse</th><th>Интернет-магазин</th></tr></thead>
+            <tbody>
+              <tr><td>Push, бонусы, CRM</td><td>Встроены</td><td>Через интеграции, зависит от стека</td></tr>
+              <tr><td>Заказы и статусы</td><td>Единый контур: клиент + менеджер + админ</td><td>Зависит от CMS, часто требует доработки</td></tr>
+              <tr><td>Склады и точки</td><td>Поддерживаются: остатки, зоны, роли</td><td>Индивидуально, через модули</td></tr>
+              <tr><td>Мобильный канал</td><td>Собственное приложение под вашим брендом</td><td>Браузер или отдельная разработка</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="b9">
+      <span class="tag">Блок 09 · Изнутри</span>
+      <h2>Клиент видит красивое приложение. Вы — весь бизнес изнутри</h2>
+      <p>Административная панель объединяет каталог, клиентов, финансы, маркетинг и операционные процессы.</p>
+      <div class="grid" style="margin-top:20px">
+        <div class="card"><h3>Админ-панель</h3><p class="muted">Единый центр управления заказами, каталогом и операционкой.</p></div>
+        <div class="card"><h3>Аналитика</h3><p class="muted">Продажи, прибыль и динамика бизнеса.</p></div>
+        <div class="card"><h3>CRM</h3><p class="muted">Клиентская база и сегментация.</p></div>
+        <div class="card"><h3>География</h3><p class="muted">Зоны, спрос и распределение заказов.</p></div>
+      </div>
+    </section>
+
+    <section id="b10" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 10 · Соцсети — НОВЫЙ БЛОК (просила клиентка)</span>
+        <h2>Будьте на связи с клиентами не только внутри приложения</h2>
+        <p class="muted">Ссылки на соцсети и мессенджеры бизнеса — чтобы посетитель лендинга мог убедиться, что компания реальная и активная, ещё до заявки.</p>
+        <div class="grid" style="margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+          <div class="ph" style="aspect-ratio:1/1">[ VK ]</div>
+          <div class="ph" style="aspect-ratio:1/1">[ Telegram-канал ]</div>
+          <div class="ph" style="aspect-ratio:1/1">[ Instagram* ]</div>
+          <div class="ph" style="aspect-ratio:1/1">[ YouTube ]</div>
+        </div>
+        <p class="note">УТОЧНИТЬ У КЛИЕНТА: какие соцсети реально ведутся и есть ссылки.</p>
+      </div>
+    </section>
+
+    <section id="b11">
+      <span class="tag">Блок 11 · Цифры</span>
+      <h2>Не концепт. Платформа уже работает в реальном бизнесе</h2>
+      <p class="muted">В основе — реальные заказы, склады, сотрудники, клиенты, маркетинг и аналитика.</p>
+      <div class="stat-row" style="margin-top:24px">
+        <div><div class="stat-num">7</div><div class="stat-label">складов в рабочем контуре</div></div>
+        <div><div class="stat-num">7 000+</div><div class="stat-label">товарных позиций</div></div>
+        <div><div class="stat-num">Full-cycle</div><div class="stat-label">от заказа до аналитики</div></div>
+      </div>
+    </section>
+
+    <section id="b12" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 12 · Тариф</span>
+        <h2>Начните с базовой конфигурации. Расширяйте по мере роста</h2>
+        <div class="price-box" style="margin-top:20px">
+          <div class="muted" style="font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em">Базовый запуск</div>
+          <div class="price-amount">от 150 000 ₽</div>
+          <p class="muted">1 торговая точка · push и промокоды · зоны доставки</p>
+          <p class="note">УТОЧНИТЬ У КЛИЕНТА: за счёт чего конкретно окупается для клиента (например: «N дополнительных повторных заказов в месяц перекрывают стоимость запуска») — сейчас это не обосновано рядом с ценой, это слабое место черновика.</p>
+        </div>
+        <h3 style="margin-top:32px">Что можно добавить</h3>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+          <div class="card"><h3 style="font-size:15px">Доп. точки</h3><p class="muted">По задаче</p></div>
+          <div class="card"><h3 style="font-size:15px">Marketplace</h3><p class="muted">Опционально</p></div>
+          <div class="card"><h3 style="font-size:15px">Партнёрский кабинет</h3><p class="muted">Интеграции индивидуально</p></div>
+          <div class="card"><h3 style="font-size:15px">Брендинг и UX/UI</h3><p class="muted">Под бизнес</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="b13">
+      <span class="tag">Блок 13 · FAQ — НОВЫЙ БЛОК</span>
+      <h2>Отвечаем на вопросы, которые обычно возникают до заявки</h2>
+      <div style="margin-top:8px">
+        <div class="faq-item">
+          <div class="faq-q">У меня уже есть сайт или карточки на маркетплейсах — зачем ещё приложение?</div>
+          <p class="muted">Сайт и маркетплейс приводят нового клиента, но не удерживают его после первой покупки. Push из собственного приложения — это канал, за который не нужно платить рекламой каждый раз заново.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Сколько по времени займёт запуск?</div>
+          <p class="muted">Базовая конфигурация — от 2 до 4 недель с момента настройки под ваш бренд. <span class="note" style="display:inline">УТОЧНИТЬ У КЛИЕНТА реальный срок.</span></p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">У меня одна точка, а не сеть — мне подходит?</div>
+          <p class="muted">Да, базовая конфигурация рассчитана именно на один магазин или точку и расширяется по мере роста бизнеса.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Нужна ли поддержка после запуска и кто её оказывает?</div>
+          <p class="muted">УТОЧНИТЬ У КЛИЕНТА: условия поддержки после запуска — сейчас в черновике этого нет вообще.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Что если клиенты не станут пользоваться приложением?</div>
+          <p class="muted">Можно попробовать демо-версию заранее (блок 06) и посмотреть реальную вовлечённость на примере уже действующего бизнеса «Синица».</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="b14" class="alt">
+      <div class="inner">
+        <span class="tag">Блок 14 · Финальный CTA</span>
+        <h2>Покажите свой бизнес. Покажем, как AppForse будет работать у вас</h2>
+        <p class="muted">За 15 минут разберём задачу и определим, какая конфигурация нужна для запуска.</p>
+        <div class="grid-2" style="display:grid;margin-top:24px;gap:24px">
+          <div class="card">
+            <h3>Оставить заявку</h3>
+            <p class="muted" style="margin-bottom:16px">Ваше имя · Компания · Телефон или Telegram</p>
+            <div class="ph" style="height:120px">[ Форма заявки ]</div>
+            <div class="cta-row"><a class="btn btn-primary" href="#">Отправить заявку</a></div>
+          </div>
+          <div class="card">
+            <h3>Или сразу в Telegram</h3>
+            <p class="muted">Если удобнее списаться напрямую — без формы.</p>
+            <div class="cta-row"><a class="btn btn-secondary" href="#">Написать в Telegram</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      AppForse · mobile commerce platform · прототип для внутреннего согласования, не финальный дизайн
+    </footer>
+
+  </main>
+</div>
