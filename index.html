@@ -223,6 +223,7 @@
     border-radius: 6px;
     padding: 10px 14px;
   }
+  .qa-item-priority { border: 1px solid var(--text); border-left: 4px solid var(--text); font-weight: 600; }
 
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; text-align: center; }
   .stat-num { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -485,6 +486,7 @@
             <h3>Оставить заявку</h3>
             <p class="muted" style="margin-bottom:16px">Ваше имя · Компания · Телефон или Telegram</p>
             <div class="ph" style="height:120px">[ Форма заявки ]</div>
+            <p class="note">☐ Согласен(на) на обработку персональных данных — обязательный чекбокс по 152-ФЗ, раз форма собирает имя и телефон.</p>
             <div class="cta-row"><a class="btn btn-primary" href="#">Отправить заявку</a></div>
           </div>
           <div class="card">
@@ -501,6 +503,14 @@
         <span class="tag">Не часть лендинга · для звонка с клиентом</span>
         <h2>Вопросы, которые нужно уточнить для прототипа</h2>
         <p class="muted">Это не блок сайта — рабочий список для созвона, чтобы прототип на следующей итерации был точнее.</p>
+
+        <h3 style="margin-top:32px">Главное — может поменять всю подачу</h3>
+        <div class="qa-list">
+          <div class="qa-item qa-item-priority">☐ Стоимость 150 000₽ — это разовый платёж, или сверху ещё ежемесячная плата за использование платформы? От этого зависит вся подача тарифного блока.</div>
+          <div class="qa-item qa-item-priority">☐ Куда технически должна падать заявка с формы — почта, CRM клиента, Telegram-бот? Кто это подключает — мы или их разработчики?</div>
+          <div class="qa-item qa-item-priority">☐ Чем AppForse отличается от похожих платформ или самостоятельной разработки приложения — почему выбрать именно их?</div>
+          <div class="qa-item qa-item-priority">☐ На домене уже что-то есть, или чистое поле? Ставим лендинг на корень домена или в раздел/поддомен?</div>
+        </div>
 
         <h3 style="margin-top:32px">Кейсы и соцдоказательства</h3>
         <div class="qa-list">
@@ -534,6 +544,7 @@
         <div class="qa-list">
           <div class="qa-item">☐ На какой из 4 сегментов (доставка / розница / сети / услуги) будет упор в первой рекламной кампании — можно усилить именно этот блок?</div>
           <div class="qa-item">☐ Какие поля нужны в форме заявки — только имя + контакт, или ещё что-то для квалификации лида (сколько точек, какая ниша)?</div>
+          <div class="qa-item">☐ Бонус: был ли уже трафик на старую/текущую версию сайта с какой-то статистикой (просмотры, заявки, где отваливались) — пригодится, чтобы понять, что чинить в первую очередь.</div>
         </div>
       </div>
     </section>
