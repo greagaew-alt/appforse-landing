@@ -270,10 +270,20 @@
   .magnet .ph-input { border: 1px solid var(--border-strong); border-radius: 6px; padding: 10px 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
 
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; text-align: center; }
+  .compare-100 { display: flex; align-items: center; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
+  .compare-100-item { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; text-align: center; flex: 1 1 200px; }
+  .compare-100-arrow { font-size: 22px; color: var(--text-faint); }
+  .quote-card { display: flex; gap: 20px; align-items: center; margin-top: 24px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .quote-photo { flex: 0 0 84px; width: 84px; height: 84px; border-radius: 50%; font-size: 10px; padding: 4px; }
+  .quote-body { flex: 1; }
+  .quote-text { font-size: 16px; font-style: italic; margin-bottom: 8px; }
+  .quote-attr { font-size: 13px; color: var(--text-muted); margin: 0; }
   .stat-num { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .stat-label { font-size: 13px; color: var(--text-muted); }
 
   .price-box { border: 1px solid var(--border-strong); border-radius: 10px; padding: 28px; background: var(--surface); }
+  .price-list { margin: 10px 0 0; padding-left: 20px; }
+  .price-list li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
   .price-amount { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
   .site-footer {
@@ -353,6 +363,12 @@
         <div class="block-head"><span class="tag sec-label">02 · Проблема</span></div>
         <h2>Привлекли клиента один раз. Зачем платить за него снова?</h2>
         <p>Сохраняйте клиента в собственной базе и возвращайте его на повторные покупки через бонусы, push-уведомления и персональные предложения.</p>
+        <div class="compare-100">
+          <div class="compare-100-item"><div class="stat-num">N из 100</div><div class="stat-label">вернутся сами, без приложения</div></div>
+          <div class="compare-100-arrow">→</div>
+          <div class="compare-100-item"><div class="stat-num">M из 100</div><div class="stat-label">вернутся с push и бонусом в приложении</div></div>
+        </div>
+        <p class="note">Наглядное сравнение «было/стало» на базе 100 клиентов — сильный приём у конкурентов (см. SWiP). Цифры N/M — заглушка, нужны реальные данные AppForse или консервативная оценка, которую можно обосновать.</p>
         <div class="grid" style="margin-top:24px">
           <div class="card"><h3>Повторные продажи</h3><p class="muted">Клиент возвращается сам — а не потому что вы снова заплатили за рекламу.</p></div>
           <div class="card"><h3>Своя клиентская база</h3><p class="muted">Данные и коммуникации остаются внутри бизнеса, а не у агрегатора.</p></div>
@@ -377,6 +393,7 @@
           <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">Скриншот интерфейса — админ-панель со списком заказов</div>
         </div>
       </div>
+      <p class="note">У большинства платформ на рынке админка/CRM — второстепенный экран под клиентским приложением. Здесь это полноценный второй продукт того же уровня: склады, роли сотрудников и аналитика по точкам — то, чего почти никто в нише не выносит в главные блоки.</p>
     </section>
 
     <section class="magnet">
@@ -454,8 +471,15 @@
           <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">[ Скриншоты приложения ]</div>
         </div>
       </div>
+      <div class="quote-card">
+        <div class="ph quote-photo">Фото владельца бизнеса</div>
+        <div class="quote-body">
+          <p class="quote-text">«[Цитата от владельца «Синицы» — что изменилось после запуска приложения, желательно с цифрой]»</p>
+          <p class="quote-attr">[Имя Фамилия], владелец(-ица) «Синица», [город]</p>
+        </div>
+      </div>
+      <p class="note">Именной отзыв с городом/должностью/цифрой — сильнее безымянного кейса (см. eDA Platform: «Микаэль Хачатрян, ресторан Light, Новокузнецк — выручка +62%»). Живое фото человека тоже отличает от рынка — там почти везде только скриншоты интерфейса. УТОЧНИТЬ У КЛИЕНТА: реальная цитата, имя, фото.</p>
     </section>
-
 
     <section id="b8">
       <div class="block-head"><span class="tag sec-label">08 · Цифры</span></div>
@@ -472,15 +496,24 @@
       <div class="inner">
         <div class="block-head"><span class="tag sec-label">09 · Тариф</span></div>
         <h2>Начните с базового пакета. Расширяйте по мере роста</h2>
+        <p class="muted">Разовый платёж — это ваш актив в собственность. Большинство платформ на рынке берут 5–14 тыс ₽ в месяц бессрочно — вы платите один раз и дальше ничего не арендуете.</p>
         <div class="price-box" style="margin-top:20px">
           <div class="muted" style="font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em">Базовый запуск</div>
-          <div class="price-amount">от 150 000 ₽</div>
-          <p class="muted">1 торговая точка · push и промокоды · зоны доставки</p>
+          <div class="price-amount">от 150 000 ₽ · разово</div>
+          <h3 style="font-size:14px;margin-top:16px">Что входит</h3>
+          <ul class="price-list">
+            <li>Клиентское приложение под вашим брендом — 1 торговая точка</li>
+            <li>Каталог, корзина, бонусы, push-уведомления</li>
+            <li>Админ-панель и CRM для управления заказами</li>
+            <li>Зоны доставки и промокоды</li>
+            <li>Настройка и запуск «под ключ»</li>
+          </ul>
           <div class="cta-row" style="margin-top:8px">
             <a class="btn btn-primary" href="#b11">Обсудить запуск для своего бизнеса</a>
           </div>
-          <p class="note">УТОЧНИТЬ У КЛИЕНТА: актуальна ли эта цена, и разовая она или + абонплата (см. чек-лист внизу страницы).</p>
+          <p class="note">Открытая смета — редкость для ниши: большинство конкурентов прячут состав пакета за «оставить заявку». УТОЧНИТЬ У КЛИЕНТА: актуальна ли эта цена и полный ли это список, или разовая цена ещё + абонплата (см. чек-лист внизу страницы).</p>
         </div>
+        <div class="ph" style="height:56px;margin-top:16px">Номер записи в реестре российского ПО — уточнить у клиента, есть ли регистрация (это трастовый сигнал, который использует AdvantShop)</div>
         <h3 style="margin-top:32px">Что можно добавить</h3>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
           <div class="card"><h3 style="font-size:15px">Доп. точки</h3><p class="muted">По задаче</p></div>
@@ -496,8 +529,8 @@
       <h2>Отвечаем на частые вопросы</h2>
       <div style="margin-top:8px">
         <div class="faq-item">
-          <div class="faq-q">У меня уже есть сайт или карточки на маркетплейсах — зачем ещё приложение?</div>
-          <p class="muted">Сайт и маркетплейс приводят нового клиента, но не удерживают его после первой покупки. Push из собственного приложения — это канал, за который не нужно платить рекламой каждый раз заново.</p>
+          <div class="faq-q">У меня уже есть сайт, реклама или карточки на маркетплейсах — зачем ещё приложение?</div>
+          <p class="muted">У каждого канала своя роль. Реклама приводит клиента, но за каждый повторный визит нужно платить снова. Агрегатор приводит клиента к себе в базу, не к вам. Сайт ждёт, что клиент вспомнит о вас сам. Приложение — единственный канал, где вы сами напоминаете о себе клиенту бесплатно: push и бонусы вместо новой рекламы.</p>
         </div>
         <div class="faq-item">
           <div class="faq-q">Сколько по времени займёт запуск?</div>
@@ -621,6 +654,7 @@
         <div class="qa-list">
           <div class="qa-item">☐ Есть ли готовый логотип / фирменные цвета / брендбук AppForse, или дизайн делать с нуля на этапе 2?</div>
           <div class="qa-item">☐ Актуален ли контактный телефон +7 (923) 104-00-00 в футере, или использовать другой?</div>
+          <div class="qa-item">☐ Есть ли у AppForse запись в реестре российского ПО — это трастовый сигнал, который активно использует конкурент AdvantShop.</div>
         </div>
 
         <h3 style="margin-top:28px">Реклама и заявки</h3>
