@@ -20,7 +20,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    background: #ffffff;
     color: var(--text);
     font-family: var(--font-body);
     line-height: 1.5;
@@ -63,31 +63,69 @@
     .topnav .btn { margin-left: 0; }
   }
 
-  .block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .block-head { margin-bottom: 20px; }
   .block-head .tag { margin-bottom: 0; }
-  .comment-btn {
+
+  section {
+    position: relative;
+    padding: 40px 32px;
+    max-width: 760px;
+    margin: 28px auto;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+  }
+  section.narrow-off { max-width: 900px; }
+  .magnet {
+    max-width: 900px;
+    margin: 28px auto;
+    border-radius: 14px;
+  }
+
+  .cmt-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--text-muted);
-    background: var(--surface);
+    background: #ffffff;
     border: 1px solid var(--border-strong);
     border-radius: 20px;
     padding: 5px 12px;
     cursor: pointer;
     white-space: nowrap;
   }
-  .comment-btn:hover { color: var(--text); border-color: var(--text); }
-
-  section {
-    padding: 64px 24px;
-    border-bottom: 1px solid var(--border);
-    max-width: 760px;
-    margin: 0 auto;
+  .cmt-btn:hover { color: var(--text); border-color: var(--text); }
+  .cmt-form { margin-top: 20px; border-top: 1px dashed var(--border-strong); padding-top: 16px; }
+  .cmt-form textarea {
+    width: 100%; font-family: var(--font-body); font-size: 14px; padding: 10px 12px;
+    border: 1px solid var(--border-strong); border-radius: 8px; resize: vertical;
   }
-  section.alt { background: var(--surface-alt); max-width: none; }
-  section.alt > .inner { max-width: 760px; margin: 0 auto; }
-  section.narrow-off { max-width: none; }
-  section.narrow-off > .inner { max-width: 900px; margin: 0 auto; }
+  .cmt-row { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
+  .cmt-row button {
+    font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 9px 16px;
+    border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer;
+  }
+  .cmt-x { font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); cursor: pointer; }
+  .cmt-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .cmt-item {
+    font-size: 13.5px; background: #fff; border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .cmt-item span { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-bottom: 4px; }
+  .cmt-item p { margin: 0; }
+  .cmt-fab {
+    position: fixed; bottom: 24px; right: 24px; z-index: 60;
+    font-family: var(--font-body); font-weight: 600; font-size: 13px;
+    background: var(--accent); color: #fff; border: none; border-radius: 24px;
+    padding: 12px 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.2);
+  }
+  #cmt-page-panel {
+    max-width: 760px; margin: 20px auto 0; padding: 20px 24px;
+    background: #fff; border: 1px dashed var(--border-strong); border-radius: 14px;
+  }
+  .cmt-panel-title { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
 
   .tag {
     display: inline-block;
@@ -114,8 +152,9 @@
   .hero-price .label { font-size: 13px; color: var(--text-muted); }
   .muted { color: var(--text-muted); }
   .note {
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 12.5px;
     color: var(--text-faint);
     border-left: 2px solid var(--border-strong);
     padding-left: 10px;
@@ -261,7 +300,7 @@
   <main>
 
     <section id="b1">
-      <div class="block-head"><span class="tag">Блок 01 · Hero</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">01 · Hero</span></div>
       <p class="eyebrow">Готовое приложение под вашим брендом</p>
       <h1>Собственное приложение для повторных продаж — за 2–4 недели</h1>
       <p class="lede">Запустим приложение под вашим брендом с заказами, бонусами, push-уведомлениями и CRM — чтобы возвращать клиентов и увеличивать повторные покупки.</p>
@@ -277,7 +316,7 @@
 
     <section id="b2" class="alt">
       <div class="inner">
-        <div class="block-head"><span class="tag">Блок 02 · Проблема</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">02 · Проблема</span></div>
         <h2>Привлекли клиента один раз. Зачем платить за него снова?</h2>
         <p>Сохраняйте клиента в собственной базе и возвращайте его на повторные покупки через бонусы, push-уведомления и персональные предложения.</p>
         <div class="grid" style="margin-top:24px">
@@ -289,7 +328,7 @@
     </section>
 
     <section id="b3">
-      <div class="block-head"><span class="tag">Блок 03 · Решение</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">03 · Решение</span></div>
       <h2>Приложение для клиентов и панель управления для вас</h2>
       <p>Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов, товары и аналитику в одной системе.</p>
       <div class="grid-2" style="display:grid;margin-top:20px">
@@ -307,7 +346,7 @@
     <section class="magnet">
       <div class="inner">
         <div class="copy">
-          <div class="block-head"><span class="tag">Лид-магнит · после блока 03</span><button class="comment-btn" type="button">Комментировать</button></div>
+          <div class="block-head"><span class="tag sec-label">Лид-магнит · после блока 03</span></div>
           <h3>Получите расчёт стоимости и сроков за один день</h3>
           <p class="muted">Оставьте контакты — посчитаем индивидуальную стоимость и сроки запуска под ваш бизнес и пришлём в течение дня.</p>
         </div>
@@ -320,7 +359,7 @@
 
     <section id="b4" class="alt">
       <div class="inner">
-        <div class="block-head"><span class="tag">Блок 04 · Для кого</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">04 · Для кого</span></div>
         <h2>Бизнесам, где важны повторные покупки и своя клиентская база</h2>
         <div class="grid" style="margin-top:20px">
           <div class="card"><span class="num">Доставка</span><h3>Рестораны, кафе, еда и товары повседневного спроса</h3><p class="muted">Комиссия агрегаторов съедает маржу, а клиент остаётся у агрегатора, а не у вас. Приложение возвращает повторный заказ в свой канал.</p></div>
@@ -332,7 +371,7 @@
     </section>
 
     <section id="b5">
-      <div class="block-head"><span class="tag">Блок 05 · Как это работает — НОВЫЙ БЛОК</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">05 · Как это работает — НОВЫЙ БЛОК</span></div>
       <h2>От заявки до запуска — четыре шага</h2>
       <div class="steps" style="margin-top:16px">
         <div class="step"><span class="idx">1</span><div><h3>Бесплатный разбор задачи</h3><p class="muted">15 минут — сразу понятно, подходит ли это вашему бизнесу.</p></div></div>
@@ -345,7 +384,7 @@
 
     <section id="b6" class="alt">
       <div class="inner">
-        <div class="block-head"><span class="tag">Блок 06 · Демо — НОВЫЙ БЛОК (просил клиент)</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">06 · Демо — НОВЫЙ БЛОК (просил клиент)</span></div>
         <h2>Попробуйте сами</h2>
         <p>Скачайте демо-версию клиентского приложения и посмотрите, как это выглядит для конечного покупателя.</p>
         <div class="grid-2" style="display:grid;margin-top:20px">
@@ -361,7 +400,7 @@
     </section>
 
     <section id="b7">
-      <div class="block-head"><span class="tag">Блок 07 · Кейс — ВИДОИЗМЕНЁН (просил клиент)</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">07 · Кейс — ВИДОИЗМЕНЁН (просил клиент)</span></div>
       <h2>Так выглядит уже работающее приложение</h2>
       <p class="muted">Ниже — примеры уже реализованной платформы. Для нового клиента бренд, дизайн и сценарии будут выглядеть иначе — под ваш бизнес.</p>
       <div class="grid-2" style="display:grid;margin-top:20px">
@@ -383,7 +422,7 @@
 
 
     <section id="b8">
-      <div class="block-head"><span class="tag">Блок 08 · Цифры</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">08 · Цифры</span></div>
       <h2>Платформа уже работает в реальном бизнесе</h2>
       <p class="muted">В основе — реальные заказы, склады, сотрудники, клиенты, маркетинг и аналитика.</p>
       <div class="stat-row" style="margin-top:24px">
@@ -395,7 +434,7 @@
 
     <section id="b9" class="alt">
       <div class="inner">
-        <div class="block-head"><span class="tag">Блок 09 · Тариф</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">09 · Тариф</span></div>
         <h2>Начните с базового пакета. Расширяйте по мере роста</h2>
         <div class="price-box" style="margin-top:20px">
           <div class="muted" style="font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em">Базовый запуск</div>
@@ -417,7 +456,7 @@
     </section>
 
     <section id="b10">
-      <div class="block-head"><span class="tag">Блок 10 · FAQ — НОВЫЙ БЛОК</span><button class="comment-btn" type="button">Комментировать</button></div>
+      <div class="block-head"><span class="tag sec-label">10 · FAQ — НОВЫЙ БЛОК</span></div>
       <h2>Отвечаем на частые вопросы</h2>
       <div style="margin-top:8px">
         <div class="faq-item">
@@ -453,7 +492,7 @@
 
     <section id="b11" class="alt">
       <div class="inner">
-        <div class="block-head"><span class="tag">Блок 11 · Финальный CTA</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">11 · Финальный CTA</span></div>
         <h2>Покажите свой бизнес. Покажем, как AppForse будет работать у вас</h2>
         <p class="muted">За 15 минут разберём задачу и определим, что нужно для запуска.</p>
         <div class="grid-2" style="display:grid;margin-top:24px;gap:24px">
@@ -475,7 +514,7 @@
 
     <section id="qa" class="narrow-off" style="border-top:3px solid var(--border-strong)">
       <div class="inner">
-        <div class="block-head"><span class="tag">Не часть лендинга · для звонка с клиентом</span><button class="comment-btn" type="button">Комментировать</button></div>
+        <div class="block-head"><span class="tag sec-label">Не часть лендинга · для звонка с клиентом</span></div>
         <h2>Вопросы, которые нужно уточнить для прототипа</h2>
         <p class="muted">Это не блок сайта — рабочий список для созвона, чтобы прототип на следующей итерации был точнее.</p>
 
@@ -534,4 +573,103 @@
     </footer>
 
   </main>
+
+<script>
+/* Комментарии прототипа — адаптация скилла prototype-comments под статический
+   GitHub Pages: сервера (server.js) нет, поэтому храним в localStorage браузера.
+   Комментарии видны только тому, кто их оставил, в этом же браузере. */
+(function () {
+  var STORE_KEY = 'appforse_proto_comments';
+  var PAGE = location.pathname.split('/').pop() || 'index.html';
+  var PAGE_KEY = 'Страница в целом';
+
+  function readAll() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch (e) { return []; }
+  }
+  function writeAll(items) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(items)); } catch (e) {}
+  }
+
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
+  function fmt(ts) { try { return new Date(ts).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
+  function secKey(s) { var l = s.querySelector('.sec-label'); return l ? l.textContent.trim() : 'Блок'; }
+
+  function listFor(container) {
+    var l = container.querySelector(':scope > .cmt-list');
+    if (!l) { l = el('div', 'cmt-list'); container.appendChild(l); }
+    return l;
+  }
+
+  function renderItem(container, c) {
+    listFor(container).appendChild(el('div', 'cmt-item',
+      '<span>' + fmt(c.ts) + '</span><p>' + esc(c.text) + '</p>'));
+  }
+
+  function pagePanel() {
+    var p = document.getElementById('cmt-page-panel');
+    if (!p) {
+      p = el('div', '', '');
+      p.id = 'cmt-page-panel';
+      p.appendChild(el('div', 'cmt-panel-title', 'Комментарии к странице в целом'));
+      var main = document.querySelector('main');
+      main.insertBefore(p, main.firstChild);
+    }
+    return p;
+  }
+
+  function openForm(container, key) {
+    if (container.querySelector('.cmt-form')) return;
+    var f = el('div', 'cmt-form',
+      '<textarea rows="3" placeholder="Что поправить или добавить в этом блоке? Пишите как удобно…"></textarea>' +
+      '<div class="cmt-row"><button type="button">Сохранить</button><span class="cmt-x">отмена</span></div>');
+    container.appendChild(f);
+    f.querySelector('.cmt-x').onclick = function () { f.remove(); };
+    f.querySelector('button').onclick = function () {
+      var text = f.querySelector('textarea').value.trim();
+      if (!text) { f.querySelector('textarea').focus(); return; }
+      var item = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ts: Date.now(), page: PAGE, section: key, text: text };
+      var items = readAll();
+      items.push(item);
+      writeAll(items);
+      f.remove();
+      renderItem(container, item);
+    };
+    f.querySelector('textarea').focus();
+  }
+
+  function init() {
+    document.querySelectorAll('main section').forEach(function (s) {
+      var key = secKey(s);
+      var b = el('button', 'cmt-btn', 'Комментировать');
+      b.type = 'button';
+      b.onclick = function () { openForm(s, key); };
+      s.appendChild(b);
+    });
+
+    var fb = el('button', 'cmt-fab', 'Комментарий к странице');
+    fb.type = 'button';
+    fb.onclick = function () {
+      var p = pagePanel();
+      openForm(p, PAGE_KEY);
+      p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    document.body.appendChild(fb);
+
+    var items = readAll().filter(function (c) { return c.page === PAGE; });
+    if (items.length) {
+      var map = {};
+      document.querySelectorAll('main section').forEach(function (s) { map[secKey(s)] = s; });
+      items.forEach(function (c) {
+        if (c.section === PAGE_KEY) renderItem(pagePanel(), c);
+        else if (map[c.section]) renderItem(map[c.section], c);
+        else renderItem(pagePanel(), c);
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 
