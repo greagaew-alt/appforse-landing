@@ -225,6 +225,28 @@
   }
   .qa-item-priority { border: 1px solid var(--text); border-left: 4px solid var(--text); font-weight: 600; }
 
+  .magnet {
+    max-width: none;
+    padding: 40px 24px;
+    border-top: 2px dashed var(--border-strong);
+    border-bottom: 2px dashed var(--border-strong);
+    background: var(--surface);
+  }
+  .magnet .inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    justify-content: space-between;
+  }
+  .magnet .copy { flex: 1 1 360px; }
+  .magnet h3 { font-size: 19px; margin-bottom: 6px; }
+  .magnet p { margin-bottom: 0; }
+  .magnet .action { flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px; min-width: 220px; }
+  .magnet .ph-input { border: 1px solid var(--border-strong); border-radius: 6px; padding: 10px 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
+
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; text-align: center; }
   .stat-num { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .stat-label { font-size: 13px; color: var(--text-muted); }
@@ -272,7 +294,7 @@
       <span class="tag">Блок 01 · Hero</span>
       <h1>Возвращайте клиентов на повторные покупки — без постоянных затрат на рекламу</h1>
       <p class="lede">Собственное приложение с бонусами, push-уведомлениями, заказами и CRM — под вашим брендом. Превращает разовых покупателей в постоянных.</p>
-      <p class="lede" style="font-size:15px;margin-top:-6px">Настроим и запустим готовое решение за 2–4 недели — нанимать свою команду разработчиков для этого не нужно.</p>
+      <p class="lede" style="font-size:15px;margin-top:-6px">Настроим и запустим готовое решение за 2–4 недели.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#b13">Обсудить запуск для своего бизнеса</a>
         <a class="btn btn-secondary" href="#b13">Написать в Telegram</a>
@@ -306,6 +328,21 @@
         <div class="card">
           <h3>Управление бизнесом</h3>
           <p class="muted">Админ-панель · CRM · Аналитика · Склады · Push · Роли сотрудников</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="magnet">
+      <div class="inner">
+        <div class="copy">
+          <span class="tag">Лид-магнит 1 · после блока 03</span>
+          <h3>Не уверены, что приложение — для вас?</h3>
+          <p class="muted">Короткий чек-лист: 7 признаков, что бизнесу пора завести собственный мобильный канал вместо (или вместе с) рекламой.</p>
+        </div>
+        <div class="action">
+          <div class="ph-input">[ Telegram или email ]</div>
+          <a class="btn btn-primary" href="#">Получить чек-лист</a>
+          <p class="note" style="margin:0">Присылаем сразу, без звонка.</p>
         </div>
       </div>
     </section>
@@ -373,6 +410,20 @@
       </div>
     </section>
 
+    <section class="magnet">
+      <div class="inner">
+        <div class="copy">
+          <span class="tag">Лид-магнит 2 · после блока 07</span>
+          <h3>Это не единственный пример</h3>
+          <p class="muted">Пришлём ещё пару кейсов с реальными цифрами — как менялись повторные заказы и выручка после запуска приложения.</p>
+        </div>
+        <div class="action">
+          <div class="ph-input">[ Telegram или email ]</div>
+          <a class="btn btn-primary" href="#">Прислать кейсы</a>
+        </div>
+      </div>
+    </section>
+
     <section id="b8" class="alt narrow-off">
       <div class="inner">
         <span class="tag">Блок 08 · Сравнение — логика изменена</span>
@@ -396,6 +447,20 @@
         <div class="card"><h3>Аналитика</h3><p class="muted">Продажи, прибыль и динамика бизнеса.</p></div>
         <div class="card"><h3>CRM</h3><p class="muted">Клиентская база и сегментация.</p></div>
         <div class="card"><h3>География</h3><p class="muted">Зоны, спрос и распределение заказов.</p></div>
+      </div>
+    </section>
+
+    <section class="magnet">
+      <div class="inner">
+        <div class="copy">
+          <span class="tag">Лид-магнит 3 · после блока 09</span>
+          <h3>Посмотрите на админ-панель вживую</h3>
+          <p class="muted">Организуем короткий показ — как выглядит управление заказами, клиентами и аналитикой изнутри, на реальном примере.</p>
+        </div>
+        <div class="action">
+          <div class="ph-input">[ Telegram или email ]</div>
+          <a class="btn btn-primary" href="#">Показать демо-панель</a>
+        </div>
       </div>
     </section>
 
@@ -431,6 +496,20 @@
           <div class="card"><h3 style="font-size:15px">Marketplace</h3><p class="muted">Опционально</p></div>
           <div class="card"><h3 style="font-size:15px">Партнёрский кабинет</h3><p class="muted">Интеграции индивидуально</p></div>
           <div class="card"><h3 style="font-size:15px">Брендинг и UX/UI</h3><p class="muted">Под бизнес</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="magnet">
+      <div class="inner">
+        <div class="copy">
+          <span class="tag">Лид-магнит 4 · после блока 11</span>
+          <h3>Сколько это будет стоить именно вам?</h3>
+          <p class="muted">Посчитаем индивидуальную стоимость и сроки под ваш бизнес — бесплатно, 15 минут созвона.</p>
+        </div>
+        <div class="action">
+          <div class="ph-input">[ Telegram или email ]</div>
+          <a class="btn btn-primary" href="#">Рассчитать стоимость</a>
         </div>
       </div>
     </section>
@@ -539,6 +618,13 @@
           <div class="qa-item">☐ На какой из 4 сегментов (доставка / розница / сети / услуги) будет упор в первой рекламной кампании — можно усилить именно этот блок?</div>
           <div class="qa-item">☐ Какие поля нужны в форме заявки — только имя + контакт, или ещё что-то для квалификации лида (сколько точек, какая ниша)?</div>
           <div class="qa-item">☐ Бонус: был ли уже трафик на старую/текущую версию сайта с какой-то статистикой (просмотры, заявки, где отваливались) — пригодится, чтобы понять, что чинить в первую очередь.</div>
+        </div>
+
+        <h3 style="margin-top:28px">Лид-магниты (новое, 4 точки касания по странице)</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ Есть ресурс подготовить чек-лист/гайд («7 признаков, что пора завести приложение») для лид-магнита 1, или писать его нам?</div>
+          <div class="qa-item">☐ Реально ли организовать быстрый демо-показ админ-панели по заявке (лид-магнит 3) — кто это будет проводить?</div>
+          <div class="qa-item">☐ Лид-магниты 2 и 4 (доп. кейсы, расчёт стоимости) зависят от тех же данных, что уже спрошены выше — просто напоминание, что без них эти магниты не заработают.</div>
         </div>
       </div>
     </section>
