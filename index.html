@@ -69,15 +69,15 @@
   section {
     position: relative;
     padding: 40px 32px;
-    max-width: 760px;
+    max-width: 1040px;
     margin: 28px auto;
     background: #fafafa;
     border: 1px solid #ddd;
     border-radius: 14px;
   }
-  section.narrow-off { max-width: 900px; }
+  section.narrow-off { max-width: 1220px; }
   .magnet {
-    max-width: 900px;
+    max-width: 1220px;
     margin: 28px auto;
     border-radius: 14px;
   }
@@ -122,7 +122,7 @@
     padding: 12px 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.2);
   }
   #cmt-page-panel {
-    max-width: 760px; margin: 20px auto 0; padding: 20px 24px;
+    max-width: 1040px; margin: 20px auto 0; padding: 20px 24px;
     background: #fff; border: 1px dashed var(--border-strong); border-radius: 14px;
   }
   .cmt-panel-title { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
@@ -147,6 +147,12 @@
   p { margin: 0 0 14px; color: var(--text); max-width: 65ch; }
   .lede { font-size: 18px; color: var(--text-muted); max-width: 60ch; }
   .eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 44px; align-items: center; }
+  .hero-visual { align-self: stretch; min-height: 340px; aspect-ratio: auto; }
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 220px; }
+  }
   .hero-price { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 22px; }
   .hero-price .amount { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .hero-price .label { font-size: 13px; color: var(--text-muted); }
@@ -245,7 +251,7 @@
     background: var(--surface);
   }
   .magnet .inner {
-    max-width: 760px;
+    max-width: 1040px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -267,7 +273,7 @@
   .price-amount { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
   footer {
-    max-width: 760px;
+    max-width: 1040px;
     margin: 0 auto;
     padding: 40px 24px 80px;
     font-family: var(--font-mono);
@@ -301,15 +307,20 @@
 
     <section id="b1">
       <div class="block-head"><span class="tag sec-label">01 · Hero</span></div>
-      <p class="eyebrow">Готовое приложение под вашим брендом</p>
-      <h1>Собственное приложение для повторных продаж — за 2–4 недели</h1>
-      <p class="lede">Запустим приложение под вашим брендом с заказами, бонусами, push-уведомлениями и CRM — чтобы возвращать клиентов и увеличивать повторные покупки.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#b11">Обсудить запуск для своего бизнеса</a>
-        <a class="btn btn-secondary" href="#b11">Написать в Telegram</a>
-      </div>
-      <div class="hero-price">
-        <div><div class="amount">от 150 000 ₽</div><div class="label">базовый запуск с одной торговой точкой</div></div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Готовое приложение под вашим брендом</p>
+          <h1>Собственное приложение для повторных продаж — за 2–4 недели</h1>
+          <p class="lede">Запустим приложение под вашим брендом с заказами, бонусами, push-уведомлениями и CRM — чтобы возвращать клиентов и увеличивать повторные покупки.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#b11">Обсудить запуск для своего бизнеса</a>
+            <a class="btn btn-secondary" href="#b11">Написать в Telegram</a>
+          </div>
+          <div class="hero-price">
+            <div><div class="amount">от 150 000 ₽</div><div class="label">базовый запуск с одной торговой точкой</div></div>
+          </div>
+        </div>
+        <div class="ph hero-visual">Скриншот интерфейса — главный экран приложения: каталог, оффер, кнопка заказа</div>
       </div>
       <p class="note">Бесплатный разбор задачи — 15 минут, без обязательств.<br>УТОЧНИТЬ У КЛИЕНТА: реальный срок базового запуска (сейчас стоит 2–4 недели как рабочая гипотеза) и актуальна ли цена от 150 000 ₽.</p>
     </section>
@@ -335,10 +346,12 @@
         <div class="card">
           <h3>Клиентское приложение</h3>
           <p class="muted">Каталог · Корзина · Профиль · Бонусы · Избранное · История заказов</p>
+          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">Скриншот интерфейса — экран каталога с товарами</div>
         </div>
         <div class="card">
           <h3>Управление бизнесом</h3>
           <p class="muted">Админ-панель · CRM · Аналитика · Склады · Push · Роли сотрудников</p>
+          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">Скриншот интерфейса — админ-панель со списком заказов</div>
         </div>
       </div>
     </section>
