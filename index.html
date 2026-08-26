@@ -139,6 +139,10 @@
   h3 { font-size: 17px; }
   p { margin: 0 0 14px; color: var(--text); max-width: 65ch; }
   .lede { font-size: 18px; color: var(--text-muted); max-width: 60ch; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .hero-price { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 22px; }
+  .hero-price .amount { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hero-price .label { font-size: 13px; color: var(--text-muted); }
   .muted { color: var(--text-muted); }
   .note {
     font-family: var(--font-mono);
@@ -292,14 +296,18 @@
 
     <section id="b1">
       <span class="tag">Блок 01 · Hero</span>
-      <h1>Возвращайте клиентов на повторные покупки — без постоянных затрат на рекламу</h1>
-      <p class="lede">Собственное приложение с бонусами, push-уведомлениями, заказами и CRM — под вашим брендом. Превращает разовых покупателей в постоянных.</p>
-      <p class="lede" style="font-size:15px;margin-top:-6px">Настроим и запустим готовое решение за 2–4 недели.</p>
+      <p class="eyebrow">Mobile commerce под вашим брендом</p>
+      <h1>Собственное приложение для повторных продаж — за 2–4 недели</h1>
+      <p class="lede">Запустим приложение под вашим брендом с заказами, бонусами, push-уведомлениями и CRM — чтобы возвращать клиентов и увеличивать повторные покупки.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#b13">Обсудить запуск для своего бизнеса</a>
         <a class="btn btn-secondary" href="#b13">Написать в Telegram</a>
       </div>
-      <p class="note">Бесплатный разбор задачи — 15 минут, без обязательств.<br>УТОЧНИТЬ У КЛИЕНТА: реальный срок базового запуска (сейчас стоит 2–4 недели как рабочая гипотеза).</p>
+      <div class="hero-price">
+        <div><div class="amount">от 150 000 ₽</div><div class="label">базовый запуск</div></div>
+        <div><div class="amount">1 точка</div><div class="label">для бизнеса с одной торговой точкой</div></div>
+      </div>
+      <p class="note">Бесплатный разбор задачи — 15 минут, без обязательств.<br>УТОЧНИТЬ У КЛИЕНТА: реальный срок базового запуска (сейчас стоит 2–4 недели как рабочая гипотеза) и актуальна ли цена от 150 000 ₽.</p>
     </section>
 
     <section id="b2" class="alt">
