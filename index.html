@@ -43,10 +43,14 @@
 
   .topnav {
     position: sticky;
-    top: 33px;
+    top: 0;
     z-index: 40;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
+  }
+  .topnav-inner {
+    max-width: 1360px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     gap: 24px;
@@ -54,7 +58,7 @@
     overflow-x: auto;
   }
   .topnav .logo { font-weight: 800; font-size: 16px; letter-spacing: 0.02em; white-space: nowrap; }
-  .topnav .links { display: none; gap: 18px; flex: 1; }
+  .topnav .links { display: none; gap: 18px; flex: 1; justify-content: center; }
   .topnav .links a { color: var(--text-muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
   .topnav .links a:hover, .topnav .links a:focus-visible { color: var(--text); }
   .topnav .btn { white-space: nowrap; margin-left: auto; padding: 9px 16px; font-size: 13px; }
@@ -186,7 +190,7 @@
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
-  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
 
   .card {
     border: 1px solid var(--border);
@@ -272,13 +276,33 @@
   .price-box { border: 1px solid var(--border-strong); border-radius: 10px; padding: 28px; background: var(--surface); }
   .price-amount { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-  footer {
-    max-width: 1360px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-faint);
+  .site-footer {
+    max-width: none;
+    margin: 48px 0 0;
+    padding: 0;
+    background: var(--surface-alt);
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+  .footer-inner { max-width: 1360px; margin: 0 auto; padding: 48px 32px 24px; }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 780px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  .footer-brand .logo { font-weight: 800; font-size: 18px; margin-bottom: 6px; }
+  .footer-col h3 {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text-faint); font-weight: 500; margin-bottom: 10px;
+  }
+  .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 14px; margin-bottom: 8px; }
+  .footer-col a:hover { color: var(--text); }
+  .footer-bottom {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+    margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-faint);
   }
 
   @media (max-width: 640px) {
@@ -286,21 +310,21 @@
   }
 </style>
 
-<div class="draft-banner">Прототип · чёрно-белый костяк · тексты черновые, финальный дизайн будет на этапе 2</div>
-
 <header class="topnav">
-  <span class="logo">AppForse</span>
-  <nav class="links" aria-label="Оглавление блоков">
-    <a href="#b2">Проблема</a>
-    <a href="#b3">Решение</a>
-    <a href="#b4">Для кого</a>
-    <a href="#b6">Демо</a>
-    <a href="#b7">Кейс</a>
-    <a href="#b9">Цена</a>
-    <a href="#b10">FAQ</a>
-    <a href="#qa">Вопросы к клиенту</a>
-  </nav>
-  <a class="btn btn-primary" href="#b11">Обсудить запуск</a>
+  <div class="topnav-inner">
+    <span class="logo">AppForse</span>
+    <nav class="links" aria-label="Оглавление блоков">
+      <a href="#b2">Проблема</a>
+      <a href="#b3">Решение</a>
+      <a href="#b4">Для кого</a>
+      <a href="#b6">Демо</a>
+      <a href="#b7">Кейс</a>
+      <a href="#b9">Цена</a>
+      <a href="#b10">FAQ</a>
+      <a href="#qa">Вопросы к клиенту</a>
+    </nav>
+    <a class="btn btn-primary" href="#b11">Обсудить запуск</a>
+  </div>
 </header>
 
   <main>
@@ -346,12 +370,12 @@
         <div class="card">
           <h3>Клиентское приложение</h3>
           <p class="muted">Каталог · Корзина · Профиль · Бонусы · Избранное · История заказов</p>
-          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">Скриншот интерфейса — экран каталога с товарами</div>
+          <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">Скриншот интерфейса — экран каталога с товарами</div>
         </div>
         <div class="card">
           <h3>Управление бизнесом</h3>
           <p class="muted">Админ-панель · CRM · Аналитика · Склады · Push · Роли сотрудников</p>
-          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">Скриншот интерфейса — админ-панель со списком заказов</div>
+          <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">Скриншот интерфейса — админ-панель со списком заказов</div>
         </div>
       </div>
     </section>
@@ -421,14 +445,14 @@
           <span class="num">Доставка / розница</span>
           <h3>«Синица»</h3>
           <p class="muted">Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.</p>
-          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">[ Скриншоты приложения ]</div>
+          <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">[ Скриншоты приложения ]</div>
           <p class="note">УТОЧНИТЬ У КЛИЕНТА: реальная цифра — например «повторные заказы выросли на N%» или отзыв от владельца.</p>
         </div>
         <div class="card">
           <span class="num">Операционка</span>
           <h3>Менеджерское приложение</h3>
           <p class="muted">Заказы, клиенты, статусы и исполнение — в одном окне.</p>
-          <div class="ph" style="aspect-ratio:9/16;margin-top:12px">[ Скриншоты приложения ]</div>
+          <div class="ph" style="aspect-ratio:9/16;max-width:220px;margin:16px auto 0">[ Скриншоты приложения ]</div>
         </div>
       </div>
     </section>
@@ -525,6 +549,39 @@
       </div>
     </section>
 
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="logo">AppForse</div>
+            <p class="muted">Mobile commerce под вашим брендом</p>
+          </div>
+          <div class="footer-col">
+            <h3>Навигация</h3>
+            <a href="#b2">Проблема</a>
+            <a href="#b3">Решение</a>
+            <a href="#b4">Для кого</a>
+            <a href="#b7">Кейс</a>
+            <a href="#b9">Цена</a>
+            <a href="#b10">FAQ</a>
+          </div>
+          <div class="footer-col">
+            <h3>Контакты</h3>
+            <a href="#">Telegram @shark154</a>
+            <a href="#">+7 (923) 104-00-00</a>
+          </div>
+          <div class="footer-col">
+            <h3>Соцсети</h3>
+            <div class="ph" style="height:56px">ссылки — уточнить у клиента</div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 AppForse</span>
+          <span class="muted">Прототип, не финальный дизайн</span>
+        </div>
+      </div>
+    </footer>
+
     <section id="qa" class="narrow-off" style="border-top:3px solid var(--border-strong)">
       <div class="inner">
         <div class="block-head"><span class="tag sec-label">Не часть лендинга · для звонка с клиентом</span></div>
@@ -580,10 +637,6 @@
         </div>
       </div>
     </section>
-
-    <footer>
-      AppForse · mobile commerce platform · прототип для внутреннего согласования, не финальный дизайн
-    </footer>
 
   </main>
 
