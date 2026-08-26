@@ -212,6 +212,18 @@
   .faq-item:first-child { border-top: none; }
   .faq-q { font-weight: 600; margin-bottom: 8px; }
 
+  .qa-list { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
+  .qa-item {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; text-align: center; }
   .stat-num { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .stat-label { font-size: 13px; color: var(--text-muted); }
@@ -251,6 +263,7 @@
     <a href="#b12">12 Тариф</a>
     <a href="#b13">13 FAQ</a>
     <a href="#b14">14 Заявка</a>
+    <a href="#qa" style="margin-top:10px;border-top:1px dashed var(--border);padding-top:12px">Вопросы к клиенту</a>
   </nav>
 
   <main>
@@ -479,6 +492,48 @@
             <p class="muted">Если удобнее списаться напрямую — без формы.</p>
             <div class="cta-row"><a class="btn btn-secondary" href="#">Написать в Telegram</a></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qa" class="narrow-off" style="border-top:3px solid var(--border-strong)">
+      <div class="inner">
+        <span class="tag">Не часть лендинга · для звонка с клиентом</span>
+        <h2>Вопросы, которые нужно уточнить для прототипа</h2>
+        <p class="muted">Это не блок сайта — рабочий список для созвона, чтобы прототип на следующей итерации был точнее.</p>
+
+        <h3 style="margin-top:32px">Кейсы и соцдоказательства</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ Есть ли ещё кейсы/клиенты на платформе кроме «Синица» — хотя бы 1-2, чтобы не держаться на одном примере?</div>
+          <div class="qa-item">☐ Есть ли реальные цифры по кейсу «Синица» (рост повторных заказов, конверсия — что угодно измеримое)?</div>
+          <div class="qa-item">☐ Можно ли получить короткий текстовый отзыв от владельца бизнеса «Синица»?</div>
+          <div class="qa-item">☐ Какие соцсети реально ведутся и есть прямые ссылки (VK / Telegram-канал / Instagram / YouTube)?</div>
+        </div>
+
+        <h3 style="margin-top:28px">Демо и продукт</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ Есть ли уже готовая демо-сборка приложения для скачивания (App Store / Google Play / TestFlight / APK), или её ещё нужно подготовить?</div>
+          <div class="qa-item">☐ Актуальна ли цена «от 150 000 ₽» за базовый запуск, или цифра устарела?</div>
+          <div class="qa-item">☐ За счёт чего конкретно окупается стоимость для бизнеса-клиента (какую выгоду в цифрах или времени можно обещать)?</div>
+          <div class="qa-item">☐ Какие условия поддержки после запуска — есть ли она, платная/бесплатная, кто оказывает?</div>
+          <div class="qa-item">☐ Реальный срок запуска базовой конфигурации (сейчас в прототипе стоит «2–4 недели» как гипотеза)?</div>
+        </div>
+
+        <h3 style="margin-top:28px">Тарифы и допы</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ Доп. точки / Marketplace / Партнёрский кабинет / Интеграции — это готовые опции с понятной ценой, или каждый раз обсуждается индивидуально?</div>
+        </div>
+
+        <h3 style="margin-top:28px">Бренд</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ Есть ли готовый логотип / фирменные цвета / брендбук AppForse, или дизайн делать с нуля на этапе 2?</div>
+          <div class="qa-item">☐ Актуален ли контактный телефон +7 (923) 104-00-00 в футере, или использовать другой?</div>
+        </div>
+
+        <h3 style="margin-top:28px">Реклама и заявки</h3>
+        <div class="qa-list">
+          <div class="qa-item">☐ На какой из 4 сегментов (доставка / розница / сети / услуги) будет упор в первой рекламной кампании — можно усилить именно этот блок?</div>
+          <div class="qa-item">☐ Какие поля нужны в форме заявки — только имя + контакт, или ещё что-то для квалификации лида (сколько точек, какая ниша)?</div>
         </div>
       </div>
     </section>
