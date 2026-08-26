@@ -17,37 +17,6 @@
     --font-mono: ui-monospace, "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #171613;
-      --surface: #1f1e1a;
-      --surface-alt: #26251f;
-      --border: #3a3931;
-      --border-strong: #525044;
-      --text: #f2f0e8;
-      --text-muted: #a8a698;
-      --text-faint: #77766a;
-      --accent: #f2f0e8;
-      --placeholder-stripe: #2c2b24;
-      --tag-bg: #f2f0e8;
-      --tag-text: #171613;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #171613;
-    --surface: #1f1e1a;
-    --surface-alt: #26251f;
-    --border: #3a3931;
-    --border-strong: #525044;
-    --text: #f2f0e8;
-    --text-muted: #a8a698;
-    --text-faint: #77766a;
-    --accent: #f2f0e8;
-    --placeholder-stripe: #2c2b24;
-    --tag-bg: #f2f0e8;
-    --tag-text: #171613;
-  }
-
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -72,42 +41,42 @@
     z-index: 50;
   }
 
-  .layout {
+  .topnav {
+    position: sticky;
+    top: 33px;
+    z-index: 40;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
-    max-width: 1180px;
-    margin: 0 auto;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 24px;
+    overflow-x: auto;
+  }
+  .topnav .logo { font-weight: 800; font-size: 16px; letter-spacing: 0.02em; white-space: nowrap; }
+  .topnav .links { display: none; gap: 18px; flex: 1; }
+  .topnav .links a { color: var(--text-muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
+  .topnav .links a:hover, .topnav .links a:focus-visible { color: var(--text); }
+  .topnav .btn { white-space: nowrap; margin-left: auto; padding: 9px 16px; font-size: 13px; }
+  @media (min-width: 900px) {
+    .topnav .links { display: flex; }
+    .topnav .btn { margin-left: 0; }
   }
 
-  .toc {
-    display: none;
+  .block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .block-head .tag { margin-bottom: 0; }
+  .comment-btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 5px 12px;
+    cursor: pointer;
+    white-space: nowrap;
   }
-  @media (min-width: 1040px) {
-    .toc {
-      display: block;
-      position: sticky;
-      top: 52px;
-      align-self: flex-start;
-      width: 200px;
-      padding: 32px 16px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-faint);
-    }
-    .toc a {
-      display: block;
-      color: var(--text-muted);
-      text-decoration: none;
-      padding: 5px 0;
-      border-left: 2px solid transparent;
-      padding-left: 10px;
-    }
-    .toc a:hover, .toc a:focus-visible {
-      color: var(--text);
-      border-left-color: var(--text);
-    }
-  }
-
-  main { flex: 1; min-width: 0; }
+  .comment-btn:hover { color: var(--text); border-color: var(--text); }
 
   section {
     padding: 64px 24px;
@@ -274,26 +243,25 @@
 
 <div class="draft-banner">Прототип · чёрно-белый костяк · тексты черновые, финальный дизайн будет на этапе 2</div>
 
-<div class="layout">
-  <nav class="toc" aria-label="Оглавление блоков">
-    <a href="#b1">01 Hero</a>
-    <a href="#b2">02 Проблема</a>
-    <a href="#b3">03 Решение</a>
-    <a href="#b4">04 Для кого</a>
-    <a href="#b5">05 Как работает</a>
-    <a href="#b6">06 Демо</a>
-    <a href="#b7">07 Кейс</a>
-    <a href="#b8">08 Цифры</a>
-    <a href="#b9">09 Тариф</a>
-    <a href="#b10">10 FAQ</a>
-    <a href="#b11">11 Заявка</a>
-    <a href="#qa" style="margin-top:10px;border-top:1px dashed var(--border);padding-top:12px">Вопросы к клиенту</a>
+<header class="topnav">
+  <span class="logo">AppForse</span>
+  <nav class="links" aria-label="Оглавление блоков">
+    <a href="#b2">Проблема</a>
+    <a href="#b3">Решение</a>
+    <a href="#b4">Для кого</a>
+    <a href="#b6">Демо</a>
+    <a href="#b7">Кейс</a>
+    <a href="#b9">Цена</a>
+    <a href="#b10">FAQ</a>
+    <a href="#qa">Вопросы к клиенту</a>
   </nav>
+  <a class="btn btn-primary" href="#b11">Обсудить запуск</a>
+</header>
 
   <main>
 
     <section id="b1">
-      <span class="tag">Блок 01 · Hero</span>
+      <div class="block-head"><span class="tag">Блок 01 · Hero</span><button class="comment-btn" type="button">Комментировать</button></div>
       <p class="eyebrow">Готовое приложение под вашим брендом</p>
       <h1>Собственное приложение для повторных продаж — за 2–4 недели</h1>
       <p class="lede">Запустим приложение под вашим брендом с заказами, бонусами, push-уведомлениями и CRM — чтобы возвращать клиентов и увеличивать повторные покупки.</p>
@@ -309,7 +277,7 @@
 
     <section id="b2" class="alt">
       <div class="inner">
-        <span class="tag">Блок 02 · Проблема</span>
+        <div class="block-head"><span class="tag">Блок 02 · Проблема</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Привлекли клиента один раз. Зачем платить за него снова?</h2>
         <p>Сохраняйте клиента в собственной базе и возвращайте его на повторные покупки через бонусы, push-уведомления и персональные предложения.</p>
         <div class="grid" style="margin-top:24px">
@@ -321,7 +289,7 @@
     </section>
 
     <section id="b3">
-      <span class="tag">Блок 03 · Решение</span>
+      <div class="block-head"><span class="tag">Блок 03 · Решение</span><button class="comment-btn" type="button">Комментировать</button></div>
       <h2>Приложение для клиентов и панель управления для вас</h2>
       <p>Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов, товары и аналитику в одной системе.</p>
       <div class="grid-2" style="display:grid;margin-top:20px">
@@ -339,7 +307,7 @@
     <section class="magnet">
       <div class="inner">
         <div class="copy">
-          <span class="tag">Лид-магнит · после блока 03</span>
+          <div class="block-head"><span class="tag">Лид-магнит · после блока 03</span><button class="comment-btn" type="button">Комментировать</button></div>
           <h3>Получите расчёт стоимости и сроков за один день</h3>
           <p class="muted">Оставьте контакты — посчитаем индивидуальную стоимость и сроки запуска под ваш бизнес и пришлём в течение дня.</p>
         </div>
@@ -352,7 +320,7 @@
 
     <section id="b4" class="alt">
       <div class="inner">
-        <span class="tag">Блок 04 · Для кого</span>
+        <div class="block-head"><span class="tag">Блок 04 · Для кого</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Бизнесам, где важны повторные покупки и своя клиентская база</h2>
         <div class="grid" style="margin-top:20px">
           <div class="card"><span class="num">Доставка</span><h3>Рестораны, кафе, еда и товары повседневного спроса</h3><p class="muted">Комиссия агрегаторов съедает маржу, а клиент остаётся у агрегатора, а не у вас. Приложение возвращает повторный заказ в свой канал.</p></div>
@@ -364,7 +332,7 @@
     </section>
 
     <section id="b5">
-      <span class="tag">Блок 05 · Как это работает — НОВЫЙ БЛОК</span>
+      <div class="block-head"><span class="tag">Блок 05 · Как это работает — НОВЫЙ БЛОК</span><button class="comment-btn" type="button">Комментировать</button></div>
       <h2>От заявки до запуска — четыре шага</h2>
       <div class="steps" style="margin-top:16px">
         <div class="step"><span class="idx">1</span><div><h3>Бесплатный разбор задачи</h3><p class="muted">15 минут — сразу понятно, подходит ли это вашему бизнесу.</p></div></div>
@@ -377,7 +345,7 @@
 
     <section id="b6" class="alt">
       <div class="inner">
-        <span class="tag">Блок 06 · Демо — НОВЫЙ БЛОК (просил клиент)</span>
+        <div class="block-head"><span class="tag">Блок 06 · Демо — НОВЫЙ БЛОК (просил клиент)</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Попробуйте сами</h2>
         <p>Скачайте демо-версию клиентского приложения и посмотрите, как это выглядит для конечного покупателя.</p>
         <div class="grid-2" style="display:grid;margin-top:20px">
@@ -393,7 +361,7 @@
     </section>
 
     <section id="b7">
-      <span class="tag">Блок 07 · Кейс — ВИДОИЗМЕНЁН (просил клиент)</span>
+      <div class="block-head"><span class="tag">Блок 07 · Кейс — ВИДОИЗМЕНЁН (просил клиент)</span><button class="comment-btn" type="button">Комментировать</button></div>
       <h2>Так выглядит уже работающее приложение</h2>
       <p class="muted">Ниже — примеры уже реализованной платформы. Для нового клиента бренд, дизайн и сценарии будут выглядеть иначе — под ваш бизнес.</p>
       <div class="grid-2" style="display:grid;margin-top:20px">
@@ -415,7 +383,7 @@
 
 
     <section id="b8">
-      <span class="tag">Блок 08 · Цифры</span>
+      <div class="block-head"><span class="tag">Блок 08 · Цифры</span><button class="comment-btn" type="button">Комментировать</button></div>
       <h2>Платформа уже работает в реальном бизнесе</h2>
       <p class="muted">В основе — реальные заказы, склады, сотрудники, клиенты, маркетинг и аналитика.</p>
       <div class="stat-row" style="margin-top:24px">
@@ -427,7 +395,7 @@
 
     <section id="b9" class="alt">
       <div class="inner">
-        <span class="tag">Блок 09 · Тариф</span>
+        <div class="block-head"><span class="tag">Блок 09 · Тариф</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Начните с базового пакета. Расширяйте по мере роста</h2>
         <div class="price-box" style="margin-top:20px">
           <div class="muted" style="font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em">Базовый запуск</div>
@@ -449,7 +417,7 @@
     </section>
 
     <section id="b10">
-      <span class="tag">Блок 10 · FAQ — НОВЫЙ БЛОК</span>
+      <div class="block-head"><span class="tag">Блок 10 · FAQ — НОВЫЙ БЛОК</span><button class="comment-btn" type="button">Комментировать</button></div>
       <h2>Отвечаем на частые вопросы</h2>
       <div style="margin-top:8px">
         <div class="faq-item">
@@ -485,7 +453,7 @@
 
     <section id="b11" class="alt">
       <div class="inner">
-        <span class="tag">Блок 11 · Финальный CTA</span>
+        <div class="block-head"><span class="tag">Блок 11 · Финальный CTA</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Покажите свой бизнес. Покажем, как AppForse будет работать у вас</h2>
         <p class="muted">За 15 минут разберём задачу и определим, что нужно для запуска.</p>
         <div class="grid-2" style="display:grid;margin-top:24px;gap:24px">
@@ -507,7 +475,7 @@
 
     <section id="qa" class="narrow-off" style="border-top:3px solid var(--border-strong)">
       <div class="inner">
-        <span class="tag">Не часть лендинга · для звонка с клиентом</span>
+        <div class="block-head"><span class="tag">Не часть лендинга · для звонка с клиентом</span><button class="comment-btn" type="button">Комментировать</button></div>
         <h2>Вопросы, которые нужно уточнить для прототипа</h2>
         <p class="muted">Это не блок сайта — рабочий список для созвона, чтобы прототип на следующей итерации был точнее.</p>
 
@@ -566,5 +534,4 @@
     </footer>
 
   </main>
-</div>
 
