@@ -630,13 +630,7 @@
   }
 
   function myName() {
-    var n = null;
-    try { n = localStorage.getItem('pin_name'); } catch (e) {}
-    if (!n) {
-      n = window.prompt('Как вас зовут? Подпись к комментариям', '') || 'Клиент';
-      try { localStorage.setItem('pin_name', n); } catch (e) {}
-    }
-    return n;
+    return 'Клиент';
   }
 
   function sections() {
