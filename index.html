@@ -285,6 +285,14 @@
   .price-list { margin: 10px 0 0; padding-left: 20px; }
   .price-list li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
   .price-amount { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .extras { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-strong); }
+  .extras-title {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text-faint); font-weight: 500; margin: 0 0 18px;
+  }
+  .extras-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+  .extra-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  .extra-item p { margin: 0; font-size: 14.5px; color: var(--text-muted); }
 
   .site-footer {
     max-width: none;
@@ -495,16 +503,17 @@
             <a class="btn btn-primary" href="#b10">Обсудить запуск для своего бизнеса</a>
           </div>
         </div>
-        <div class="grid-2" style="display:grid;margin-top:20px">
-          <div class="card">
-            <span class="num">По желанию</span>
-            <h3>Техподдержка — от 25 000 ₽</h3>
-            <p class="muted">Не обязательна: пользоваться платформой можно самостоятельно. Нужна, если хотите, чтобы мы вели сервер и были на связи. Стоимость зависит от объёма запросов.</p>
-          </div>
-          <div class="card">
-            <span class="num">Отдельно</span>
-            <h3>Доработки под вас</h3>
-            <p class="muted">Новые возможности, маркетплейс, товары с размерами и цветами — считаем отдельно. Дешевле, чем искать стороннюю команду: разработчики уже знают систему.</p>
+        <div class="extras">
+          <h3 class="extras-title">Дополнительно</h3>
+          <div class="extras-grid">
+            <div class="extra-item">
+              <div class="extra-name">Техническая поддержка — от 25 000 ₽/мес.</div>
+              <p>По желанию, если хотите передать нам обслуживание платформы.</p>
+            </div>
+            <div class="extra-item">
+              <div class="extra-name">Индивидуальные доработки</div>
+              <p>Функции и интеграции под задачи вашего бизнеса.</p>
+            </div>
           </div>
         </div>
         <p class="note">Исправлено по созвону. Убрана формулировка про «актив в собственность»: код не передаётся, он запатентован — это лицензия на использование под своим брендом (white-label). Выкуп кода возможен, но обсуждается отдельно и на других условиях. Также убрано «1 торговая точка» — клиент прямо сказал, что несколько точек, складов и городов входят в базовую цену.</p>
