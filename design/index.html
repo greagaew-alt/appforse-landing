@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AppForse — 6 вариантов дизайна</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;600;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400;700;900&family=Playfair+Display:wght@600;800;900&family=Golos+Text:wght@400;600;900&family=Rubik:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #101014; font-family: Manrope, system-ui, sans-serif; }
+  img { max-width: 100%; }
+  :focus-visible { outline: 3px solid #4D7BFF; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+
+  /* ================= ПЕРЕКЛЮЧАТЕЛЬ ================= */
+  .switcher {
+    position: sticky; top: 0; z-index: 999;
+    background: #101014; border-bottom: 1px solid #26262e;
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px; overflow-x: auto;
+  }
+  .switcher .brand {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: #6f6f7d; margin-right: 8px; white-space: nowrap;
+  }
+  .switcher button {
+    font-family: Manrope, sans-serif; font-size: 13px; font-weight: 600;
+    padding: 9px 15px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    background: transparent; color: #a5a5b3; border: 1px solid #33333f;
+  }
+  .switcher button[data-on="1"] { background: #fff; color: #101014; border-color: #fff; }
+  .switcher .note {
+    margin-left: auto; font-size: 12px; color: #5c5c69; white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  @media (max-width: 900px) { .switcher .note { display: none; } }
+
+  .stage { min-height: 60vh; }
+  .caption {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6f6f7d;
+    padding: 14px 20px; background: #101014; border-top: 1px solid #26262e;
+  }
+  .caption b { color: #c9c9d6; font-weight: 400; }
+
+  /* ============================================================
+     ВАРИАНТ 1 — СТРИТ. Рваная бумага, электрик-синий, обводка от руки
+     ============================================================ */
+  .v1 { background: #0D0D11; color: #fff; font-family: Manrope, sans-serif; }
+  .v1 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+  .v1 .top { padding: 26px 0; display: flex; align-items: center; gap: 26px; }
+  .v1 .logo { font-family: Oswald, sans-serif; font-weight: 700; font-size: 21px; letter-spacing: .06em; text-transform: uppercase; }
+  .v1 .top nav { display: flex; gap: 20px; margin-left: auto; }
+  .v1 .top nav span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #8b8b99; }
+  .v1 .hero { padding: 36px 0 90px; display: grid; grid-template-columns: 1.08fr .92fr; gap: 50px; align-items: center; }
+  .v1 .kicker {
+    display: inline-block; background: #2B4CFF; color: #fff; padding: 6px 12px;
+    font-family: Oswald, sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    transform: rotate(-1.5deg); margin-bottom: 20px;
+  }
+  .v1 h1 {
+    font-family: Oswald, sans-serif; font-weight: 700; text-transform: uppercase;
+    font-size: clamp(38px, 6.4vw, 82px); line-height: 1.0; letter-spacing: -.005em; margin: 0 0 22px;
+  }
+  .v1 .circled { position: relative; display: inline-block; white-space: nowrap; }
+  .v1 .circled { padding: 0 .12em; }
+  .v1 .circled svg { position: absolute; left: -13%; top: -22%; width: 126%; height: 145%; pointer-events: none; overflow: visible; }
+  .v1 .circled svg path { stroke: #FF5C39; stroke-width: 4; fill: none; stroke-linecap: round; }
+  .v1 .lede { font-size: 17px; line-height: 1.55; color: #a9a9ba; max-width: 44ch; margin: 0 0 30px; }
+  .v1 .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 34px; }
+  .v1 .btn {
+    font-family: Oswald, sans-serif; font-size: 15px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 15px 28px; cursor: pointer; border: 2px solid #2B4CFF;
+  }
+  .v1 .btn.solid { background: #2B4CFF; color: #fff; }
+  .v1 .btn.ghost { background: transparent; color: #fff; border-color: #3a3a48; }
+  .v1 .facts { display: flex; gap: 38px; }
+  .v1 .facts b { display: block; font-family: Oswald, sans-serif; font-size: 27px; letter-spacing: .01em; }
+  .v1 .facts span { font-size: 12px; color: #8b8b99; }
+  /* коллаж из «экранов» с наклоном и скотчем */
+  .v1 .collage { position: relative; height: 470px; }
+  .v1 .shot {
+    position: absolute; border: 3px solid #fff; background: #16161d;
+    box-shadow: 0 20px 50px rgba(0,0,0,.55);
+    display: flex; align-items: flex-end; padding: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6f6f7d; line-height: 1.4;
+  }
+  .v1 .shot.a { width: 210px; height: 400px; left: 6%; top: 20px; transform: rotate(-6deg); }
+  .v1 .shot.b { width: 210px; height: 400px; right: 8%; top: 60px; transform: rotate(5deg); background: #2B4CFF; border-color: #2B4CFF; color: #cdd8ff; }
+  .v1 .tape {
+    position: absolute; width: 84px; height: 26px; background: rgba(255,255,255,.72);
+    left: 50%; top: -12px; transform: translateX(-50%) rotate(-3deg);
+  }
+  .v1 .tornwrap { position: relative; background: #2B4CFF; }
+  .v1 .torn-top {
+    height: 46px; background: #0D0D11;
+    clip-path: polygon(0 0,100% 0,100% 46%,96% 70%,92% 40%,88% 76%,83% 44%,78% 80%,73% 46%,68% 84%,63% 50%,58% 88%,53% 52%,48% 86%,43% 48%,38% 82%,33% 46%,28% 78%,23% 44%,18% 74%,13% 42%,8% 70%,4% 40%,0 66%);
+  }
+  .v1 .problem { padding: 20px 0 96px; }
+  .v1 .problem h2 {
+    font-family: Oswald, sans-serif; font-weight: 700; text-transform: uppercase;
+    font-size: clamp(28px, 4.4vw, 52px); line-height: 1; margin: 0 0 18px; max-width: 20ch;
+  }
+  .v1 .problem .lede { color: #d2d8ff; max-width: 60ch; }
+  .v1 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+  .v1 .card { background: #0D0D11; padding: 26px; border: 2px solid #0D0D11; }
+  .v1 .card i {
+    font-family: Oswald, sans-serif; font-style: normal; font-size: 12px; letter-spacing: .16em;
+    color: #FF5C39; display: block; margin-bottom: 12px;
+  }
+  .v1 .card h3 { font-family: Oswald, sans-serif; text-transform: uppercase; font-size: 20px; margin: 0 0 10px; }
+  .v1 .card p { margin: 0; font-size: 14.5px; line-height: 1.5; color: #9c9caa; }
+  @media (max-width: 900px) {
+    .v1 .hero { grid-template-columns: 1fr; }
+    .v1 .collage { height: 340px; }
+    .v1 .shot.a, .v1 .shot.b { width: 150px; height: 280px; }
+    .v1 .cards { grid-template-columns: 1fr; }
+    .v1 .top nav { display: none; }
+  }
+
+  /* ============================================================
+     ВАРИАНТ 2 — КОЛЛАЖ. Чёрный + кислотный лайм, стикеры, скосы
+     ============================================================ */
+  .v2 { background: #08080A; color: #fff; font-family: 'JetBrains Mono', monospace; }
+  .v2 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+  .v2 .top { padding: 22px 0; display: flex; align-items: center; gap: 20px; border-bottom: 2px solid #C6F432; }
+  .v2 .logo { font-family: Unbounded, sans-serif; font-weight: 900; font-size: 17px; color: #C6F432; }
+  .v2 .top nav { display: flex; gap: 18px; margin-left: auto; font-size: 11px; text-transform: uppercase; color: #7b7b86; }
+  .v2 .hero { padding: 58px 0 40px; }
+  .v2 .bars { margin-bottom: 26px; }
+  .v2 .bar {
+    display: inline-block; background: #C6F432; color: #08080A;
+    font-family: Unbounded, sans-serif; font-weight: 900; text-transform: uppercase;
+    font-size: clamp(22px, 4.1vw, 52px); line-height: 1; padding: 8px 18px 12px;
+    transform: skewX(-8deg); margin: 0 0 9px;
+  }
+  .v2 .bar.out { background: transparent; color: #fff; border: 3px solid #C6F432; }
+  .v2 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+  .v2 .lede { font-size: 15px; line-height: 1.65; color: #a2a2ae; max-width: 46ch; }
+  .v2 .sticker {
+    background: #16161a; border: 2px dashed #3a3a44; padding: 16px 18px; margin-top: 22px;
+    transform: rotate(-1.6deg); position: relative; max-width: 380px;
+  }
+  .v2 .sticker::before {
+    content: ''; position: absolute; top: -11px; left: 28px; width: 76px; height: 22px;
+    background: rgba(198,244,50,.34); transform: rotate(-4deg);
+  }
+  .v2 .sticker b { color: #C6F432; }
+  .v2 .sticker p { margin: 0; font-size: 12.5px; line-height: 1.6; color: #9d9daa; }
+  .v2 .acts { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 26px; }
+  .v2 .btn {
+    font-family: Unbounded, sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase;
+    padding: 15px 24px; cursor: pointer; border: 3px solid #C6F432; background: #C6F432; color: #08080A;
+    box-shadow: 6px 6px 0 #2f3a08;
+  }
+  .v2 .btn.ghost { background: transparent; color: #C6F432; box-shadow: 6px 6px 0 #1b1b20; }
+  .v2 .facts { display: flex; gap: 30px; flex-wrap: wrap; }
+  .v2 .facts b { display: block; font-family: Unbounded, sans-serif; font-weight: 900; font-size: 24px; color: #C6F432; }
+  .v2 .facts span { font-size: 11px; text-transform: uppercase; color: #7b7b86; }
+  .v2 .cut {
+    background: #101014; border: 3px solid #fff; height: 100%; min-height: 400px;
+    padding: 18px; transform: rotate(1.4deg); box-shadow: 10px 10px 0 #C6F432;
+    display: flex; flex-direction: column; justify-content: flex-end; font-size: 11px; color: #6f6f7d;
+  }
+  .v2 .problem { padding: 66px 0 90px; border-top: 2px solid #1c1c22; }
+  .v2 .problem h2 {
+    font-family: Unbounded, sans-serif; font-weight: 900; text-transform: uppercase;
+    font-size: clamp(24px, 3.5vw, 42px); line-height: 1.08; margin: 0 0 16px; max-width: 22ch;
+  }
+  .v2 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+  .v2 .card {
+    background: #101014; border: 2px solid #26262e; padding: 24px;
+  }
+  .v2 .card:nth-child(2) { transform: rotate(-1deg); border-color: #C6F432; }
+  .v2 .card h3 { font-family: Unbounded, sans-serif; font-weight: 700; font-size: 15px; margin: 0 0 10px; text-transform: uppercase; }
+  .v2 .card p { margin: 0; font-size: 12.5px; line-height: 1.65; color: #8f8f9c; }
+  @media (max-width: 900px) {
+    .v2 .grid, .v2 .cards { grid-template-columns: 1fr; }
+    .v2 .top nav { display: none; }
+  }
+
+  /* ============================================================
+     ВАРИАНТ 3 — КЛЕЙ. Объёмные мягкие формы, двойные тени
+     ============================================================ */
+  .v3 { background: #EFEBFD; color: #241F3D; font-family: Nunito, sans-serif; }
+  .v3 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  .v3 .top { padding: 24px 0; display: flex; align-items: center; gap: 22px; }
+  .v3 .logo { font-weight: 900; font-size: 21px; color: #5B45D8; }
+  .v3 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 14px; font-weight: 700; color: #6d6690; }
+  .v3 .hero { padding: 26px 0 70px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; align-items: center; }
+  .v3 .clay {
+    background: #EFEBFD; border-radius: 34px;
+    box-shadow: 12px 12px 26px #cdc6e8, -12px -12px 26px #ffffff;
+  }
+  .v3 .pill {
+    display: inline-block; padding: 9px 18px; border-radius: 999px; font-weight: 800; font-size: 13px;
+    color: #5B45D8; background: #EFEBFD; margin-bottom: 20px;
+    box-shadow: inset 4px 4px 9px #cdc6e8, inset -4px -4px 9px #ffffff;
+  }
+  .v3 h1 { font-weight: 900; font-size: clamp(34px, 5.2vw, 60px); line-height: 1.06; margin: 0 0 18px; }
+  .v3 h1 em { font-style: normal; color: #5B45D8; }
+  .v3 .lede { font-size: 17px; line-height: 1.6; color: #5f5880; max-width: 44ch; margin: 0 0 30px; }
+  .v3 .acts { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 32px; }
+  .v3 .btn {
+    font-family: Nunito, sans-serif; font-weight: 800; font-size: 15px; padding: 16px 30px;
+    border: none; border-radius: 999px; cursor: pointer; background: #5B45D8; color: #fff;
+    box-shadow: 8px 8px 18px rgba(91,69,216,.34), -6px -6px 14px #ffffff;
+  }
+  .v3 .btn.soft { background: #EFEBFD; color: #5B45D8; box-shadow: 8px 8px 18px #cdc6e8, -8px -8px 18px #ffffff; }
+  .v3 .facts { display: flex; gap: 16px; flex-wrap: wrap; }
+  .v3 .fact { padding: 16px 22px; border-radius: 22px; }
+  .v3 .fact b { display: block; font-size: 22px; font-weight: 900; color: #5B45D8; }
+  .v3 .fact span { font-size: 12.5px; color: #6d6690; font-weight: 700; }
+  .v3 .blobwrap { position: relative; height: 440px; }
+  .v3 .blob { position: absolute; border-radius: 50% 46% 52% 48% / 48% 52% 46% 54%; }
+  .v3 .blob.b1 { width: 300px; height: 300px; left: 14%; top: 26px; background: #D9CFFB; box-shadow: 16px 16px 34px #cdc6e8, -14px -14px 30px #fff; }
+  .v3 .blob.b2 { width: 150px; height: 150px; right: 12%; bottom: 44px; background: #FFD9E8; box-shadow: 12px 12px 24px #ddd0e0, -10px -10px 22px #fff; }
+  .v3 .phone {
+    position: absolute; left: 50%; top: 42px; transform: translateX(-50%);
+    width: 208px; height: 372px; border-radius: 40px; background: #EFEBFD;
+    box-shadow: 16px 16px 34px #c8c0e6, -14px -14px 30px #ffffff;
+    display: flex; align-items: flex-end; justify-content: center; padding: 22px;
+    font-size: 12px; font-weight: 700; color: #8c85ac; text-align: center;
+  }
+  .v3 .problem { padding: 10px 0 92px; }
+  .v3 .problem h2 { font-weight: 900; font-size: clamp(26px, 3.8vw, 44px); line-height: 1.1; margin: 0 0 16px; max-width: 22ch; }
+  .v3 .problem .lede { max-width: 62ch; }
+  .v3 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 38px; }
+  .v3 .card { padding: 28px; }
+  .v3 .card .dot { width: 44px; height: 44px; border-radius: 16px; background: #5B45D8; margin-bottom: 16px; box-shadow: 6px 6px 14px rgba(91,69,216,.32); }
+  .v3 .card:nth-child(2) .dot { background: #E86FA6; box-shadow: 6px 6px 14px rgba(232,111,166,.32); }
+  .v3 .card:nth-child(3) .dot { background: #46B8A6; box-shadow: 6px 6px 14px rgba(70,184,166,.32); }
+  .v3 .card h3 { font-size: 18px; font-weight: 900; margin: 0 0 9px; }
+  .v3 .card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: #5f5880; }
+  @media (max-width: 900px) {
+    .v3 .hero, .v3 .cards { grid-template-columns: 1fr; }
+    .v3 .blobwrap { height: 380px; }
+    .v3 .top nav { display: none; }
+  }
+
+  /* ============================================================
+     ВАРИАНТ 4 — СТЕКЛО. Блюр-панели на тёплом градиенте
+     ============================================================ */
+  .v4 {
+    color: #FFF6E8; font-family: Manrope, sans-serif; position: relative; overflow: hidden;
+    background: radial-gradient(120% 90% at 12% 8%, #C97A18 0%, #6E3606 46%, #2A1503 100%);
+  }
+  .v4::before, .v4::after {
+    content: ''; position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none;
+  }
+  .v4::before { width: 460px; height: 460px; background: rgba(255,196,84,.5); left: -110px; top: -90px; }
+  .v4::after { width: 520px; height: 520px; background: rgba(196,84,20,.42); right: -140px; bottom: -160px; }
+  .v4 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+  .v4 .top { padding: 24px 0; display: flex; align-items: center; gap: 22px; }
+  .v4 .logo { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 23px; }
+  .v4 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 13px; color: rgba(255,246,232,.66); }
+  .v4 .glass {
+    background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 26px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 18px 50px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.24);
+  }
+  .v4 .hero { padding: 30px 0 74px; display: grid; grid-template-columns: 1.06fr .94fr; gap: 44px; align-items: center; }
+  .v4 .eyebrow {
+    display: inline-block; padding: 8px 15px; border-radius: 999px; font-size: 12px; letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: 22px; color: #FFE3B0;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  }
+  .v4 h1 {
+    font-family: 'Playfair Display', serif; font-weight: 800;
+    font-size: clamp(36px, 5.4vw, 66px); line-height: 1.03; margin: 0 0 20px;
+  }
+  .v4 h1 em { font-style: italic; color: #FFC96B; }
+  .v4 .lede { font-size: 17px; line-height: 1.6; color: rgba(255,246,232,.76); max-width: 45ch; margin: 0 0 30px; }
+  .v4 .acts { display: flex; flex-wrap: wrap; gap: 13px; margin-bottom: 32px; }
+  .v4 .btn {
+    font-family: Manrope, sans-serif; font-weight: 800; font-size: 15px; padding: 15px 28px;
+    border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+    background: #FFC96B; color: #35190A;
+  }
+  .v4 .btn.ghost { background: rgba(255,255,255,.09); color: #FFF6E8; border-color: rgba(255,255,255,.26); backdrop-filter: blur(10px); }
+  .v4 .facts { display: flex; gap: 14px; flex-wrap: wrap; }
+  .v4 .fact { padding: 15px 22px; border-radius: 18px; }
+  .v4 .fact b { display: block; font-family: 'Playfair Display', serif; font-size: 23px; }
+  .v4 .fact span { font-size: 12.5px; color: rgba(255,246,232,.62); }
+  .v4 .panel { padding: 22px; min-height: 430px; display: flex; flex-direction: column; gap: 14px; }
+  .v4 .panel .screen {
+    flex: 1; border-radius: 18px; background: rgba(0,0,0,.24); border: 1px solid rgba(255,255,255,.14);
+    display: flex; align-items: flex-end; padding: 18px; font-size: 12px; color: rgba(255,246,232,.55);
+  }
+  .v4 .panel .rowmini { display: flex; gap: 12px; }
+  .v4 .panel .rowmini div {
+    flex: 1; height: 62px; border-radius: 14px; background: rgba(255,255,255,.09);
+    border: 1px solid rgba(255,255,255,.14);
+  }
+  .v4 .problem { padding: 0 0 92px; }
+  .v4 .problem .inner { padding: 42px; border-radius: 30px; }
+  .v4 .problem h2 {
+    font-family: 'Playfair Display', serif; font-weight: 800;
+    font-size: clamp(26px, 3.8vw, 46px); line-height: 1.08; margin: 0 0 16px; max-width: 22ch;
+  }
+  .v4 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+  .v4 .card { padding: 24px; border-radius: 20px; }
+  .v4 .card h3 { font-family: 'Playfair Display', serif; font-size: 19px; margin: 0 0 9px; }
+  .v4 .card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: rgba(255,246,232,.7); }
+  @media (max-width: 900px) {
+    .v4 .hero, .v4 .cards { grid-template-columns: 1fr; }
+    .v4 .top nav { display: none; }
+    .v4 .problem .inner { padding: 26px; }
+  }
+
+  /* ============================================================
+     ВАРИАНТ 5 — ОРГАНИКА. Слоистые формы, зелёный + терракота
+     ============================================================ */
+  .v5 { background: #163A2C; color: #F2ECDC; font-family: 'Golos Text', sans-serif; position: relative; overflow: hidden; }
+  .v5 .leaf { position: absolute; pointer-events: none; opacity: .5; }
+  .v5 .leaf.l1 { width: 520px; height: 520px; right: -130px; top: -170px; background: radial-gradient(circle at 34% 34%, #27604A, transparent 66%); border-radius: 50%; }
+  .v5 .leaf.l2 { width: 430px; height: 430px; left: -160px; bottom: -140px; background: radial-gradient(circle at 60% 42%, #8A4A2A, transparent 66%); border-radius: 50%; }
+  .v5 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+  .v5 .top { padding: 26px 0; display: flex; align-items: center; gap: 22px; }
+  .v5 .logo { font-weight: 900; font-size: 21px; letter-spacing: -.01em; }
+  .v5 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 13px; color: rgba(242,236,220,.62); }
+  .v5 .hero { padding: 32px 0 66px; display: grid; grid-template-columns: 1.04fr .96fr; gap: 46px; align-items: center; }
+  .v5 .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #D2895E; margin-bottom: 18px; }
+  .v5 h1 { font-weight: 900; font-size: clamp(35px, 5.3vw, 62px); line-height: 1.04; letter-spacing: -.02em; margin: 0 0 20px; }
+  .v5 h1 em { font-style: normal; color: #D2895E; }
+  .v5 .lede { font-size: 17px; line-height: 1.62; color: rgba(242,236,220,.74); max-width: 45ch; margin: 0 0 30px; }
+  .v5 .acts { display: flex; flex-wrap: wrap; gap: 13px; margin-bottom: 34px; }
+  .v5 .btn {
+    font-family: 'Golos Text', sans-serif; font-weight: 600; font-size: 15px; padding: 16px 30px;
+    border-radius: 40px; cursor: pointer; border: 1px solid #D2895E; background: #D2895E; color: #1B2E22;
+  }
+  .v5 .btn.ghost { background: transparent; color: #F2ECDC; border-color: rgba(242,236,220,.3); }
+  .v5 .facts { display: flex; gap: 34px; flex-wrap: wrap; }
+  .v5 .facts b { display: block; font-size: 25px; font-weight: 900; }
+  .v5 .facts span { font-size: 12.5px; color: rgba(242,236,220,.58); }
+  .v5 .organic { position: relative; height: 450px; }
+  .v5 .shape {
+    position: absolute; border-radius: 58% 42% 46% 54% / 46% 54% 46% 54%;
+    background: linear-gradient(150deg, #27604A, #1B4536);
+    box-shadow: 0 26px 60px rgba(0,0,0,.32);
+  }
+  .v5 .shape.s1 { width: 330px; height: 360px; left: 10%; top: 22px; }
+  .v5 .shape.s2 { width: 190px; height: 200px; right: 10%; bottom: 30px; background: linear-gradient(150deg, #A9563066, #6C351B66); }
+  .v5 .glasscard {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 88%; padding: 22px; border-radius: 22px;
+    background: rgba(242,236,220,.09); border: 1px solid rgba(242,236,220,.18);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+  }
+  .v5 .glasscard div { padding: 14px; border-radius: 14px; background: rgba(0,0,0,.18); font-size: 12.5px; color: rgba(242,236,220,.8); }
+  .v5 .glasscard div b { display: block; font-size: 15px; margin-bottom: 3px; color: #F2ECDC; }
+  .v5 .problem { padding: 6px 0 94px; }
+  .v5 .problem h2 { font-weight: 900; font-size: clamp(26px, 3.8vw, 45px); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 16px; max-width: 22ch; }
+  .v5 .problem .lede { max-width: 62ch; }
+  .v5 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 38px; }
+  .v5 .card {
+    padding: 26px; border-radius: 22px; background: rgba(242,236,220,.07);
+    border: 1px solid rgba(242,236,220,.13);
+  }
+  .v5 .card h3 { font-size: 18px; font-weight: 900; margin: 0 0 10px; }
+  .v5 .card p { margin: 0; font-size: 14.5px; line-height: 1.56; color: rgba(242,236,220,.7); }
+  @media (max-width: 900px) {
+    .v5 .hero, .v5 .cards { grid-template-columns: 1fr; }
+    .v5 .organic { height: 380px; }
+    .v5 .top nav { display: none; }
+  }
+
+  /* ============================================================
+     ВАРИАНТ 6 — ФЛЭТ. Волны, толстые контуры, яркий
+     ============================================================ */
+  .v6 { background: #FFD23F; color: #16130B; font-family: Rubik, sans-serif; }
+  .v6 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+  .v6 .top { padding: 22px 0; display: flex; align-items: center; gap: 22px; }
+  .v6 .logo { font-weight: 900; font-size: 21px; }
+  .v6 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 14px; font-weight: 600; }
+  .v6 .top .mini {
+    font-weight: 800; font-size: 13px; padding: 10px 18px; border: 3px solid #16130B;
+    background: #16130B; color: #FFD23F; border-radius: 10px;
+  }
+  .v6 .hero { padding: 26px 0 60px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; align-items: center; }
+  .v6 .tagpill {
+    display: inline-block; font-weight: 800; font-size: 13px; padding: 9px 16px;
+    border: 3px solid #16130B; border-radius: 999px; background: #fff; margin-bottom: 20px;
+  }
+  .v6 h1 { font-weight: 900; font-size: clamp(36px, 5.6vw, 66px); line-height: 1.02; margin: 0 0 18px; letter-spacing: -.02em; }
+  .v6 h1 mark { background: #7B5CFF; color: #fff; padding: 0 10px; border-radius: 10px; white-space: nowrap;
+    -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .v6 .lede { font-size: 17px; line-height: 1.58; margin: 0 0 30px; max-width: 45ch; color: #3d3524; }
+  .v6 .acts { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 30px; }
+  .v6 .btn {
+    font-family: Rubik, sans-serif; font-weight: 800; font-size: 15px; padding: 15px 28px;
+    border: 3px solid #16130B; border-radius: 12px; cursor: pointer;
+    background: #7B5CFF; color: #fff; box-shadow: 5px 5px 0 #16130B;
+  }
+  .v6 .btn.alt { background: #fff; color: #16130B; }
+  .v6 .facts { display: flex; gap: 14px; flex-wrap: wrap; }
+  .v6 .fact { background: #fff; border: 3px solid #16130B; border-radius: 14px; padding: 13px 20px; box-shadow: 4px 4px 0 #16130B; }
+  .v6 .fact b { display: block; font-size: 21px; font-weight: 900; }
+  .v6 .fact span { font-size: 12.5px; color: #554c36; }
+  .v6 .art { position: relative; height: 430px; }
+  .v6 .art .box {
+    position: absolute; border: 3px solid #16130B; border-radius: 20px; box-shadow: 7px 7px 0 #16130B;
+    display: flex; align-items: flex-end; padding: 16px; font-size: 12.5px; font-weight: 600;
+  }
+  .v6 .art .box.p1 { width: 200px; height: 350px; left: 8%; top: 26px; background: #fff; }
+  .v6 .art .box.p2 { width: 175px; height: 240px; right: 8%; top: 66px; background: #7B5CFF; color: #fff; }
+  .v6 .art .box.p3 { width: 150px; height: 120px; right: 22%; bottom: 20px; background: #21C7A8; }
+  .v6 .wave { display: block; width: 100%; height: 56px; }
+  .v6 .problem { background: #7B5CFF; color: #fff; padding: 12px 0 88px; }
+  .v6 .problem h2 { font-weight: 900; font-size: clamp(26px, 3.9vw, 46px); line-height: 1.06; margin: 0 0 16px; max-width: 22ch; letter-spacing: -.02em; }
+  .v6 .problem .lede { color: rgba(255,255,255,.86); max-width: 60ch; }
+  .v6 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 36px; }
+  .v6 .card {
+    background: #fff; color: #16130B; border: 3px solid #16130B; border-radius: 18px;
+    padding: 24px; box-shadow: 6px 6px 0 #16130B;
+  }
+  .v6 .card .ico { width: 42px; height: 42px; border-radius: 12px; border: 3px solid #16130B; background: #FFD23F; margin-bottom: 14px; }
+  .v6 .card:nth-child(2) .ico { background: #21C7A8; }
+  .v6 .card:nth-child(3) .ico { background: #FF7A5C; }
+  .v6 .card h3 { font-size: 18px; font-weight: 900; margin: 0 0 9px; }
+  .v6 .card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: #4a4132; }
+  @media (max-width: 900px) {
+    .v6 .hero, .v6 .cards { grid-template-columns: 1fr; }
+    .v6 .art { height: 360px; }
+    .v6 .top nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+/* Единый контент — меняется только оформление, тексты согласованы */
+const C = {
+  brand: 'AppForse',
+  nav: ['Зачем приложение', 'Возможности', 'Для кого', 'Кейс', 'Цена'],
+  eyebrow: 'Готовое приложение под вашим брендом',
+  h1a: 'Готовое приложение для вашего магазина',
+  h1b: 'за 7 дней',
+  lede: 'Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы, доставка, оплата, бонусы, push-уведомления и клиентская база — без разработки с нуля.',
+  cta1: 'Обсудить запуск',
+  cta2: 'Посмотреть кейсы',
+  price: '150 000 ₽',
+  priceLabel: 'запуск под вашим брендом',
+  term: '7 дней',
+  termLabel: 'и приложение уже в сторах',
+  p2h: 'Вы уже заплатили за привлечение клиента. Теперь верните его снова.',
+  p2lede: 'Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится снова тратить деньги на рекламу, чтобы вернуть тех, кто уже однажды у вас покупал.',
+  cards: [
+    { t: 'Повторные продажи', d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.' },
+    { t: 'Своя клиентская база', d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.' },
+    { t: 'Прямой канал с клиентом', d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.' },
+  ],
+};
+
+const Nav = ({ cls }) => (
+  <nav className={cls}>{C.nav.map(n => <span key={n}>{n}</span>)}</nav>
+);
+
+/* ---------- 1. СТРИТ ---------- */
+function V1() {
+  return (
+    <div className="v1">
+      <div className="wrap">
+        <header className="top"><div className="logo">{C.brand}</div><Nav /></header>
+        <section className="hero">
+          <div>
+            <div className="kicker">{C.eyebrow}</div>
+            <h1>
+              {C.h1a} —{' '}
+              <span className="circled">
+                {C.h1b}
+                <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
+                </svg>
+              </span>
+            </h1>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn solid">{C.cta1}</button>
+              <button className="btn ghost">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+          </div>
+          <div className="collage">
+            <div className="shot a"><div className="tape" />Экран каталога</div>
+            <div className="shot b"><div className="tape" />Админ-панель</div>
+          </div>
+        </section>
+      </div>
+      <div className="tornwrap">
+        <div className="torn-top" />
+        <div className="wrap">
+          <section className="problem">
+            <h2>{C.p2h}</h2>
+            <p className="lede">{C.p2lede}</p>
+            <div className="cards">
+              {C.cards.map((c, i) => (
+                <div className="card" key={c.t}>
+                  <i>{String(i + 1).padStart(2, '0')}</i>
+                  <h3>{c.t}</h3><p>{c.d}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 2. КОЛЛАЖ ---------- */
+function V2() {
+  return (
+    <div className="v2">
+      <div className="wrap">
+        <header className="top"><div className="logo">{C.brand}</div><Nav /></header>
+        <section className="hero">
+          <div className="bars">
+            <div className="bar">Готовое приложение</div><br />
+            <div className="bar">для вашего магазина</div><br />
+            <div className="bar out">за 7 дней</div>
+          </div>
+          <div className="grid">
+            <div>
+              <p className="lede">{C.lede}</p>
+              <div className="acts">
+                <button className="btn">{C.cta1}</button>
+                <button className="btn ghost">{C.cta2}</button>
+              </div>
+              <div className="facts">
+                <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+                <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+              </div>
+              <div className="sticker">
+                <p><b>Без разработки с нуля.</b> Платформа уже работает в действующем бизнесе в нескольких городах.</p>
+              </div>
+            </div>
+            <div className="cut">Скриншот приложения — каталог и корзина</div>
+          </div>
+        </section>
+        <section className="problem">
+          <h2>{C.p2h}</h2>
+          <p className="lede">{C.p2lede}</p>
+          <div className="cards">
+            {C.cards.map(c => (
+              <div className="card" key={c.t}><h3>{c.t}</h3><p>{c.d}</p></div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 3. КЛЕЙ ---------- */
+function V3() {
+  return (
+    <div className="v3">
+      <div className="wrap">
+        <header className="top"><div className="logo">{C.brand}</div><Nav /></header>
+        <section className="hero">
+          <div>
+            <div className="pill">{C.eyebrow}</div>
+            <h1>{C.h1a} — <em>{C.h1b}</em></h1>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn">{C.cta1}</button>
+              <button className="btn soft">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div className="fact clay"><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div className="fact clay"><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+          </div>
+          <div className="blobwrap">
+            <div className="blob b1" /><div className="blob b2" />
+            <div className="phone">Экран приложения — каталог, корзина, бонусы</div>
+          </div>
+        </section>
+        <section className="problem">
+          <h2>{C.p2h}</h2>
+          <p className="lede">{C.p2lede}</p>
+          <div className="cards">
+            {C.cards.map(c => (
+              <div className="card clay" key={c.t}><div className="dot" /><h3>{c.t}</h3><p>{c.d}</p></div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 4. СТЕКЛО ---------- */
+function V4() {
+  return (
+    <div className="v4">
+      <div className="wrap">
+        <header className="top"><div className="logo">{C.brand}</div><Nav /></header>
+        <section className="hero">
+          <div>
+            <div className="eyebrow">{C.eyebrow}</div>
+            <h1>{C.h1a} — <em>{C.h1b}</em></h1>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn">{C.cta1}</button>
+              <button className="btn ghost">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div className="fact glass"><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div className="fact glass"><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+          </div>
+          <div className="panel glass">
+            <div className="screen">Скриншот приложения — главный экран</div>
+            <div className="rowmini"><div /><div /><div /></div>
+          </div>
+        </section>
+        <section className="problem">
+          <div className="inner glass">
+            <h2>{C.p2h}</h2>
+            <p className="lede">{C.p2lede}</p>
+            <div className="cards">
+              {C.cards.map(c => (
+                <div className="card glass" key={c.t}><h3>{c.t}</h3><p>{c.d}</p></div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 5. ОРГАНИКА ---------- */
+function V5() {
+  return (
+    <div className="v5">
+      <div className="leaf l1" /><div className="leaf l2" />
+      <div className="wrap">
+        <header className="top"><div className="logo">{C.brand}</div><Nav /></header>
+        <section className="hero">
+          <div>
+            <div className="eyebrow">{C.eyebrow}</div>
+            <h1>{C.h1a} — <em>{C.h1b}</em></h1>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn">{C.cta1}</button>
+              <button className="btn ghost">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+          </div>
+          <div className="organic">
+            <div className="shape s1" /><div className="shape s2" />
+            <div className="glasscard">
+              <div><b>Каталог</b>товары и остатки</div>
+              <div><b>Заказы</b>доставка и самовывоз</div>
+              <div><b>Бонусы</b>push и промокоды</div>
+              <div><b>CRM</b>клиентская база</div>
+            </div>
+          </div>
+        </section>
+        <section className="problem">
+          <h2>{C.p2h}</h2>
+          <p className="lede">{C.p2lede}</p>
+          <div className="cards">
+            {C.cards.map(c => (
+              <div className="card" key={c.t}><h3>{c.t}</h3><p>{c.d}</p></div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 6. ФЛЭТ ---------- */
+function V6() {
+  return (
+    <div className="v6">
+      <div className="wrap">
+        <header className="top">
+          <div className="logo">{C.brand}</div><Nav />
+          <button className="mini">{C.cta1}</button>
+        </header>
+        <section className="hero">
+          <div>
+            <div className="tagpill">{C.eyebrow}</div>
+            <h1>{C.h1a} — <mark>{C.h1b}</mark></h1>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn">{C.cta1}</button>
+              <button className="btn alt">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div className="fact"><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div className="fact"><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+          </div>
+          <div className="art">
+            <div className="box p1">Каталог</div>
+            <div className="box p2">Админ-панель</div>
+            <div className="box p3">Бонусы</div>
+          </div>
+        </section>
+      </div>
+      <svg className="wave" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="#7B5CFF" d="M0 30c120-28 240 22 360 20s240-42 360-38 240 44 360 42 240-38 360-38v42H0z" />
+      </svg>
+      <div className="problem">
+        <div className="wrap">
+          <h2>{C.p2h}</h2>
+          <p className="lede">{C.p2lede}</p>
+          <div className="cards">
+            {C.cards.map(c => (
+              <div className="card" key={c.t}><div className="ico" /><h3>{c.t}</h3><p>{c.d}</p></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const VARIANTS = [
+  { n: 1, name: 'Стрит',    ref: 'по референсу Emil Dance Room — рваная бумага, электрик-синий, обводка от руки', Cmp: V1 },
+  { n: 2, name: 'Коллаж',   ref: 'по референсу Resonance Studio — чёрный и кислотный лайм, стикеры, скошенные плашки', Cmp: V2 },
+  { n: 3, name: 'Клей',     ref: 'по референсу с астронавтом — объёмные мягкие формы, двойные тени', Cmp: V3 },
+  { n: 4, name: 'Стекло',   ref: 'по золотому референсу — блюр-панели на тёплом градиенте', Cmp: V4 },
+  { n: 5, name: 'Органика', ref: 'по зелёному референсу с листьями — слоистые формы, зелёный и терракота', Cmp: V5 },
+  { n: 6, name: 'Флэт',     ref: 'по референсам Super Hello и Zombify — волны, толстые контуры, яркий', Cmp: V6 },
+];
+
+function App() {
+  const [cur, setCur] = useState(1);
+  const v = VARIANTS.find(x => x.n === cur);
+  const Cmp = v.Cmp;
+  return (
+    <React.Fragment>
+      <div className="switcher">
+        <span className="brand">Вариант дизайна</span>
+        {VARIANTS.map(x => (
+          <button key={x.n} data-on={x.n === cur ? '1' : '0'} onClick={() => setCur(x.n)}>
+            {x.n}. {x.name}
+          </button>
+        ))}
+        <span className="note">первый экран + второй блок</span>
+      </div>
+      <div className="stage"><Cmp /></div>
+      <div className="caption">Вариант {v.n} — «{v.name}»: <b>{v.ref}</b></div>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
