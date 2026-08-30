@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AppForse — готовое приложение для вашего магазина за 7 дней</title>
+<meta name="description" content="Запустим мобильное приложение под вашим брендом на готовой платформе: каталог, заказы, доставка, оплата, бонусы, push и клиентская база. 150 000 ₽, 7 дней.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   ДИЗАЙН-СИСТЕМА APPFORSE
+   Снята с макета 1920×1400. Все размеры масштабируются от него.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* ── цвет ── */
+  --ink:        #0E0C10;   /* основной фон */
+  --ink-lift:   #16141A;   /* поверхность на тёмном */
+  --ink-line:   #262626;   /* плашки, границы */
+  --paper:      #FFFFFF;
+  --muted:      #929292;   /* приглушённый текст на плашке */
+  --muted-lo:   #A9A9BA;   /* текст на тёмном */
+  --muted-hi:   #6E6E7A;   /* мелкие подписи */
+  --red:        #E8243C;
+  --red-dk:     #B3182C;
+  --red-lt:     #FF5468;
+  --on-red:     rgba(255,255,255,.88);
+
+  /* ── типографика: опорные значения при 1920, ниже масштабируются ── */
+  --fs-h1:   clamp(32px, 3.54vw, 68px);
+  --fs-h2:   clamp(24px, 2.29vw, 44px);
+  --fs-h3:   clamp(19px, 1.51vw, 29px);
+  --fs-h4:   clamp(16px, 1.09vw, 21px);
+  --fs-num:  clamp(24px, 1.77vw, 34px);
+  --fs-lead: clamp(15px, 0.89vw, 17px);
+  --fs-body: clamp(14px, 0.78vw, 15px);
+  --fs-cap:  clamp(11px, 0.68vw, 13px);
+  --fs-nav:  clamp(12px, 0.78vw, 15px);
+
+  /* ширины текстовых колонок — из макета */
+  --w-h1: 730px;
+  --w-h2: clamp(320px, 31.25vw, 600px);
+  --w-lead: clamp(260px, 22.9vw, 440px);
+  --w-lead-wide: clamp(280px, 29.2vw, 560px);
+
+  --lh-tight: .96;   /* заголовки в верхнем регистре: шаг строк из макета */
+  --lh-head:  1.1;
+  --lh-text:  1.5;
+
+  /* ── шаг сетки: кратно 4 ── */
+  --s1: 4px;   --s2: 8px;   --s3: 12px;  --s4: 16px;
+  --s5: 20px;  --s6: 24px;  --s8: 32px;  --s10: 40px;
+  --s12: 48px; --s16: 64px; --s20: 80px; --s25: 100px;
+  --gap-block: clamp(56px, 5.2vw, 100px);   /* отступ между блоками */
+
+  /* ── сетка ── */
+  --shell: 1505px;
+  --shot-w: clamp(150px, 14.27vw, 274px);   /* ширина снимка с рамкой */
+  --shot-gap: clamp(14px, 1.82vw, 35px);
+  --tape-w: clamp(34px, 3.13vw, 60px);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ink); color: var(--paper);
+  font-family: Manrope, system-ui, sans-serif; font-size: var(--fs-body);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; }
+:focus-visible { outline: 3px solid var(--red-lt); outline-offset: 3px; }
+
+h1, h2, h3, .display {
+  font-family: Oswald, 'Arial Narrow', sans-serif;
+  text-transform: uppercase; text-wrap: balance;
+  margin: 0; font-weight: 700; letter-spacing: 0;
+}
+h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -.025em; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -.02em;
+  max-width: var(--w-h2); }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-head); font-weight: 600; }
+p  { margin: 0; }
+.lead { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo); text-wrap: pretty; }
+
+.shell { width: min(var(--shell), calc(100% - clamp(40px, 4.2vw, 80px))); margin: 0 auto; }
+
+/* ── плашка-эйбрау ── */
+.eyebrow {
+  display: inline-block; background: var(--ink-line); color: var(--muted);
+  font-family: Oswald, sans-serif; font-size: var(--fs-cap); font-weight: 500;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 12px 22px 11px; line-height: 1;
+}
+.eyebrow.on-red { background: rgba(0,0,0,.22); color: rgba(255,255,255,.72); }
+
+/* ── кнопки ── */
+.btn {
+  font-family: Oswald, sans-serif; font-size: clamp(13px, .78vw, 15px); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+  height: clamp(46px, 3.02vw, 58px); padding: 0 clamp(20px, 1.77vw, 34px);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 2px solid var(--red); background: var(--red); color: var(--paper);
+  transition: background .2s var(--ease), border-color .2s var(--ease),
+              transform .2s var(--ease), box-shadow .2s var(--ease);
+  text-decoration: none;
+}
+.btn:hover { background: var(--red-dk); border-color: var(--red-dk);
+  transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232,36,60,.34); }
+.btn:active { transform: translateY(0); }
+.btn.ghost { background: transparent; border-color: #373745; color: var(--paper); }
+.btn.ghost:hover { background: transparent; border-color: var(--paper); box-shadow: none; }
+.btn.on-red { background: var(--paper); border-color: var(--paper); color: var(--red); }
+.btn.on-red:hover { background: var(--ink); border-color: var(--ink); color: var(--paper);
+  box-shadow: 0 8px 22px rgba(0,0,0,.24); }
+
+/* ── появление при прокрутке ── */
+.rise { opacity: 0; transform: translateY(26px); }
+.rise.seen { opacity: 1; transform: none;
+  transition: opacity .7s var(--ease), transform .7s var(--ease); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise, .rise.seen { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ═══════════ ШАПКА ═══════════ */
+.top {
+  position: sticky; top: 0; z-index: 60; background: rgba(14,12,16,.86);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent; transition: border-color .3s var(--ease);
+}
+.top.stuck { border-bottom-color: #1F1D24; }
+.top .shell { display: flex; align-items: center; gap: var(--s6);
+  padding-top: var(--s6); padding-bottom: 0; }
+.top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
+.top nav { display: flex; gap: clamp(14px, 1.2vw, 23px); margin-left: auto; align-items: center; }
+.top nav a {
+  font-family: Oswald, sans-serif; font-size: var(--fs-nav); font-weight: 500;
+  letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; white-space: nowrap;
+  transition: color .2s var(--ease);
+}
+.top nav a:hover { color: var(--paper); }
+@media (max-width: 1100px) { .top nav { display: none; } }
+
+/* ═══════════ 01. ПЕРВЫЙ ЭКРАН ═══════════ */
+.hero .shell {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(32px, 4vw, 76px); align-items: start;
+  padding-top: clamp(30px, 2.55vw, 49px); padding-bottom: clamp(40px, 2.81vw, 54px);
+}
+.hero h1 { max-width: var(--w-h1); margin: 10px 0 0; text-wrap: normal; }
+.hero .circle { position: relative; display: inline-block; white-space: nowrap; padding: 0 .1em; }
+.hero .circle svg { position: absolute; left: -11%; top: -33%; width: 123%; height: 168%;
+  overflow: visible; pointer-events: none; }
+.hero .circle path {
+  fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round;
+  stroke-dasharray: 470; stroke-dashoffset: 470;
+  animation: draw 1.1s var(--ease) .5s forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.hero .lead { max-width: var(--w-lead); margin-top: clamp(4px, .42vw, 8px); }
+.hero .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(18px, 1.35vw, 26px); }
+.hero .facts { display: flex; gap: clamp(24px, 2.08vw, 40px); margin-top: clamp(20px, 1.35vw, 26px); }
+.hero .facts b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
+  font-size: var(--fs-num); line-height: 1; letter-spacing: .01em; }
+.hero .facts span { display: block; margin-top: 6px; font-size: var(--fs-cap); color: var(--muted-hi); }
+
+/* снимки */
+.shots { display: flex; gap: var(--shot-gap); justify-content: flex-end;
+  margin-top: clamp(-8px, -0.42vw, 0px); }
+.shot { position: relative; width: var(--shot-w); border: 4px solid var(--paper);
+  background: var(--ink-lift); box-shadow: 0 22px 54px rgba(0,0,0,.6); }
+.shot.b { border-color: var(--red); margin-top: 6px; }
+.shot img { width: 100%; height: auto; }
+.tape {
+  position: absolute; z-index: 3; width: var(--tape-w); height: auto;
+  left: 50%; top: -9px; transform: translateX(-50%) rotate(-1.5deg);
+  opacity: .9; filter: drop-shadow(0 3px 6px rgba(0,0,0,.5)); pointer-events: none;
+  transition: transform .4s var(--ease);
+}
+.shot img.tape { width: var(--tape-w); }
+.shot.b .tape { transform: translateX(-50%) rotate(2deg); }
+.shot:hover .tape { transform: translateX(-50%) rotate(-4deg); }
+.shot.b:hover .tape { transform: translateX(-50%) rotate(5deg); }
+
+/* рваный край между секциями */
+.torn { display: block; width: 100%; height: clamp(30px, 3.1vw, 60px); }
+.torn.down path { fill: var(--red); }
+.torn.up path { fill: var(--ink); }
+
+/* ═══════════ КРАСНАЯ СЕКЦИЯ ═══════════ */
+.red { background: var(--red); color: var(--paper); }
+.red .lead { color: var(--on-red); }
+.red .shell { padding-top: var(--gap-block); padding-bottom: var(--gap-block); }
+.red h2 + .lead { margin-top: clamp(16px, 1.35vw, 26px); max-width: var(--w-lead-wide); }
+
+/* карточки на красном */
+.deck { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, .89vw, 17px);
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.card { background: var(--ink); padding: clamp(20px, 1.67vw, 32px);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(0,0,0,.28); }
+.card .num { display: block; font-family: Oswald, sans-serif; font-weight: 600;
+  font-size: clamp(12px, .73vw, 14px); letter-spacing: .1em; color: var(--red-lt); }
+.card h3 { margin: clamp(14px, 1.15vw, 22px) 0 clamp(10px, .83vw, 16px); }
+.card p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
+
+/* ═══════════ ТЁМНАЯ СЕКЦИЯ ═══════════ */
+.dark .shell { padding-top: var(--gap-block); padding-bottom: var(--gap-block); }
+.dark h2 + .lead { margin-top: clamp(16px, 1.35vw, 26px); max-width: var(--w-lead-wide); }
+.sec-head { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+
+/* ── 03. Возможности ── */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.25vw, 24px);
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.panel { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
+  display: flex; flex-direction: column; gap: clamp(16px, 1.4vw, 26px); }
+.panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
+  border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
+.panel .pic { border: 3px solid var(--paper); background: var(--ink); align-self: flex-start;
+  width: clamp(140px, 13vw, 250px); }
+.panel:nth-child(2) .pic { border-color: var(--red); }
+.panel .pic img { width: 100%; }
+
+/* ── 04. Для кого ── */
+.quad { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 1.04vw, 20px);
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.who { background: var(--ink-lift); border-left: 3px solid var(--red);
+  padding: clamp(20px, 1.67vw, 32px); transition: border-color .3s var(--ease), background .3s var(--ease); }
+.who:hover { background: #1B1920; border-left-color: var(--red-lt); }
+.who h3 { font-size: var(--fs-h4); }
+.who p { margin-top: 12px; font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
+
+/* ── 05. Как проходит запуск ── */
+.steps { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
+.step { display: grid; grid-template-columns: clamp(56px, 5vw, 96px) minmax(0, 26ch) 1fr;
+  gap: clamp(16px, 2vw, 40px); align-items: baseline;
+  padding: clamp(20px, 1.67vw, 32px) 0; border-bottom: 1px solid #1F1D24;
+  transition: background .3s var(--ease); }
+.step:hover { background: #131117; }
+.step .n { font-family: Oswald, sans-serif; font-weight: 700; font-size: var(--fs-h3);
+  color: var(--red); line-height: 1; }
+.step h3 { font-size: var(--fs-h4); }
+.step p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
+
+/* ── 06. Демо ── */
+.demo { display: grid; grid-template-columns: 1fr auto; gap: clamp(24px, 3vw, 56px);
+  align-items: center; background: var(--ink-lift); border: 1px solid #1F1D24;
+  padding: clamp(24px, 2.6vw, 50px); margin-top: clamp(24px, 2vw, 38px); }
+.demo .lead { max-width: 52ch; margin-top: 16px; }
+
+/* ── 07. Кейс ── */
+.cases { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.25vw, 24px);
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.case { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px); }
+.case .kind { font-family: Oswald, sans-serif; font-size: var(--fs-cap); letter-spacing: .14em;
+  text-transform: uppercase; color: var(--red-lt); }
+.case h3 { margin: 14px 0 10px; font-size: var(--fs-h4); }
+.case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
+.case .pic { margin-top: clamp(16px, 1.4vw, 26px); border: 3px solid var(--paper);
+  width: clamp(140px, 13vw, 250px); }
+.case:nth-child(2) .pic { border-color: var(--red); }
+
+/* ── 08. Цена ── */
+.price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 460px);
+  gap: clamp(24px, 2.5vw, 48px); margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
+.price .box { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(22px, 2.1vw, 40px); }
+.price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted-hi); font-family: Oswald, sans-serif; }
+.price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(38px, 3.13vw, 60px);
+  line-height: 1; margin: 12px 0 clamp(20px, 1.67vw, 32px); }
+.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.price li { display: flex; gap: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); }
+.price li svg { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--red); }
+.price .btn { margin-top: clamp(22px, 1.9vw, 36px); }
+.price .extra { display: grid; gap: clamp(12px, 1.04vw, 20px); }
+.price .extra .item { background: var(--ink-lift); border: 1px solid #1F1D24;
+  padding: clamp(18px, 1.46vw, 28px); }
+.price .extra b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
+  text-transform: uppercase; font-size: var(--fs-h4); }
+.price .extra p { margin-top: 10px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); }
+.price .shotpair { display: flex; gap: 12px; margin-top: clamp(16px, 1.25vw, 24px); }
+.price .shotpair div { border: 3px solid var(--paper); width: clamp(110px, 10vw, 190px); }
+.price .shotpair div:last-child { border-color: var(--red); }
+
+/* ── 09. Вопросы ── */
+.faq { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
+.q { border-bottom: 1px solid #1F1D24; }
+.q button {
+  width: 100%; background: none; border: 0; color: inherit; cursor: pointer; text-align: left;
+  display: flex; align-items: center; gap: 20px; padding: clamp(18px, 1.46vw, 28px) 0;
+  font-family: Oswald, sans-serif; font-weight: 500; text-transform: uppercase;
+  font-size: var(--fs-h4); line-height: 1.25; transition: color .2s var(--ease);
+}
+.q button:hover { color: var(--red-lt); }
+.q .mark { flex: none; margin-left: auto; width: 22px; height: 22px; position: relative; }
+.q .mark::before, .q .mark::after {
+  content: ''; position: absolute; inset: 50% 0 auto; height: 2px; background: var(--red);
+  transition: transform .3s var(--ease);
+}
+.q .mark::after { transform: rotate(90deg); }
+.q[data-open="1"] .mark::after { transform: rotate(0deg); }
+.q .body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease); }
+.q[data-open="1"] .body { grid-template-rows: 1fr; }
+.q .body > div { overflow: hidden; }
+.q .body p { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo);
+  max-width: 92ch; padding-bottom: clamp(18px, 1.46vw, 28px); }
+
+/* ── 10. Заявка ── */
+.contact { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(20px, 1.67vw, 32px);
+  margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
+.contact .box { background: var(--ink); padding: clamp(22px, 2.1vw, 40px); }
+.contact h3 { font-size: var(--fs-h4); }
+.form { display: grid; gap: 12px; margin-top: clamp(18px, 1.46vw, 28px); }
+.form input {
+  font: inherit; font-size: var(--fs-lead); color: var(--paper); background: #131117;
+  border: 1px solid #2A2830; padding: 14px 16px; width: 100%;
+  transition: border-color .2s var(--ease);
+}
+.form input::placeholder { color: var(--muted-hi); }
+.form input:focus { border-color: var(--red); outline: none; }
+.form .btn { margin-top: 6px; }
+.form .note { font-size: var(--fs-cap); color: var(--muted-hi); line-height: 1.5; }
+.contact .aside p { margin-top: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); }
+.contact .aside .btn { margin-top: clamp(18px, 1.46vw, 28px); }
+
+/* ── подвал ── */
+.foot { border-top: 1px solid #1F1D24; }
+.foot .shell { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: clamp(20px, 2vw, 40px);
+  padding-top: clamp(32px, 2.9vw, 56px); padding-bottom: clamp(24px, 2vw, 38px); }
+.foot .logo { height: 38px; width: auto; }
+.foot .tag { margin-top: 14px; font-size: var(--fs-body); color: var(--muted-hi); }
+.foot h4 { font-family: Oswald, sans-serif; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .12em; font-size: var(--fs-cap); color: var(--muted-hi); margin: 0 0 14px; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.foot a { color: var(--muted-lo); text-decoration: none; font-size: var(--fs-body);
+  transition: color .2s var(--ease); }
+.foot a:hover { color: var(--paper); }
+.foot .rule { border-top: 1px solid #1F1D24; }
+.foot .rule .shell { display: flex; justify-content: space-between; gap: 20px;
+  padding-top: 20px; padding-bottom: 26px; font-size: var(--fs-cap); color: var(--muted-hi); }
+
+/* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
+@media (max-width: 1180px) {
+  .hero .shell { grid-template-columns: 1fr; }
+  .shots { justify-content: flex-start; }
+  .price { grid-template-columns: 1fr; }
+  .contact { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .deck, .duo, .quad, .cases, .foot .shell { grid-template-columns: 1fr; }
+  .step { grid-template-columns: 44px 1fr; }
+  .step p { grid-column: 2; }
+  .demo { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const LOGO   = "__LOGO__";
+const SHOT1  = "__SHOT1__";
+const SHOT2  = "__SHOT2__";
+const TAPE   = "__TAPE__";
+const TORN_A = "__TORN_A__";
+const TORN_B = "__TORN_B__";
+
+const TG = 'https://t.me/shark154';
+
+/* ─────────── содержание ─────────── */
+const NAV = [
+  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
+  ['Кейс', '#case'], ['Цена', '#price'],
+];
+
+const WHY_CARDS = [
+  { t: 'Повторные продажи',   d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.' },
+  { t: 'Своя клиентская база', d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.' },
+  { t: 'Прямой канал с клиентом', d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.' },
+];
+
+const AUDIENCE = [
+  { t: 'Оптовые продажи', d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.' },
+  { t: 'Магазины и доставка', d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.' },
+  { t: 'Рестораны и доставка еды', d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.' },
+  { t: 'Розница', d: 'Каталог, акции, бонусы и новые поступления всегда под рукой у покупателя.' },
+];
+
+const STEPS = [
+  { t: 'Разбираемся в вашем бизнесе', d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.' },
+  { t: 'Адаптируем под ваш бренд', d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.' },
+  { t: 'Собираем приложение', d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.' },
+  { t: 'Публикуем в App Store и Google Play', d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.' },
+  { t: 'Передаём готовую систему', d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.' },
+];
+
+const INCLUDED = [
+  'Клиентское приложение под вашим брендом',
+  'Публикация в App Store и Google Play',
+  'Каталог товаров, корзина и онлайн-оплата',
+  'Доставка и самовывоз',
+  'Бонусы, промокоды и push-уведомления',
+  'CRM и клиентская база',
+  'Админ-панель и аналитика',
+  'Управление заказами и сотрудниками',
+  'Несколько точек, складов и городов',
+];
+
+const FAQ = [
+  ['У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?',
+   'Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки.'],
+  ['Сколько времени занимает запуск?',
+   'Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения.'],
+  ['Кто делает дизайн приложения?',
+   'Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить.'],
+  ['Что нужно от меня для запуска?',
+   'Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя.'],
+  ['Я получаю исходный код?',
+   'Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно.'],
+  ['Обязательно ли платить за поддержку?',
+   'Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно.'],
+  ['Что если клиенты не станут пользоваться приложением?',
+   'До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах.'],
+];
+
+/* ─────────── мелкие детали ─────────── */
+const Check = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+);
+
+const Torn = ({ d, dir }) => (
+  <svg className={'torn ' + dir} viewBox="0 0 1600 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+
+/* появление при прокрутке */
+function Rise({ as: Tag = 'div', delay = 0, className = '', children, ...rest }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        el.style.transitionDelay = delay + 'ms';
+        el.classList.add('seen');
+        io.disconnect();
+      }
+    }, { rootMargin: '0px 0px -12% 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [delay]);
+  return <Tag ref={ref} className={('rise ' + className).trim()} {...rest}>{children}</Tag>;
+}
+
+const Shot = ({ src, alt, cls }) => (
+  <div className={'shot ' + cls}>
+    <img className="tape" src={TAPE} alt="" />
+    <img src={src} alt={alt} />
+  </div>
+);
+
+/* ─────────── блоки ─────────── */
+const Top = () => {
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const on = () => setStuck(window.scrollY > 8);
+    on(); window.addEventListener('scroll', on, { passive: true });
+    return () => window.removeEventListener('scroll', on);
+  }, []);
+  return (
+    <header className={'top' + (stuck ? ' stuck' : '')}>
+      <div className="shell">
+        <a href="#top"><img className="logo" src={LOGO} alt="AppForse" /></a>
+        <nav>{NAV.map(([t, h]) => <a key={h} href={h}>{t}</a>)}</nav>
+      </div>
+    </header>
+  );
+};
+
+const Hero = () => (
+  <section className="hero" id="top">
+    <div className="shell">
+      <div>
+        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
+        <Rise as="h1" delay={70}>
+          Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
+            </svg>
+          </span>
+        </Rise>
+        <Rise as="p" className="lead" delay={140}>
+          Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
+          доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
+        </Rise>
+        <Rise className="acts" delay={210}>
+          <a className="btn" href="#contact">Обсудить запуск</a>
+          <a className="btn ghost" href="#case">Посмотреть кейсы</a>
+        </Rise>
+        <Rise className="facts" delay={280}>
+          <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
+          <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
+        </Rise>
+      </div>
+      <Rise className="shots" delay={160}>
+        <Shot src={SHOT1} alt="Каталог в клиентском приложении" cls="a" />
+        <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
+      </Rise>
+    </div>
+  </section>
+);
+
+const Why = () => (
+  <section id="why">
+    <Torn d={TORN_A} dir="down" />
+    <div className="red">
+      <div className="shell">
+        <Rise as="h2">
+          Вы уже заплатили<br />за привлечение клиента.<br />Теперь верните его снова.
+        </Rise>
+        <Rise as="p" className="lead" delay={80}>
+          Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится
+          снова тратить деньги на рекламу, чтобы вернуть тех, кто уже однажды у вас покупал.
+        </Rise>
+        <div className="deck">
+          {WHY_CARDS.map((c, i) => (
+            <Rise className="card" key={c.t} delay={120 + i * 90}>
+              <span className="num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{c.t}</h3>
+              <p>{c.d}</p>
+            </Rise>
+          ))}
+        </div>
+      </div>
+    </div>
+    <Torn d={TORN_B} dir="up" />
+  </section>
+);
+
+const What = () => (
+  <section className="dark" id="what">
+    <div className="shell">
+      <Rise as="h2">Приложение для клиентов и панель управления для вас</Rise>
+      <Rise as="p" className="lead" delay={80}>
+        Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
+        товары и аналитику в одной системе.
+      </Rise>
+      <div className="duo">
+        <Rise className="panel" delay={140}>
+          <h3>Клиентское приложение</h3>
+          <div className="tags">
+            {['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']
+              .map(t => <span className="tag" key={t}>{t}</span>)}
+          </div>
+          <div className="pic"><img src={SHOT1} alt="Каталог с товарами" /></div>
+        </Rise>
+        <Rise className="panel" delay={220}>
+          <h3>Управление бизнесом</h3>
+          <div className="tags">
+            {['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']
+              .map(t => <span className="tag" key={t}>{t}</span>)}
+          </div>
+          <div className="pic"><img src={SHOT2} alt="Админ-панель со списком заказов" /></div>
+        </Rise>
+      </div>
+    </div>
+  </section>
+);
+
+const Who = () => (
+  <section className="dark" id="who">
+    <div className="shell">
+      <Rise as="h2">Бизнесам, где важны повторные покупки и своя клиентская база</Rise>
+      <div className="quad">
+        {AUDIENCE.map((a, i) => (
+          <Rise className="who" key={a.t} delay={60 + i * 80}>
+            <h3>{a.t}</h3><p>{a.d}</p>
+          </Rise>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const How = () => (
+  <section className="dark" id="how">
+    <div className="shell">
+      <Rise as="h2">Как ваше приложение появится в App Store и Google Play</Rise>
+      <div className="steps">
+        {STEPS.map((s, i) => (
+          <Rise className="step" key={s.t} delay={40 + i * 70}>
+            <span className="n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </Rise>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const Case = () => (
+  <section className="dark" id="case">
+    <div className="shell">
+      <Rise as="h2">Приложение, которое уже работает в реальном бизнесе</Rise>
+      <Rise as="p" className="lead" delay={80}>
+        «Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
+        приложение под брендом компании с каталогом, заказами, бонусами и повторными покупками.
+      </Rise>
+      <div className="cases">
+        <Rise className="case" delay={140}>
+          <span className="kind">Доставка / розница</span>
+          <h3>«Синица»</h3>
+          <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
+             Работает в нескольких городах.</p>
+          <div className="pic"><img src={SHOT1} alt="Каталог продуктов" /></div>
+        </Rise>
+        <Rise className="case" delay={220}>
+          <span className="kind">Операционка</span>
+          <h3>Менеджерское приложение</h3>
+          <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
+          <div className="pic"><img src={SHOT2} alt="Админ-панель" /></div>
+        </Rise>
+      </div>
+    </div>
+  </section>
+);
+
+const Price = () => (
+  <section id="price">
+    <Torn d={TORN_A} dir="down" />
+    <div className="red">
+      <div className="shell">
+        <Rise as="h2">Стоимость запуска</Rise>
+        <Rise as="p" className="lead" delay={80}>
+          Готовое решение под вашим брендом — всё необходимое для запуска собственного
+          мобильного приложения в одном пакете.
+        </Rise>
+        <div className="price">
+          <Rise className="box" delay={140}>
+            <span className="tagline">Запуск платформы</span>
+            <div className="sum">150 000 ₽</div>
+            <h3>В стоимость входит</h3>
+            <ul style={{ marginTop: 20 }}>
+              {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
+            </ul>
+            <a className="btn" href="#contact">Обсудить запуск</a>
+            <div className="shotpair">
+              <div><img src={SHOT1} alt="Экран приложения" /></div>
+              <div><img src={SHOT2} alt="Админ-панель" /></div>
+            </div>
+          </Rise>
+          <Rise className="extra" delay={220}>
+            <div className="item">
+              <b>Техническая поддержка</b>
+              <p>От 25 000 ₽/мес. По желанию, если хотите передать нам обслуживание платформы.</p>
+            </div>
+            <div className="item">
+              <b>Индивидуальные доработки</b>
+              <p>Функции и интеграции под задачи вашего бизнеса. Считаем отдельно.</p>
+            </div>
+            <div className="item">
+              <b>Демо-версия</b>
+              <p>Скачайте демо клиентского приложения и посмотрите, как это выглядит
+                 для конечного покупателя.</p>
+              <a className="btn ghost" href={TG} style={{ marginTop: 20 }}>Запросить демо</a>
+            </div>
+          </Rise>
+        </div>
+      </div>
+    </div>
+    <Torn d={TORN_B} dir="up" />
+  </section>
+);
+
+const Faq = () => {
+  const [open, setOpen] = useState(0);
+  return (
+    <section className="dark" id="faq">
+      <div className="shell">
+        <Rise as="h2">Отвечаем на частые вопросы</Rise>
+        <div className="faq">
+          {FAQ.map(([q, a], i) => (
+            <Rise className="q" key={q} data-open={open === i ? '1' : '0'} delay={30 + i * 40}>
+              <button type="button" aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>
+                {q}<span className="mark" aria-hidden="true" />
+              </button>
+              <div className="body"><div><p>{a}</p></div></div>
+            </Rise>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Contact = () => {
+  const [sent, setSent] = useState(false);
+  return (
+    <section id="contact">
+      <Torn d={TORN_A} dir="down" />
+      <div className="red">
+        <div className="shell">
+          <Rise as="h2">Покажите свой бизнес. Покажем, как AppForse будет работать у вас</Rise>
+          <Rise as="p" className="lead" delay={80}>
+            За 15 минут разберём задачу и определим, что нужно для запуска.
+          </Rise>
+          <div className="contact">
+            <Rise className="box" delay={140}>
+              <h3>Оставить заявку</h3>
+              <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
+                <input name="name" placeholder="Ваше имя" required />
+                <input name="company" placeholder="Компания" />
+                <input name="contact" placeholder="Телефон или Telegram" required />
+                <button className="btn" type="submit">
+                  {sent ? 'Заявка отправлена' : 'Отправить заявку'}
+                </button>
+                <p className="note">
+                  {sent
+                    ? 'Спасибо, свяжемся в течение рабочего дня.'
+                    : 'Нажимая кнопку, вы соглашаетесь на обработку персональных данных.'}
+                </p>
+              </form>
+            </Rise>
+            <Rise className="box aside" delay={220}>
+              <h3>Или сразу в Telegram</h3>
+              <p>Если удобнее списаться напрямую — без формы.</p>
+              <a className="btn" href={TG}>Написать в Telegram</a>
+            </Rise>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Foot = () => (
+  <footer className="foot">
+    <div className="shell">
+      <div>
+        <img className="logo" src={LOGO} alt="AppForse" />
+        <p className="tag">Мобильная торговля под вашим брендом</p>
+      </div>
+      <div>
+        <h4>Навигация</h4>
+        <ul>{NAV.map(([t, h]) => <li key={h}><a href={h}>{t}</a></li>)}
+          <li><a href="#faq">Вопросы</a></li></ul>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href={TG}>Telegram @shark154</a></li>
+          <li><a href="#contact">Оставить заявку</a></li>
+        </ul>
+      </div>
+    </div>
+    <div className="rule">
+      <div className="shell"><span>© 2026 AppForse</span><span>Mobile commerce</span></div>
+    </div>
+  </footer>
+);
+
+const App = () => (
+  <React.Fragment>
+    <Top /><Hero /><Why /><What /><Who /><How /><Case /><Price /><Faq /><Contact /><Foot />
+  </React.Fragment>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
