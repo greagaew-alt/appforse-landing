@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /privacy.html
+
+Sitemap: https://greagaew-alt.github.io/appforse-landing/site/sitemap.xml

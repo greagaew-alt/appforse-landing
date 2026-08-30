@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Страница не найдена — AppForse</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E0C10">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/manrope-400-cyrillic.woff2">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root {
+  --ink: #0E0C10; --ink-lift: #16141A;
+  --paper: #FFFFFF; --muted: #929292; --muted-lo: #A9A9BA; --muted-hi: #6E6E7A;
+  --red: #E8243C; --red-dk: #B3182C; --red-lt: #FF5468;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--ink); color: var(--paper);
+  font-family: Manrope, system-ui, sans-serif;
+  display: flex; flex-direction: column; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--red-lt); outline-offset: 3px; }
+.shell { width: min(1505px, calc(100% - clamp(40px, 4.2vw, 80px))); margin: 0 auto; }
+
+/* ── шапка ── */
+.top { border-bottom: 1px solid #1F1D24; }
+.top .shell { display: flex; align-items: center; padding: 24px 0; }
+.top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
+
+/* ── сцена ── */
+main { flex: 1; display: flex; align-items: center; position: relative;
+  padding: clamp(48px, 6vw, 110px) 0; }
+
+/* уходящая вдаль сетка на фоне */
+.grid { position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  mask-image: radial-gradient(120% 90% at 50% 45%, #000 20%, transparent 72%);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 45%, #000 20%, transparent 72%); }
+.grid::before { content: ''; position: absolute; inset: -50% -10%;
+  background-image: linear-gradient(#241f27 1px, transparent 1px),
+                    linear-gradient(90deg, #241f27 1px, transparent 1px);
+  background-size: 62px 62px; animation: drift 26s linear infinite; }
+@keyframes drift { to { transform: translate(62px, 62px); } }
+
+.stage { position: relative; display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 90px); align-items: center; }
+
+/* ── цифры ── */
+.code { display: flex; align-items: center; gap: clamp(2px, .5vw, 10px); }
+.code span { font-family: Oswald, sans-serif; font-weight: 700; line-height: .8;
+  font-size: clamp(96px, 15.6vw, 300px); letter-spacing: -.03em;
+  opacity: 0; transform: translateY(24px); animation: pop .7s var(--ease) forwards; }
+.code span:nth-child(1) { animation-delay: .05s; }
+.code span:nth-child(2) { animation-delay: .17s; }
+.code span:nth-child(3) { animation-delay: .29s; }
+@keyframes pop { to { opacity: 1; transform: none; } }
+
+/* средний ноль — обводка от руки, как в первом экране сайта */
+.zero { position: relative; color: transparent; -webkit-text-stroke: 3px var(--paper); }
+.zero svg { position: absolute; left: -16%; top: -12%; width: 132%; height: 124%;
+  overflow: visible; pointer-events: none; }
+.zero path { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 600; stroke-dashoffset: 600;
+  animation: draw 1.2s var(--ease) .6s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* сбой изображения: цифры на миг расслаиваются на красный и голубой */
+.code.glitch span { position: relative; }
+.code.glitch span::before, .code.glitch span::after {
+  content: attr(data-c); position: absolute; inset: 0; }
+.code.glitch span::before { color: var(--red); transform: translate(-4px, 2px); }
+.code.glitch span::after { color: #35D6E7; transform: translate(4px, -2px); }
+.code.glitch .zero::before, .code.glitch .zero::after { display: none; }
+
+/* ── текст ── */
+.kicker { display: inline-block; background: #262626; color: var(--muted);
+  font-family: Oswald, sans-serif; font-size: clamp(12px, .68vw, 13px); font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; padding: 12px 22px 11px; line-height: 1; }
+h1 { font-family: Oswald, sans-serif; font-weight: 700; text-transform: uppercase;
+  font-size: clamp(30px, 2.71vw, 52px); line-height: .96; letter-spacing: -.02em;
+  margin: 18px 0 0; max-width: 16ch; text-wrap: balance; }
+.lead { font-size: clamp(15px, .89vw, 17px); line-height: 1.5; color: var(--muted-lo);
+  max-width: 44ch; margin: 18px 0 0; text-wrap: pretty; }
+.acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(22px, 1.9vw, 34px); }
+.btn { font-family: Oswald, sans-serif; font-size: clamp(13px, .78vw, 15px); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; cursor: pointer; text-decoration: none;
+  height: clamp(46px, 3.02vw, 58px); padding: 0 clamp(20px, 1.77vw, 34px);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 2px solid var(--red); background: var(--red); color: var(--paper);
+  position: relative; overflow: hidden;
+  transition: background .2s var(--ease), border-color .2s var(--ease),
+              transform .2s var(--ease), box-shadow .2s var(--ease); }
+.btn:hover { background: var(--red-dk); border-color: var(--red-dk);
+  transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232,36,60,.34); }
+.btn.ghost { background: transparent; border-color: #373745; }
+.btn.ghost:hover { background: transparent; border-color: var(--paper); box-shadow: none; }
+.text { opacity: 0; transform: translateY(20px);
+  animation: pop .8s var(--ease) .45s forwards; }
+
+/* ── ссылки по разделам ── */
+.map { border-top: 1px solid #1F1D24; }
+.map .shell { display: flex; flex-wrap: wrap; gap: 10px clamp(18px, 1.6vw, 30px);
+  padding: 22px 0 26px; align-items: center; }
+.map b { font-family: Oswald, sans-serif; font-weight: 500; font-size: clamp(12px, .68vw, 13px);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted-hi); }
+.map a { font-size: clamp(13px, .78vw, 15px); color: var(--muted-lo); text-decoration: none;
+  padding: 7px 0;
+  transition: color .2s var(--ease); }
+.map a:hover { color: var(--paper); }
+
+/* рваная красная полоса внизу */
+.torn { display: block; width: 100%; height: clamp(24px, 2.6vw, 50px); background: var(--red); }
+.torn path { fill: var(--ink); }
+.strip { background: var(--red); height: clamp(8px, .83vw, 16px); }
+
+@media (max-width: 900px) {
+  .stage { grid-template-columns: 1fr; gap: clamp(20px, 4vw, 40px); }
+  .code { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .code span, .text { opacity: 1; transform: none; }
+  .zero path { stroke-dashoffset: 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="shell"><a href="__HOME__"><img class="logo" src="__LOGO__" alt="AppForse"></a></div>
+</header>
+
+<main>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="shell">
+    <div class="stage">
+      <div class="code" id="code" aria-hidden="true">
+        <span data-c="4">4</span>
+        <span class="zero" data-c="0">0<svg viewBox="0 0 200 200" preserveAspectRatio="none">
+          <path d="M100 12c50 0 88 38 88 88s-38 88-88 88-88-38-88-88S50 12 100 12z" />
+        </svg></span>
+        <span data-c="4">4</span>
+      </div>
+      <div class="text">
+        <span class="kicker">Ошибка 404</span>
+        <h1>Такой страницы нет</h1>
+        <p class="lead">
+          Ссылка устарела или в&nbsp;адресе опечатка. Вернитесь на&nbsp;главную —
+          там всё о&nbsp;том, как запустить приложение под&nbsp;вашим брендом
+          за&nbsp;7&nbsp;дней.
+        </p>
+        <div class="acts">
+          <a class="btn" href="__HOME__">На главную</a>
+          <a class="btn ghost" href="https://t.me/shark154" target="_blank" rel="noopener">
+            Написать в Telegram
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav class="map" aria-label="Разделы сайта">
+  <div class="shell">
+    <b>Разделы</b>
+    <a href="__HOME__#why">Зачем приложение</a>
+    <a href="__HOME__#what">Возможности</a>
+    <a href="__HOME__#who">Для кого</a>
+    <a href="__HOME__#how">Как запустим</a>
+    <a href="__HOME__#case">Кейс</a>
+    <a href="__HOME__#price">Цена</a>
+    <a href="__HOME__#faq">Вопросы</a>
+  </div>
+</nav>
+
+<svg class="torn" viewBox="0 0 1600 60" preserveAspectRatio="none" aria-hidden="true">
+  <path d="__TORN__" />
+</svg>
+<div class="strip"></div>
+
+<script>
+// сбой изображения раз в несколько секунд — короткий, чтобы не мешал читать
+(function () {
+  var code = document.getElementById('code');
+  if (!code || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  function blink() {
+    code.classList.add('glitch');
+    setTimeout(function () { code.classList.remove('glitch'); }, 90 + Math.random() * 90);
+    setTimeout(blink, 2600 + Math.random() * 3200);
+  }
+  setTimeout(blink, 1800);
+})();
+</script>
+
+</body>
+</html>

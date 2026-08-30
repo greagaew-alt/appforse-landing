@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Политика обработки персональных данных — AppForse</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/manrope-400-cyrillic.woff2">
+<link rel="stylesheet" href="fonts.css">
 <style>
 :root {
   --ink: #0E0C10; --ink-lift: #16141A; --ink-line: #262626;
@@ -17,7 +19,7 @@
   --fs-h2: clamp(18px, 1.25vw, 24px);
   --fs-lead: clamp(15px, 0.89vw, 17px);
   --fs-body: clamp(14px, 0.83vw, 16px);
-  --fs-cap: clamp(11px, 0.68vw, 13px);
+  --fs-cap: clamp(12px, 0.68vw, 13px);
   --shell: 1505px; --text: 78ch;
   --ease: cubic-bezier(.22,.61,.36,1);
 }
@@ -32,7 +34,7 @@ img { max-width: 100%; display: block; }
 .top { border-bottom: 1px solid #1F1D24; }
 .top .shell { display: flex; align-items: center; gap: 24px; padding: 24px 0; }
 .top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
-.top a.back { margin-left: auto; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
+.top a.back { margin-left: auto; padding: 8px 0; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
   text-decoration: none; transition: color .2s var(--ease); }
 .top a.back:hover { color: var(--paper); }
@@ -72,7 +74,7 @@ a { color: var(--paper); text-underline-offset: 3px; }
 .foot { border-top: 1px solid #1F1D24; }
 .foot .shell { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
   padding: 26px 0; font-size: var(--fs-cap); color: var(--muted-hi); }
-.foot a { color: var(--muted-lo); text-decoration: none; }
+.foot a { color: var(--muted-lo); text-decoration: none; padding: 6px 0; display: inline-block; }
 .foot a:hover { color: var(--paper); }
 </style>
 </head>

@@ -3,11 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AppForse — готовое приложение для вашего магазина за 7 дней</title>
-<meta name="description" content="Запустим мобильное приложение под вашим брендом на готовой платформе: каталог, заказы, доставка, оплата, бонусы, push и клиентская база. 150 000 ₽, 7 дней.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<title>Мобильное приложение под вашим брендом за 7 дней — AppForse</title>
+<meta name="description" content="Запустим приложение для вашего магазина на готовой платформе: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, публикация в App Store и Google Play за 7 дней.">
+<link rel="canonical" href="https://greagaew-alt.github.io/appforse-landing/site/">
+<meta name="theme-color" content="#0E0C10">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AppForse">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:url" content="https://greagaew-alt.github.io/appforse-landing/site/">
+<meta property="og:title" content="Мобильное приложение под вашим брендом за 7 дней">
+<meta property="og:description" content="Готовая платформа под ваш бренд: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, публикация в App Store и Google Play.">
+<meta property="og:image" content="https://greagaew-alt.github.io/appforse-landing/site/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="AppForse — готовое приложение для вашего магазина за 7 дней">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Мобильное приложение под вашим брендом за 7 дней">
+<meta name="twitter:description" content="Готовая платформа: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, 7 дней.">
+<meta name="twitter:image" content="https://greagaew-alt.github.io/appforse-landing/site/og.jpg">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/manrope-400-cyrillic.woff2">
+<link rel="stylesheet" href="fonts.css">
 <style>
 /* ═══════════════════════════════════════════════════════════
    ДИЗАЙН-СИСТЕМА APPFORSE
@@ -35,7 +56,7 @@
   --fs-num:  clamp(24px, 1.77vw, 34px);
   --fs-lead: clamp(15px, 0.89vw, 17px);
   --fs-body: clamp(14px, 0.78vw, 15px);
-  --fs-cap:  clamp(11px, 0.68vw, 13px);
+  --fs-cap:  clamp(12px, 0.68vw, 13px);
   --fs-nav:  clamp(12px, 0.78vw, 15px);
 
   /* ширины текстовых колонок — из макета */
@@ -149,6 +170,38 @@ p, li, .lead { text-wrap: pretty; }
 .top nav a:hover { color: var(--paper); }
 @media (max-width: 1100px) { .top nav { display: none; } }
 
+/* ── меню на узких экранах ── */
+.burger { display: none; margin-left: auto; width: 46px; height: 46px; flex: none;
+  background: none; border: 1px solid #2A2830; cursor: pointer; padding: 0;
+  align-items: center; justify-content: center;
+  transition: border-color .2s var(--ease), background .2s var(--ease); }
+.burger:hover { border-color: var(--red); }
+.burger i { display: block; position: relative; width: 20px; height: 2px;
+  background: var(--paper); transition: background .2s var(--ease); }
+.burger i::before, .burger i::after { content: ''; position: absolute; left: 0;
+  width: 20px; height: 2px; background: var(--paper);
+  transition: transform .3s var(--ease), top .25s var(--ease); }
+.burger i::before { top: -6px; }
+.burger i::after { top: 6px; }
+.top.open .burger i { background: transparent; }
+.top.open .burger i::before { top: 0; transform: rotate(45deg); }
+.top.open .burger i::after { top: 0; transform: rotate(-45deg); }
+
+@media (max-width: 1100px) {
+  .burger { display: flex; }
+  .top nav { display: grid; position: fixed; inset: 0 0 auto; top: var(--top-h, 94px);
+    background: var(--ink); border-bottom: 1px solid #1F1D24;
+    padding: 8px clamp(20px, 4.2vw, 40px) 22px; gap: 0; margin: 0;
+    grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease);
+    max-height: calc(100vh - var(--top-h, 94px)); overflow: hidden; }
+  .top nav > * { min-height: 0; }
+  .top.open nav { grid-template-rows: 1fr; overflow-y: auto; }
+  .top nav .inner { display: flex; flex-direction: column; overflow: hidden; }
+  .top nav a { font-size: clamp(15px, 4vw, 19px); padding: 15px 0;
+    border-bottom: 1px solid #1B1920; color: var(--paper); }
+  .top nav a:last-child { border-bottom: 0; }
+}
+
 /* ═══════════ 01. ПЕРВЫЙ ЭКРАН ═══════════ */
 .hero .shell {
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
@@ -167,7 +220,8 @@ p, li, .lead { text-wrap: pretty; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .hero .lead { max-width: var(--w-lead); margin-top: clamp(12px, 1.15vw, 22px); }
 .hero .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 1.25vw, 24px); }
-.hero .facts { display: flex; gap: clamp(24px, 2.08vw, 40px); margin-top: clamp(18px, 1.15vw, 22px); }
+.hero .facts { display: flex; flex-wrap: wrap; gap: clamp(18px, 2.08vw, 40px);
+  margin-top: clamp(18px, 1.15vw, 22px); }
 .hero .facts b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
   font-size: var(--fs-num); line-height: 1; letter-spacing: .01em; }
 .hero .facts span { display: block; margin-top: 6px; font-size: var(--fs-cap); color: var(--muted-hi); }
@@ -297,7 +351,7 @@ p, li, .lead { text-wrap: pretty; }
     width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
   .price .collage .shot { position: absolute; }
   .price .collage .shot.a { left: 0; top: 0; width: clamp(88px, 7.9vw, 152px); }
-  .price .collage .shot.b { left: 45%; top: clamp(48px, 4.4vw, 84px); width: clamp(104px, 9.4vw, 180px); }
+  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(104px, 9.4vw, 180px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
@@ -361,8 +415,10 @@ p, li, .lead { text-wrap: pretty; }
 
 /* ── подвал ── */
 .foot { border-top: 1px solid #1F1D24; }
-.foot .shell { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: clamp(20px, 2vw, 40px);
+.foot .shell { display: grid; grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: clamp(28px, 5.2vw, 100px);
   padding-top: clamp(32px, 2.9vw, 56px); padding-bottom: clamp(24px, 2vw, 38px); }
+.foot .brand { max-width: 34ch; }
 .foot .logo { height: 38px; width: auto; }
 .foot .tag { margin-top: 14px; font-size: var(--fs-body); color: var(--muted-hi); }
 .foot h4 { font-family: Oswald, sans-serif; font-weight: 500; text-transform: uppercase;
@@ -372,8 +428,12 @@ p, li, .lead { text-wrap: pretty; }
   transition: color .2s var(--ease); }
 .foot a:hover { color: var(--paper); }
 .foot .rule { border-top: 1px solid #1F1D24; }
-.foot .rule .shell { display: flex; justify-content: space-between; gap: 20px;
+.foot .rule .shell { display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: 12px clamp(20px, 3vw, 48px);
   padding-top: 20px; padding-bottom: 26px; font-size: var(--fs-cap); color: var(--muted-hi); }
+.foot .rule .by { margin-left: auto; }
+.foot .rule a { text-decoration: none; }
+@media (max-width: 760px) { .foot .rule .by { margin-left: 0; } }
 
 /* ── иконка Lucide ── */
 .lu { width: 26px; height: 26px; display: block; }
@@ -435,7 +495,7 @@ p, li, .lead { text-wrap: pretty; }
 .magnet { background: var(--red); color: var(--paper);
   padding: clamp(24px, 2.6vw, 50px);
   display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 460px);
-  gap: clamp(24px, 3vw, 58px); align-items: center;
+  gap: clamp(24px, 3vw, 58px); align-items: start;
   margin-top: clamp(16px, 1.25vw, 24px); }
 .magnet h2 { max-width: 100%; }
 .magnet > div > p { margin-top: 14px; font-size: var(--fs-body); line-height: var(--lh-text);
@@ -450,25 +510,67 @@ p, li, .lead { text-wrap: pretty; }
 
 /* ── согласие на обработку данных ── */
 .agree { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
-  cursor: pointer; margin-top: 4px; }
-.agree input { appearance: none; -webkit-appearance: none; margin: 0; flex: none;
-  width: 18px; height: 18px; margin-top: 2px; border: 1px solid #3A3742; background: #131117;
+  cursor: pointer; margin-top: 4px; padding: 6px 0; }
+.agree input[type="checkbox"] { appearance: none; -webkit-appearance: none; flex: none;
+  position: relative; width: 22px; height: 22px; padding: 0; margin: 1px 0 0; border: 1px solid #3A3742; background: #131117;
   display: grid; place-content: center; cursor: pointer;
   transition: background .2s var(--ease), border-color .2s var(--ease); }
-.agree input::before { content: ''; width: 10px; height: 10px; transform: scale(0);
+.agree input[type="checkbox"]::before { content: ''; width: 12px; height: 12px; transform: scale(0);
   background: var(--paper); transition: transform .15s var(--ease);
   clip-path: polygon(14% 46%, 0 60%, 40% 100%, 100% 22%, 86% 8%, 38% 70%); }
-.agree input:checked { background: var(--red); border-color: var(--red); }
-.agree input:checked::before { transform: scale(1); }
+.agree input[type="checkbox"]:checked { background: var(--red); border-color: var(--red); }
+.agree input[type="checkbox"]:checked::before { transform: scale(1); }
 .agree span { font-size: var(--fs-cap); line-height: 1.5; color: var(--muted-hi); }
 .agree a { color: var(--muted-lo); text-decoration: underline;
   text-underline-offset: 2px; transition: color .2s var(--ease); }
 .agree a:hover { color: var(--paper); }
-.magnet .agree input { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
-.magnet .agree input:checked { background: var(--paper); border-color: var(--paper); }
-.magnet .agree input::before { background: var(--red); }
+.magnet .agree input[type="checkbox"] { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+.magnet .agree input[type="checkbox"]:checked { background: var(--paper); border-color: var(--paper); }
+.magnet .agree input[type="checkbox"]::before { background: var(--red); }
 .magnet .agree span { color: rgba(255,255,255,.78); }
 .magnet .agree a { color: var(--paper); }
+
+/* ── иконки соцсетей ── */
+.social { display: flex; gap: 10px; margin-bottom: 16px; }
+.social a { width: 44px; height: 44px; display: grid; place-content: center;
+  border: 1px solid #2A2830; color: var(--muted-lo);
+  transition: background .25s var(--ease), border-color .25s var(--ease),
+              color .25s var(--ease), transform .25s var(--ease); }
+.social a:hover { background: var(--red); border-color: var(--red); color: var(--paper);
+  transform: translateY(-2px); }
+.social svg { width: 22px; height: 22px; display: block; }
+
+/* ═══════════ УЗКИЕ ЭКРАНЫ ═══════════ */
+@media (max-width: 1180px) {
+  .price .box { grid-template-columns: 1fr; gap: clamp(20px, 3vw, 34px); }
+  .price .collage { justify-self: center; margin-top: 0; }
+}
+@media (max-width: 760px) {
+  .hero .shell { gap: clamp(24px, 5vw, 40px); }
+  .shots { justify-content: center; width: 100%; }
+  .shot { width: calc((100% - var(--shot-gap)) / 2); }
+  .shot img { width: 100%; height: auto; }
+  .price .collage { width: min(100%, 300px); min-height: 260px; }
+  .price .collage .shot.a { width: 40%; }
+  .price .collage .shot.b { width: 47%; top: 46px; }
+  .steps { padding-left: 26px; }
+  .step { grid-template-columns: 40px 1fr; row-gap: 8px; }
+  .step h3 { grid-column: 2; }
+  .step p { grid-column: 2; }
+  .foot .shell { grid-template-columns: 1fr; gap: 28px; }
+  .foot .rule .shell { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 520px) {
+  .hero .acts .btn, .magnet .btn, .form .btn { width: 100%; }
+  .hero .facts { gap: 16px 28px; }
+  .card, .who, .panel, .case, .price .box, .price .extra .item, .contact .box,
+  .magnet { padding: clamp(18px, 5vw, 24px); }
+  .price .collage { width: min(100%, 260px); min-height: 230px; }
+}
+@media (max-width: 380px) {
+  .hero .facts { flex-direction: column; }
+  .social a { width: 40px; height: 40px; }
+}
 
 /* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
 @media (max-width: 1180px) {
@@ -487,6 +589,7 @@ p, li, .lead { text-wrap: pretty; }
   .demo { grid-template-columns: 1fr; }
 }
 </style>
+<script type="application/ld+json">__JSONLD__</script>
 </head>
 <body>
 <div id="root"></div>
@@ -507,7 +610,9 @@ const TORN_B = "__TORN_B__";
 const TORN_C = "__TORN_C__";
 const TORN_D = "__TORN_D__";
 
-const TG = 'https://t.me/shark154';
+const TG  = 'https://t.me/shark154';
+const VK  = 'https://vk.com/appforse';
+const DEV = 'https://t.me/glebbnov';
 
 /* ─────────── содержание ─────────── */
 const NAV = [
@@ -533,7 +638,7 @@ const STEPS = [
   { t: 'Разбираемся в вашем бизнесе', d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.' },
   { t: 'Адаптируем под ваш бренд', d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.' },
   { t: 'Собираем приложение', d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.' },
-  { t: 'Публикуем в App Store и Google Play', d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.' },
+  { t: 'Публикуем в App Store и Google Play', d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.' },
   { t: 'Передаём готовую систему', d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.' },
 ];
 
@@ -671,18 +776,68 @@ const Shot = ({ src, alt, cls }) => (
 );
 
 /* ─────────── блоки ─────────── */
+/* Иконки соцсетей — набор Simple Icons (CC0) */
+const SOCIAL = [
+  { url: TG, name: 'Telegram', d: 'M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z' },
+  { url: VK, name: 'ВКонтакте', d: 'M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.66 2 15.07 2zm3.15 14.27h-1.5c-.55 0-.72-.45-1.72-1.44-.87-.84-1.24-.95-1.46-.95-.3 0-.38.08-.38.49v1.32c0 .35-.11.56-1.04.56-1.53 0-3.22-.93-4.41-2.65-1.79-2.52-2.28-4.42-2.28-4.81 0-.21.08-.4.49-.4h1.5c.37 0 .51.17.65.56.73 2.13 1.96 3.99 2.47 3.99.19 0 .28-.09.28-.57V9.71c-.06-1-.59-1.09-.59-1.45 0-.17.14-.34.37-.34h2.36c.31 0 .42.17.42.54v2.98c0 .31.14.42.23.42.19 0 .34-.11.68-.45 1.06-1.19 1.82-3.02 1.82-3.02.1-.21.27-.41.64-.41h1.5c.45 0 .55.23.45.54-.19.87-2.02 3.45-2.02 3.45-.16.25-.22.37 0 .65.15.21.66.65 1 1.04.62.7 1.09 1.29 1.22 1.7.12.4-.08.61-.49.61z' },
+];
+const Social = () => (
+  <div className="social">
+    {SOCIAL.map(s => (
+      <a key={s.name} href={s.url} aria-label={s.name} title={s.name}
+         target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={s.d} /></svg>
+      </a>
+    ))}
+  </div>
+);
+
 const Top = () => {
   const [stuck, setStuck] = useState(false);
+  const [open, setOpen] = useState(false);
+  const bar = useRef(null);
+
   useEffect(() => {
     const on = () => setStuck(window.scrollY > 8);
     on(); window.addEventListener('scroll', on, { passive: true });
     return () => window.removeEventListener('scroll', on);
   }, []);
+
+  // высота шапки нужна выпадающему меню, чтобы встать точно под ней
+  useEffect(() => {
+    const set = () => {
+      if (bar.current) document.documentElement.style
+        .setProperty('--top-h', bar.current.offsetHeight + 'px');
+    };
+    set(); window.addEventListener('resize', set);
+    return () => window.removeEventListener('resize', set);
+  }, []);
+
+  // открытое меню не должно оставаться при возврате к широкому экрану
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1101px)');
+    const on = e => { if (e.matches) setOpen(false); };
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+
   return (
-    <header className={'top' + (stuck ? ' stuck' : '')}>
+    <header className={'top' + (stuck ? ' stuck' : '') + (open ? ' open' : '')} ref={bar}>
       <div className="shell">
-        <a href="#top"><img className="logo" src={LOGO} alt="AppForse" /></a>
-        <nav>{NAV.map(([t, h]) => <a key={h} href={h}>{t}</a>)}</nav>
+        <a href="#top" onClick={() => setOpen(false)}>
+          <img className="logo" src={LOGO} alt="AppForse" />
+        </a>
+        <button className="burger" type="button" aria-label="Меню"
+                aria-expanded={open} onClick={() => setOpen(v => !v)}>
+          <i />
+        </button>
+        <nav>
+          <div className="inner">
+            {NAV.map(([t, h]) => (
+              <a key={h} href={h} onClick={() => setOpen(false)}>{t}</a>
+            ))}
+          </div>
+        </nav>
       </div>
     </header>
   );
@@ -1011,9 +1166,9 @@ const Contact = () => {
 const Foot = () => (
   <footer className="foot" id="contacts">
     <div className="shell">
-      <div>
+      <div className="brand">
         <img className="logo" src={LOGO} alt="AppForse" />
-        <p className="tag">Мобильная торговля под вашим брендом</p>
+        <p className="tag">Мобильная торговля под вашим брендом</p>
       </div>
       <div>
         <h4>Навигация</h4>
@@ -1022,16 +1177,18 @@ const Foot = () => (
       </div>
       <div>
         <h4>Контакты</h4>
-        <ul>
-          <li><a href={TG}>Telegram @shark154</a></li>
-          <li><a href="#contact">Оставить заявку</a></li>
-        </ul>
+        <Social />
+        <ul><li><a href="#contact">Оставить заявку</a></li></ul>
       </div>
     </div>
     <div className="rule">
       <div className="shell">
         <span>© 2026 AppForse</span>
         <a href="privacy.html">Политика обработки персональных данных</a>
+        <span className="by">
+          Разработка сайта&nbsp;—{' '}
+          <a href={DEV} target="_blank" rel="noopener">Глеб Слободчиков</a>
+        </span>
       </div>
     </div>
   </footer>

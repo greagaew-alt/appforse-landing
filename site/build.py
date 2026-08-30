@@ -26,3 +26,13 @@ priv = io.open(os.path.join(BASE, 'privacy_template.html'), encoding='utf-8').re
 priv = priv.replace('__LOGO__', a['logo'])
 io.open(os.path.join(BASE, 'privacy.html'), 'w', encoding='utf-8').write(priv)
 print('privacy.html собран:', len(priv) // 1024, 'KB')
+
+# страница 404: две сборки — рядом с сайтом и в корне репозитория,
+# чтобы Pages подхватывал её на любом несуществующем адресе
+e404 = io.open(os.path.join(BASE, '404_template.html'), encoding='utf-8').read()
+e404 = e404.replace('__LOGO__', a['logo']).replace('__TORN__', a['tornB'])
+io.open(os.path.join(BASE, '404.html'), 'w', encoding='utf-8').write(
+    e404.replace('__HOME__', 'index.html'))
+io.open(os.path.join(BASE, '..', '404.html'), 'w', encoding='utf-8').write(
+    e404.replace('__HOME__', '/appforse-landing/site/'))
+print('404.html собран:', len(e404) // 1024, 'KB')
