@@ -759,7 +759,6 @@ const Contact = () => {
               <h3>Оставить заявку</h3>
               <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
                 <input name="name" placeholder="Ваше имя" required />
-                <input name="company" placeholder="Компания" />
                 <input name="contact" placeholder="Телефон или Telegram" required />
                 <button className="btn" type="submit">
                   {sent ? 'Заявка отправлена' : 'Отправить заявку'}
