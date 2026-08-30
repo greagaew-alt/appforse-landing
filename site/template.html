@@ -1017,8 +1017,8 @@ const Foot = () => (
       </div>
       <div>
         <h4>Навигация</h4>
-        <ul>{NAV.map(([t, h]) => <li key={h}><a href={h}>{t}</a></li>)}
-          <li><a href="#faq">Вопросы</a></li></ul>
+        <ul>{NAV.filter(([, h]) => h !== '#contacts')
+          .map(([t, h]) => <li key={h}><a href={h}>{t}</a></li>)}</ul>
       </div>
       <div>
         <h4>Контакты</h4>
