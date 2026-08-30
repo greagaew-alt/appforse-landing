@@ -82,7 +82,7 @@ h1, h2, h3, .display {
 h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -.025em; }
 h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -.02em;
   max-width: var(--w-h2); }
-h2.wide { max-width: clamp(360px, 36.5vw, 700px); }
+h2.wide { max-width: clamp(360px, 46.9vw, 900px); }
 h3 { font-size: var(--fs-h3); line-height: var(--lh-head); font-weight: 600; }
 p  { margin: 0; }
 .lead { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo); }
@@ -153,7 +153,7 @@ p, li, .lead { text-wrap: pretty; }
 .hero .shell {
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(32px, 4vw, 76px); align-items: start;
-  padding-top: clamp(14px, 1.3vw, 25px); padding-bottom: clamp(40px, 2.81vw, 54px);
+  padding-top: clamp(24px, 1.82vw, 35px); padding-bottom: clamp(40px, 2.81vw, 54px);
 }
 .hero h1 { max-width: var(--w-h1); margin: 10px 0 0; text-wrap: normal; }
 .hero .circle { position: relative; display: inline-block; white-space: nowrap; padding: 0 .1em; }
@@ -227,7 +227,6 @@ p, li, .lead { text-wrap: pretty; }
 .panel { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: "head pic" "tags pic" "fill pic";
-  grid-template-rows: auto auto 1fr;
   gap: clamp(14px, 1.15vw, 22px) clamp(18px, 1.6vw, 30px); align-content: start; }
 .panel h3 { grid-area: head; }
 .panel .tags { grid-area: tags; align-content: start; }
@@ -291,26 +290,27 @@ p, li, .lead { text-wrap: pretty; }
 
 /* ── 08. Цена ── */
 .price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24.1vw, 462px);
-  gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
+  gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
 .price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
     padding: clamp(22px, 2.5vw, 48px);
-    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(24px, 3vw, 58px); }
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 20.6vw, 395px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
-  .price .collage { position: relative; width: clamp(190px, 16.8vw, 323px);
-    min-height: clamp(290px, 25.1vw, 482px); }
+  .price .collage { position: relative; justify-self: start; margin-top: -10px;
+    width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
   .price .collage .shot { position: absolute; }
   .price .collage .shot.a { left: 0; top: 0; width: clamp(88px, 7.9vw, 152px); }
   .price .collage .shot.b { left: 45%; top: clamp(48px, 4.4vw, 84px); width: clamp(104px, 9.4vw, 180px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
-  line-height: 1; letter-spacing: -.01em; margin: 14px 0 clamp(22px, 1.72vw, 33px); }
-.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, .94vw, 18px); }
+  line-height: 1; letter-spacing: -.01em; margin: 10px 0 clamp(16px, 1.04vw, 20px); }
+.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(9px, .63vw, 12px); }
 .price li { display: flex; gap: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
 .price li svg { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--red); }
-.price .btn { margin-top: clamp(22px, 1.9vw, 36px); }
-.price .extra { display: grid; gap: clamp(12px, .89vw, 17px); align-content: start; }
+.price .btn { margin-top: clamp(20px, 1.46vw, 28px); }
+.price .extra { display: grid; gap: clamp(12px, .89vw, 17px);
+  grid-template-rows: auto auto 1fr; }
 .price .extra .item { background: var(--ink-lift); border: 1px solid #1F1D24;
   padding: clamp(18px, 1.67vw, 32px); }
 .price .extra b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
@@ -414,11 +414,6 @@ p, li, .lead { text-wrap: pretty; }
 
 
 /* ── блик по верхней кромке карточки цены ── */
-.price .box { position: relative; overflow: hidden; }
-.price .box::after { content: ''; position: absolute; top: 0; left: -45%; width: 45%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--red-lt), transparent);
-  animation: sweep 4.2s var(--ease) infinite; pointer-events: none; }
-@keyframes sweep { 0% { left: -45%; } 60%, 100% { left: 100%; } }
 
 /* ── блик по кнопке при наведении ── */
 .btn { position: relative; overflow: hidden; }
@@ -429,7 +424,7 @@ p, li, .lead { text-wrap: pretty; }
 @keyframes shine { to { transform: translateX(130%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .price .box::after, .btn::after { animation: none; }
+  .btn::after { animation: none; }
   .steps .rail { transform: scaleY(1); }
   .step:not(.on) h3, .step:not(.on) p { opacity: 1; transform: none; }
 }
@@ -714,7 +709,9 @@ const Why = () => (
 const What = () => (
   <section className="dark" id="what">
     <div className="shell">
-      <Rise as="h2">Приложение для клиентов и панель управления для вас</Rise>
+      <Rise as="h2" className="wide">
+        Приложение для клиентов<br />и панель управления для вас
+      </Rise>
       <Rise as="p" className="lead" delay={80}>
         Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
         товары и аналитику в одной системе.
@@ -744,7 +741,9 @@ const What = () => (
 const Who = () => (
   <section className="dark" id="who">
     <div className="shell">
-      <Rise as="h2">Бизнесам, где важны повторные покупки и своя клиентская база</Rise>
+      <Rise as="h2" className="wide">
+        Бизнесам, где важны повторные покупки<br />и своя клиентская база
+      </Rise>
       <div className="quad">
         {AUDIENCE.map((a, i) => (
           <Rise className="who" key={a.t} delay={60 + i * 80}>
@@ -797,7 +796,9 @@ const How = () => {
 const Case = () => (
   <section className="dark" id="case">
     <div className="shell">
-      <Rise as="h2">Приложение, которое уже работает в реальном бизнесе</Rise>
+      <Rise as="h2" className="wide">
+        Приложение, которое уже работает<br />в реальном бизнесе
+      </Rise>
       <Rise as="p" className="lead" delay={80}>
         «Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
         приложение под брендом компании с каталогом, заказами, бонусами и повторными покупками.
@@ -837,7 +838,7 @@ const Price = () => (
             <span className="tagline">Запуск платформы</span>
             <div className="sum">150 000 ₽</div>
             <h3>В стоимость входит</h3>
-            <ul style={{ marginTop: 20 }}>
+            <ul style={{ marginTop: 14 }}>
               {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
             </ul>
             <a className="btn" href="#contact">Обсудить запуск</a>
@@ -898,7 +899,9 @@ const Contact = () => {
       <Torn d={TORN_C} dir="down" />
       <div className="red">
         <div className="shell">
-          <Rise as="h2">Покажите свой бизнес. Покажем, как AppForse будет работать у вас</Rise>
+          <Rise as="h2" className="wide">
+        Покажите свой бизнес. Покажем,<br />как AppForse будет работать у вас
+      </Rise>
           <Rise as="p" className="lead" delay={80}>
             За 15 минут разберём задачу и определим, что нужно для запуска.
           </Rise>
