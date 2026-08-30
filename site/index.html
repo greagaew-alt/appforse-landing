@@ -30,7 +30,7 @@
   /* ── типографика: опорные значения при 1920, ниже масштабируются ── */
   --fs-h1:   clamp(32px, 3.54vw, 68px);
   --fs-h2:   clamp(24px, 2.29vw, 44px);
-  --fs-h3:   clamp(19px, 1.51vw, 29px);
+  --fs-h3:   clamp(16px, 1.09vw, 21px);   /* подзаголовок — один размер на весь сайт */
   --fs-h4:   clamp(16px, 1.09vw, 21px);
   --fs-num:  clamp(24px, 1.77vw, 34px);
   --fs-lead: clamp(15px, 0.89vw, 17px);
@@ -84,8 +84,6 @@ h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -.02
   max-width: var(--w-h2); }
 h2.wide { max-width: clamp(360px, 36.5vw, 700px); }
 h3 { font-size: var(--fs-h3); line-height: var(--lh-head); font-weight: 600; }
-/* карточка в сетке — уровнем ниже, чем заголовок блока */
-.card h3, .who h3, .step h3, .case h3, .q button { font-size: var(--fs-h4); }
 p  { margin: 0; }
 .lead { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo); text-wrap: pretty; }
 
@@ -138,7 +136,7 @@ p  { margin: 0; }
 }
 .top.stuck { border-bottom-color: #1F1D24; }
 .top .shell { display: flex; align-items: center; gap: var(--s6);
-  padding-top: var(--s6); padding-bottom: 0; }
+  padding-top: var(--s6); padding-bottom: var(--s6); }
 .top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
 .top nav { display: flex; gap: clamp(14px, 1.2vw, 23px); margin-left: auto; align-items: center; }
 .top nav a {
@@ -154,7 +152,7 @@ p  { margin: 0; }
 .hero .shell {
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(32px, 4vw, 76px); align-items: start;
-  padding-top: clamp(30px, 2.55vw, 49px); padding-bottom: clamp(40px, 2.81vw, 54px);
+  padding-top: clamp(14px, 1.3vw, 25px); padding-bottom: clamp(40px, 2.81vw, 54px);
 }
 .hero h1 { max-width: var(--w-h1); margin: 10px 0 0; text-wrap: normal; }
 .hero .circle { position: relative; display: inline-block; white-space: nowrap; padding: 0 .1em; }
@@ -248,7 +246,7 @@ p  { margin: 0; }
 .who { background: var(--ink-lift); border-left: 3px solid var(--red);
   padding: clamp(20px, 1.67vw, 32px); transition: border-color .3s var(--ease), background .3s var(--ease); }
 .who:hover { background: #1B1920; border-left-color: var(--red-lt); }
-.who h3 { font-size: var(--fs-h4); }
+
 .who p { margin-top: 12px; font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
 
 /* ── 05. Как проходит запуск ── */
@@ -260,7 +258,7 @@ p  { margin: 0; }
 .step:hover { background: #131117; }
 .step .n { font-family: Oswald, sans-serif; font-weight: 700; font-size: var(--fs-h3);
   color: var(--red); line-height: 1; }
-.step h3 { font-size: var(--fs-h4); }
+
 .step p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
 
 /* ── 06. Демо ── */
@@ -282,30 +280,38 @@ p  { margin: 0; }
 .case .pic { grid-area: pic; align-self: start; }
 .case .kind { font-family: Oswald, sans-serif; font-size: var(--fs-cap); letter-spacing: .14em;
   text-transform: uppercase; color: var(--red-lt); }
-.case h3 { margin: 14px 0 10px; font-size: var(--fs-h4); }
+.case h3 { margin: 14px 0 10px; }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
 .case .pic { border: 3px solid var(--paper); width: clamp(140px, 13vw, 250px); }
 .case .pic img { width: 100%; }
 .case:nth-child(2) .pic { border-color: var(--red); }
 
 /* ── 08. Цена ── */
-.price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 460px);
-  gap: clamp(24px, 2.5vw, 48px); margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
-.price .box { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(22px, 2.1vw, 40px); }
+.price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24.1vw, 462px);
+  gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
+.price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
+    padding: clamp(22px, 2.5vw, 48px);
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(24px, 3vw, 58px); }
+  /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
+  .price .collage { position: relative; width: clamp(190px, 16.8vw, 323px);
+    min-height: clamp(290px, 25.1vw, 482px); }
+  .price .collage .shot { position: absolute; }
+  .price .collage .shot.a { left: 0; top: 0; width: clamp(88px, 7.9vw, 152px); }
+  .price .collage .shot.b { left: 45%; top: clamp(48px, 4.4vw, 84px); width: clamp(104px, 9.4vw, 180px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
-.price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(38px, 3.13vw, 60px);
-  line-height: 1; margin: 12px 0 clamp(20px, 1.67vw, 32px); }
-.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
+  line-height: 1; letter-spacing: -.01em; margin: 14px 0 clamp(22px, 1.72vw, 33px); }
+.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, .94vw, 18px); }
 .price li { display: flex; gap: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
 .price li svg { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--red); }
 .price .btn { margin-top: clamp(22px, 1.9vw, 36px); }
-.price .extra { display: grid; gap: clamp(12px, 1.04vw, 20px); }
+.price .extra { display: grid; gap: clamp(12px, .89vw, 17px); align-content: start; }
 .price .extra .item { background: var(--ink-lift); border: 1px solid #1F1D24;
-  padding: clamp(18px, 1.46vw, 28px); }
+  padding: clamp(18px, 1.67vw, 32px); }
 .price .extra b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
-  text-transform: uppercase; font-size: var(--fs-h4); }
+  text-transform: uppercase; font-size: var(--fs-h3); line-height: var(--lh-head); }
 .price .extra p { margin-top: 10px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
 
@@ -336,7 +342,7 @@ p  { margin: 0; }
 .contact { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(20px, 1.67vw, 32px);
   margin-top: clamp(28px, 2.4vw, 46px); align-items: start; }
 .contact .box { background: var(--ink); padding: clamp(22px, 2.1vw, 40px); }
-.contact h3 { font-size: var(--fs-h3); }
+
 .form { display: grid; gap: 12px; margin-top: clamp(18px, 1.46vw, 28px); }
 .form input {
   font: inherit; font-size: var(--fs-lead); color: var(--paper); background: #131117;
@@ -366,6 +372,67 @@ p  { margin: 0; }
 .foot .rule { border-top: 1px solid #1F1D24; }
 .foot .rule .shell { display: flex; justify-content: space-between; gap: 20px;
   padding-top: 20px; padding-bottom: 26px; font-size: var(--fs-cap); color: var(--muted-hi); }
+
+/* ── иконка Lucide ── */
+.lu { width: 26px; height: 26px; display: block; }
+.who .ico { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
+  background: rgba(232,36,60,.12); border: 1px solid rgba(232,36,60,.3); color: var(--red-lt);
+  margin-bottom: clamp(14px, 1.15vw, 22px);
+  transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
+.who:hover .ico { background: var(--red); color: #fff; transform: translateY(-2px); }
+
+/* ── теги подсвечиваются по очереди ── */
+.panel .tag { transition: background .45s var(--ease), border-color .45s var(--ease),
+  color .45s var(--ease); }
+.panel .tag.hot { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* ── шаги запуска: линия прогресса заполняется по мере прокрутки ── */
+.steps { position: relative; padding-left: clamp(24px, 1.98vw, 38px); }
+.steps::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px;
+  background: #201E26; }
+.steps .rail { position: absolute; left: 11px; top: 0; width: 2px; height: 100%;
+  background: linear-gradient(180deg, var(--red-lt), var(--red));
+  transform-origin: top; transform: scaleY(0); transition: transform .9s var(--ease); }
+.step { position: relative; }
+.step::before { content: ''; position: absolute; left: calc(-1 * clamp(24px, 1.98vw, 38px) + 5px);
+  top: calc(50% - 6px); width: 12px; height: 12px; border-radius: 50%;
+  background: #201E26; border: 2px solid var(--ink); z-index: 1;
+  transition: background .45s var(--ease), box-shadow .45s var(--ease); }
+.step.on::before { background: var(--red); box-shadow: 0 0 0 5px rgba(232,36,60,.16); }
+.step .n { color: #3A3742; transition: color .45s var(--ease); }
+.step.on .n { color: var(--red); }
+.step h3, .step p { transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.step:not(.on) h3, .step:not(.on) p { opacity: .62; transform: translateX(-6px); }
+
+/* ── бегущая строка ── */
+.ticker { background: var(--red); overflow: hidden; padding: clamp(10px, .94vw, 18px) 0;
+  border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
+.ticker .row { display: flex; width: max-content; animation: run 42s linear infinite; }
+.ticker span { font-family: Oswald, sans-serif; font-weight: 600; text-transform: uppercase;
+  font-size: clamp(14px, 1.04vw, 20px); letter-spacing: .08em; white-space: nowrap; color: #fff; }
+@keyframes run { to { transform: translateX(-50%); } }
+.ticker:hover .row { animation-play-state: paused; }
+
+/* ── блик по верхней кромке карточки цены ── */
+.price .box { position: relative; overflow: hidden; }
+.price .box::after { content: ''; position: absolute; top: 0; left: -45%; width: 45%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red-lt), transparent);
+  animation: sweep 4.2s var(--ease) infinite; pointer-events: none; }
+@keyframes sweep { 0% { left: -45%; } 60%, 100% { left: 100%; } }
+
+/* ── блик по кнопке при наведении ── */
+.btn { position: relative; overflow: hidden; }
+.btn::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.32) 50%, transparent 58%);
+  transform: translateX(-130%); }
+.btn:hover::after { animation: shine .75s var(--ease); }
+@keyframes shine { to { transform: translateX(130%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker .row, .price .box::after, .btn::after { animation: none; }
+  .steps .rail { transform: scaleY(1); }
+  .step:not(.on) h3, .step:not(.on) p { opacity: 1; transform: none; }
+}
 
 /* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
 @media (max-width: 1180px) {
@@ -409,7 +476,7 @@ const TG = 'https://t.me/shark154';
 /* ─────────── содержание ─────────── */
 const NAV = [
   ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
-  ['Кейс', '#case'], ['Цена', '#price'],
+  ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
 ];
 
 const WHY_CARDS = [
@@ -419,10 +486,10 @@ const WHY_CARDS = [
 ];
 
 const AUDIENCE = [
-  { t: 'Оптовые продажи', d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.' },
-  { t: 'Магазины и доставка', d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.' },
-  { t: 'Рестораны и доставка еды', d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.' },
-  { t: 'Розница', d: 'Каталог, акции, бонусы и новые поступления всегда под рукой у покупателя.' },
+  { ico: 'package', t: 'Оптовые продажи', d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.' },
+  { ico: 'store', t: 'Магазины и доставка', d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.' },
+  { ico: 'bowl', t: 'Рестораны и доставка еды', d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.' },
+  { ico: 'bag', t: 'Розница', d: 'Каталог, акции, бонусы и новые поступления всегда под рукой у покупателя.' },
 ];
 
 const STEPS = [
@@ -441,8 +508,6 @@ const INCLUDED = [
   'Бонусы, промокоды и push-уведомления',
   'CRM и клиентская база',
   'Админ-панель и аналитика',
-  'Управление заказами и сотрудниками',
-  'Несколько точек, складов и городов',
 ];
 
 const FAQ = [
@@ -463,6 +528,54 @@ const FAQ = [
 ];
 
 /* ─────────── мелкие детали ─────────── */
+/* Иконки — набор Lucide (лицензия MIT), встроены как SVG: единый стиль без внешних файлов */
+const PATHS = {
+  package: ['m7.5 4.27 9 5.15',
+    'M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z',
+    'm3.3 7 8.7 5 8.7-5', 'M12 22V12'],
+  store: ['m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7',
+    'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8', 'M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4',
+    'M2 7h20'],
+  bowl: ['M12 2v2', 'M2 12h20', 'M4 12a8 8 0 0 0 16 0', 'M6 20h12',
+    'M15.5 4.5c1 1 1 2.5 0 3.5'],
+  bag: ['M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z', 'M3 6h18', 'M16 10a4 4 0 0 1-8 0'],
+};
+const Ico = ({ name }) => (
+  <svg className="lu" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {PATHS[name].map((d, i) => <path d={d} key={i} />)}
+  </svg>
+);
+
+/* Теги подсвечиваются по кругу — набор возможностей читается сам собой */
+const Tags = ({ items }) => {
+  const [hot, setHot] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setHot(v => (v + 1) % items.length), 1500);
+    return () => clearInterval(t);
+  }, [items.length]);
+  return (
+    <div className="tags">
+      {items.map((t, i) => (
+        <span className={'tag' + (i === hot ? ' hot' : '')} key={t}>{t}</span>
+      ))}
+    </div>
+  );
+};
+
+/* Бегущая строка между блоками */
+const TICK = ['Приложение под вашим брендом', '7 дней до релиза', '150 000 ₽',
+  'Каталог', 'Заказы', 'Доставка', 'Оплата', 'Бонусы', 'Push', 'CRM', 'Аналитика'];
+const Ticker = () => {
+  const line = TICK.join('   ·   ') + '   ·   ';
+  return (
+    <div className="ticker" aria-hidden="true">
+      <div className="row"><span>{line.repeat(3)}</span><span>{line.repeat(3)}</span></div>
+    </div>
+  );
+};
+
 const Check = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"
        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -591,10 +704,7 @@ const What = () => (
       <div className="duo">
         <Rise className="panel" delay={140}>
           <h3>Клиентское приложение</h3>
-          <div className="tags">
-            {['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']
-              .map(t => <span className="tag" key={t}>{t}</span>)}
-          </div>
+          <Tags items={['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']} />
           <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
              касаний, без звонков и переписки с менеджером.</p>
@@ -602,10 +712,7 @@ const What = () => (
         </Rise>
         <Rise className="panel" delay={220}>
           <h3>Управление бизнесом</h3>
-          <div className="tags">
-            {['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']
-              .map(t => <span className="tag" key={t}>{t}</span>)}
-          </div>
+          <Tags items={['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']} />
           <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
              панели, без сторонних сервисов.</p>
@@ -623,6 +730,7 @@ const Who = () => (
       <div className="quad">
         {AUDIENCE.map((a, i) => (
           <Rise className="who" key={a.t} delay={60 + i * 80}>
+            <span className="ico"><Ico name={a.ico} /></span>
             <h3>{a.t}</h3><p>{a.d}</p>
           </Rise>
         ))}
@@ -631,24 +739,42 @@ const Who = () => (
   </section>
 );
 
-const How = () => (
-  <section className="dark" id="how">
-    <div className="shell">
-      <Rise as="h2" className="wide">
-        Как ваше приложение появится<br />в App Store и Google Play
-      </Rise>
-      <div className="steps">
-        {STEPS.map((s, i) => (
-          <Rise className="step" key={s.t} delay={40 + i * 70}>
-            <span className="n">{String(i + 1).padStart(2, '0')}</span>
-            <h3>{s.t}</h3>
-            <p>{s.d}</p>
-          </Rise>
-        ))}
+const How = () => {
+  const wrap = useRef(null);
+  const [active, setActive] = useState(-1);
+  useEffect(() => {
+    const items = Array.prototype.slice.call(wrap.current.querySelectorAll('.step'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const i = items.indexOf(e.target);
+        setActive(prev => (i > prev ? i : prev));
+      });
+    }, { rootMargin: '-45% 0px -40% 0px' });
+    items.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+  const filled = (active + 1) / STEPS.length;
+  return (
+    <section className="dark" id="how">
+      <div className="shell">
+        <Rise as="h2" className="wide">
+          Как ваше приложение появится<br />в App Store и Google Play
+        </Rise>
+        <div className="steps" ref={wrap}>
+          <span className="rail" style={{ transform: 'scaleY(' + filled + ')' }} />
+          {STEPS.map((st, i) => (
+            <Rise className={'step' + (i <= active ? ' on' : '')} key={st.t} delay={40 + i * 70}>
+              <span className="n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{st.t}</h3>
+              <p>{st.d}</p>
+            </Rise>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Case = () => (
   <section className="dark" id="case">
@@ -689,6 +815,7 @@ const Price = () => (
         </Rise>
         <div className="price">
           <Rise className="box" delay={140}>
+            <div>
             <span className="tagline">Запуск платформы</span>
             <div className="sum">150 000 ₽</div>
             <h3>В стоимость входит</h3>
@@ -696,6 +823,11 @@ const Price = () => (
               {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
             </ul>
             <a className="btn" href="#contact">Обсудить запуск</a>
+            </div>
+            <div className="collage">
+              <Shot src={SHOT1} alt="Каталог в приложении" cls="a" />
+              <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
+            </div>
           </Rise>
           <Rise className="extra" delay={220}>
             <div className="item">
@@ -808,7 +940,8 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Who /><How /><Case /><Price /><Faq /><Contact /><Foot />
+    <Top /><Hero /><Why /><What /><Who /><Ticker /><How /><Case />
+    <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );
 
