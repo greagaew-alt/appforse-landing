@@ -219,7 +219,14 @@ p  { margin: 0; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.25vw, 24px);
   margin-top: clamp(28px, 2.4vw, 46px); }
 .panel { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
-  display: flex; flex-direction: column; gap: clamp(16px, 1.4vw, 26px); }
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "head pic" "tags pic" "fill pic";
+  gap: clamp(14px, 1.15vw, 22px) clamp(18px, 1.6vw, 30px); align-content: start; }
+.panel h3 { grid-area: head; }
+.panel .tags { grid-area: tags; align-content: start; }
+.panel > p { grid-area: fill; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); max-width: 42ch; }
+.panel .pic { grid-area: pic; align-self: start; }
 .panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
   border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
@@ -258,13 +265,20 @@ p  { margin: 0; }
 /* ── 07. Кейс ── */
 .cases { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.25vw, 24px);
   margin-top: clamp(28px, 2.4vw, 46px); }
-.case { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px); }
+.case { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "kind pic" "head pic" "text pic";
+  column-gap: clamp(18px, 1.6vw, 30px); align-content: start; }
+.case .kind { grid-area: kind; }
+.case h3 { grid-area: head; }
+.case p { grid-area: text; }
+.case .pic { grid-area: pic; align-self: start; }
 .case .kind { font-family: Oswald, sans-serif; font-size: var(--fs-cap); letter-spacing: .14em;
   text-transform: uppercase; color: var(--red-lt); }
 .case h3 { margin: 14px 0 10px; font-size: var(--fs-h4); }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.case .pic { margin-top: clamp(16px, 1.4vw, 26px); border: 3px solid var(--paper);
-  width: clamp(140px, 13vw, 250px); }
+.case .pic { border: 3px solid var(--paper); width: clamp(140px, 13vw, 250px); }
+.case .pic img { width: 100%; }
 .case:nth-child(2) .pic { border-color: var(--red); }
 
 /* ── 08. Цена ── */
@@ -358,6 +372,9 @@ p  { margin: 0; }
 }
 @media (max-width: 900px) {
   .deck, .duo, .quad, .cases, .foot .shell { grid-template-columns: 1fr; }
+  .panel, .case { grid-template-columns: 1fr; grid-template-areas: none; }
+  .panel > *, .case > * { grid-area: auto; }
+  .case .pic { margin-top: 20px; }
   .step { grid-template-columns: 44px 1fr; }
   .step p { grid-column: 2; }
   .demo { grid-template-columns: 1fr; }
@@ -572,6 +589,9 @@ const What = () => (
             {['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']
               .map(t => <span className="tag" key={t}>{t}</span>)}
           </div>
+          <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
+             всё в одном приложении под вашим брендом. Повторный заказ занимает пару
+             касаний, без звонков и переписки с менеджером.</p>
           <div className="pic"><img src={SHOT1} alt="Каталог с товарами" /></div>
         </Rise>
         <Rise className="panel" delay={220}>
@@ -580,6 +600,9 @@ const What = () => (
             {['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']
               .map(t => <span className="tag" key={t}>{t}</span>)}
           </div>
+          <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
+             Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
+             панели, без сторонних сервисов.</p>
           <div className="pic"><img src={SHOT2} alt="Админ-панель со списком заказов" /></div>
         </Rise>
       </div>
