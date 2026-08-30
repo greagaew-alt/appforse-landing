@@ -64,7 +64,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body {
   margin: 0; background: var(--ink); color: var(--paper);
   font-family: Manrope, system-ui, sans-serif; font-size: var(--fs-body);
@@ -254,9 +254,7 @@ p, li, .lead { text-wrap: pretty; }
 .steps { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
 .step { display: grid; grid-template-columns: clamp(56px, 5vw, 96px) minmax(0, 26ch) 1fr;
   gap: clamp(16px, 2vw, 40px); align-items: baseline;
-  padding: clamp(20px, 1.67vw, 32px) 0; border-bottom: 1px solid #1F1D24;
-  transition: background .3s var(--ease); }
-.step:hover { background: #131117; }
+  padding: clamp(20px, 1.67vw, 32px) 0; border-bottom: 1px solid #1F1D24; }
 .step .n { font-family: Oswald, sans-serif; font-weight: 700; font-size: var(--fs-h3);
   color: var(--red); line-height: 1; }
 
@@ -292,7 +290,7 @@ p, li, .lead { text-wrap: pretty; }
 .price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24.1vw, 462px);
   gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
 .price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
-    padding: clamp(22px, 2.5vw, 48px);
+    padding: clamp(20px, 1.67vw, 32px) clamp(22px, 2.5vw, 48px);
     display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 20.6vw, 395px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
   .price .collage { position: relative; justify-self: start; margin-top: -10px;
@@ -308,9 +306,10 @@ p, li, .lead { text-wrap: pretty; }
 .price li { display: flex; gap: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
 .price li svg { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--red); }
+.price .box > div { display: flex; flex-direction: column; }
+.price .box ul { margin-bottom: auto; }
 .price .btn { margin-top: clamp(20px, 1.46vw, 28px); }
-.price .extra { display: grid; gap: clamp(12px, .89vw, 17px);
-  grid-template-rows: auto auto 1fr; }
+.price .extra { display: grid; gap: clamp(12px, .89vw, 17px); align-content: start; }
 .price .extra .item { background: var(--ink-lift); border: 1px solid #1F1D24;
   padding: clamp(18px, 1.67vw, 32px); }
 .price .extra b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
@@ -434,8 +433,8 @@ p, li, .lead { text-wrap: pretty; }
   padding: clamp(24px, 2.6vw, 50px);
   display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 460px);
   gap: clamp(24px, 3vw, 58px); align-items: center;
-  margin-top: clamp(28px, 2.4vw, 46px); }
-.magnet h3 { max-width: 34ch; }
+  margin-top: clamp(16px, 1.25vw, 24px); }
+.magnet h2 { max-width: 100%; }
 .magnet > div > p { margin-top: 14px; font-size: var(--fs-lead); line-height: var(--lh-text);
   color: var(--on-red); max-width: 54ch; }
 .magnet .form { margin-top: 0; }
@@ -445,6 +444,28 @@ p, li, .lead { text-wrap: pretty; }
 .magnet .form input:focus { border-color: var(--paper); }
 .magnet .form .note { color: rgba(255,255,255,.72); }
 @media (max-width: 900px) { .magnet { grid-template-columns: 1fr; } }
+
+/* ── согласие на обработку данных ── */
+.agree { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
+  cursor: pointer; margin-top: 4px; }
+.agree input { appearance: none; -webkit-appearance: none; margin: 0; flex: none;
+  width: 18px; height: 18px; margin-top: 2px; border: 1px solid #3A3742; background: #131117;
+  display: grid; place-content: center; cursor: pointer;
+  transition: background .2s var(--ease), border-color .2s var(--ease); }
+.agree input::before { content: ''; width: 10px; height: 10px; transform: scale(0);
+  background: var(--paper); transition: transform .15s var(--ease);
+  clip-path: polygon(14% 46%, 0 60%, 40% 100%, 100% 22%, 86% 8%, 38% 70%); }
+.agree input:checked { background: var(--red); border-color: var(--red); }
+.agree input:checked::before { transform: scale(1); }
+.agree span { font-size: var(--fs-cap); line-height: 1.5; color: var(--muted-hi); }
+.agree a { color: var(--muted-lo); text-decoration: underline;
+  text-underline-offset: 2px; transition: color .2s var(--ease); }
+.agree a:hover { color: var(--paper); }
+.magnet .agree input { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+.magnet .agree input:checked { background: var(--paper); border-color: var(--paper); }
+.magnet .agree input::before { background: var(--red); }
+.magnet .agree span { color: rgba(255,255,255,.78); }
+.magnet .agree a { color: var(--paper); }
 
 /* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
 @media (max-width: 1180px) {
@@ -489,6 +510,7 @@ const TG = 'https://t.me/shark154';
 const NAV = [
   ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
   ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
+  ['Контакты', '#contacts'],
 ];
 
 const WHY_CARDS = [
@@ -751,6 +773,7 @@ const What = () => (
           <div className="pic"><img src={SHOT2} alt="Админ-панель со списком заказов" /></div>
         </Rise>
       </div>
+      <Magnet />
     </div>
   </section>
 );
@@ -758,11 +781,9 @@ const What = () => (
 const Magnet = () => {
   const [sent, setSent] = useState(false);
   return (
-    <section className="dark" id="magnet">
-      <div className="shell">
-        <Rise className="magnet">
+    <Rise className="magnet" id="magnet">
           <div>
-            <h3>Разберём ваш бизнес и покажем точки роста повторных продаж</h3>
+            <h2>Разберём ваш бизнес и покажем<br />точки роста повторных продаж</h2>
             <p>
               Посмотрим, как приложение может работать с вашей клиентской базой,
               возвращать покупателей и автоматизировать повторные заказы.
@@ -775,11 +796,15 @@ const Magnet = () => {
             <button className="btn on-red" type="submit">
               {sent ? 'Заявка отправлена' : 'Получить разбор'}
             </button>
+            <label className="agree">
+              <input type="checkbox" name="agree" required />
+              <span>Согласен на обработку персональных данных
+                и принимаю <a href="privacy.html" target="_blank"
+                rel="noopener">политику конфиденциальности</a>.</span>
+            </label>
             {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
           </form>
-        </Rise>
-      </div>
-    </section>
+    </Rise>
   );
 };
 
@@ -959,11 +984,13 @@ const Contact = () => {
                 <button className="btn" type="submit">
                   {sent ? 'Заявка отправлена' : 'Отправить заявку'}
                 </button>
-                <p className="note">
-                  {sent
-                    ? 'Спасибо, свяжемся в течение рабочего дня.'
-                    : 'Нажимая кнопку, вы соглашаетесь на обработку персональных данных.'}
-                </p>
+                <label className="agree">
+                  <input type="checkbox" name="agree" required />
+                  <span>Согласен на обработку персональных данных
+                    и принимаю <a href="privacy.html" target="_blank"
+                    rel="noopener">политику конфиденциальности</a>.</span>
+                </label>
+                {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
               </form>
             </Rise>
             <Rise className="box aside" delay={220}>
@@ -979,7 +1006,7 @@ const Contact = () => {
 };
 
 const Foot = () => (
-  <footer className="foot">
+  <footer className="foot" id="contacts">
     <div className="shell">
       <div>
         <img className="logo" src={LOGO} alt="AppForse" />
@@ -999,14 +1026,17 @@ const Foot = () => (
       </div>
     </div>
     <div className="rule">
-      <div className="shell"><span>© 2026 AppForse</span><span>Mobile commerce</span></div>
+      <div className="shell">
+        <span>© 2026 AppForse</span>
+        <a href="privacy.html">Политика обработки персональных данных</a>
+      </div>
     </div>
   </footer>
 );
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Magnet /><Who /><How /><Case />
+    <Top /><Hero /><Why /><What /><Who /><How /><Case />
     <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );

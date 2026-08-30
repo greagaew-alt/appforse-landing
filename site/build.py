@@ -20,3 +20,9 @@ out = (tpl
 
 io.open(os.path.join(BASE, 'index.html'), 'w', encoding='utf-8').write(out)
 print('index.html собран:', len(out) // 1024, 'KB')
+
+# страница политики: подставляем только логотип
+priv = io.open(os.path.join(BASE, 'privacy_template.html'), encoding='utf-8').read()
+priv = priv.replace('__LOGO__', a['logo'])
+io.open(os.path.join(BASE, 'privacy.html'), 'w', encoding='utf-8').write(priv)
+print('privacy.html собран:', len(priv) // 1024, 'KB')

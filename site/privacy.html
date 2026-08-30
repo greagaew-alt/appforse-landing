@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Политика обработки персональных данных — AppForse</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0E0C10; --ink-lift: #16141A; --ink-line: #262626;
+  --paper: #FFFFFF; --muted: #929292; --muted-lo: #A9A9BA; --muted-hi: #6E6E7A;
+  --red: #E8243C; --red-dk: #B3182C; --red-lt: #FF5468;
+  --fs-h1: clamp(28px, 2.60vw, 50px);
+  --fs-h2: clamp(18px, 1.25vw, 24px);
+  --fs-lead: clamp(15px, 0.89vw, 17px);
+  --fs-body: clamp(14px, 0.83vw, 16px);
+  --fs-cap: clamp(11px, 0.68vw, 13px);
+  --shell: 1505px; --text: 78ch;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--ink); color: var(--paper);
+  font-family: Manrope, system-ui, sans-serif; font-size: var(--fs-body);
+  -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--red-lt); outline-offset: 3px; }
+.shell { width: min(var(--shell), calc(100% - clamp(40px, 4.2vw, 80px))); margin: 0 auto; }
+
+.top { border-bottom: 1px solid #1F1D24; }
+.top .shell { display: flex; align-items: center; gap: 24px; padding: 24px 0; }
+.top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
+.top a.back { margin-left: auto; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
+  font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color .2s var(--ease); }
+.top a.back:hover { color: var(--paper); }
+
+main { padding: clamp(40px, 4.2vw, 80px) 0 clamp(48px, 5.2vw, 100px); }
+h1 { font-family: Oswald, sans-serif; font-weight: 700; text-transform: uppercase;
+  font-size: var(--fs-h1); line-height: .96; letter-spacing: -.02em;
+  margin: 0 0 18px; max-width: 20ch; text-wrap: balance; }
+.date { font-size: var(--fs-cap); color: var(--muted-hi); letter-spacing: .04em;
+  text-transform: uppercase; font-family: Oswald, sans-serif; }
+.intro { font-size: var(--fs-lead); line-height: 1.55; color: var(--muted-lo);
+  max-width: 74ch; margin: 26px 0 0; text-wrap: pretty; }
+
+h2 { font-family: Oswald, sans-serif; font-weight: 600; text-transform: uppercase;
+  font-size: var(--fs-h2); line-height: 1.2; letter-spacing: -.01em;
+  margin: clamp(34px, 3.1vw, 60px) 0 16px; max-width: 46ch; text-wrap: balance; }
+h2 .n { color: var(--red); margin-right: 12px; }
+p, li { font-size: var(--fs-body); line-height: 1.65; color: var(--muted-lo);
+  max-width: var(--text); text-wrap: pretty; }
+p + p { margin-top: 12px; }
+ul, ol { margin: 14px 0 0; padding-left: 22px; display: grid; gap: 10px; }
+li::marker { color: var(--red); }
+b, strong { color: var(--paper); font-weight: 600; }
+a { color: var(--paper); text-underline-offset: 3px; }
+.fill { color: var(--red-lt); border-bottom: 1px dashed rgba(255,84,104,.6); }
+
+.card { background: var(--ink-lift); border: 1px solid #1F1D24;
+  padding: clamp(20px, 1.9vw, 36px); margin-top: 20px; max-width: var(--text); }
+.card dl { margin: 0; display: grid; grid-template-columns: minmax(0, 22ch) 1fr;
+  gap: 12px clamp(16px, 1.6vw, 30px); }
+.card dt { font-size: var(--fs-cap); letter-spacing: .06em; text-transform: uppercase;
+  font-family: Oswald, sans-serif; color: var(--muted-hi); padding-top: 2px; }
+.card dd { margin: 0; font-size: var(--fs-body); line-height: 1.5; color: var(--paper); }
+@media (max-width: 700px) { .card dl { grid-template-columns: 1fr; gap: 4px 0; }
+  .card dd { margin-bottom: 10px; } }
+
+.foot { border-top: 1px solid #1F1D24; }
+.foot .shell { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
+  padding: 26px 0; font-size: var(--fs-cap); color: var(--muted-hi); }
+.foot a { color: var(--muted-lo); text-decoration: none; }
+.foot a:hover { color: var(--paper); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="shell">
+    <a href="index.html"><img class="logo" src="data:image/jpeg;base64,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yJv+eT/98GgI8UiSSIyIHGSVIr8Df+FmfET/AKHzxF/4OZ//AIqkb4mfETy3/wCK58QvkYwdYmP/ALNR/bMH9hgvBLMk0/rkf/AH/mVPiAN3xw8YsOQdZugO2f3zH+orkx9wfSnzSST3stxO5e4kYvLK8pZmY85Oe9MByM5zXyjs25H9mYWh9XwsKfNflSV++nYWiiipOkKKKKACiiigApCM9c/nS0UBs7h3yeT7miiih67iskGAevNJjHTj6UtFGysN6qz2Ex19+tKOBgUUU7u1hWV7hR3B7iiioshjWRWQqRwfQ06iinZCSSVlsJjmloopjCiiigAoxRRQAmPlUenSloopNX3DrcQgHGe1AAC4AwM5paKLK1geqswooopgIVUsCRyKWiih67gB5Hp9KQAK2QBnGM0tFKwB0A9ulB5QL2zmiin5BZBRRRSSS2DYaEAYnkn3NLgYpaKGk9weogAHagAA8DFLRTBabBgZzgH8KTHPU/TNLRSFbW/UKKKKY9g7UDAGMAj0IzRRSsAdsduwooooaTG3cKP0oooSSEtNgbDMSQMnrxR+GPpRRVNt7gFFFFIAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z" alt="AppForse"></a>
+    <a class="back" href="index.html">← На главную</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <span class="date">Редакция от 31 августа 2026 года</span>
+    <h1>Политика обработки персональных данных</h1>
+    <p class="intro">
+      Настоящая Политика определяет порядок обработки и защиты персональных данных
+      физических лиц, которые пользуются сайтом <span class="fill">[адрес сайта]</span>
+      (далее — Сайт), и разработана во исполнение требований пункта 2 части 1 статьи 18.1
+      Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных».
+    </p>
+
+    <h2><span class="n">1</span>Общие положения</h2>
+    <p>
+      1.1. Политика применяется ко всей информации, которую Оператор может получить
+      о посетителях Сайта во время использования ими Сайта, его сервисов и форм обратной связи.
+    </p>
+    <p>
+      1.2. Используя Сайт и отправляя свои данные через формы, пользователь подтверждает,
+      что ознакомился с настоящей Политикой и даёт согласие на обработку персональных данных
+      на изложенных в ней условиях.
+    </p>
+    <p>
+      1.3. Если пользователь не согласен с условиями Политики, он должен воздержаться
+      от использования форм Сайта и от передачи своих персональных данных Оператору.
+    </p>
+    <p>
+      1.4. Оператор не проверяет достоверность предоставленных персональных данных
+      и исходит из того, что пользователь предоставляет достоверные данные и поддерживает
+      их в актуальном состоянии.
+    </p>
+
+    <h2><span class="n">2</span>Основные понятия</h2>
+    <p>
+      <b>Персональные данные</b> — любая информация, относящаяся прямо или косвенно
+      к определённому или определяемому физическому лицу (субъекту персональных данных).
+    </p>
+    <p>
+      <b>Оператор</b> — лицо, самостоятельно или совместно с другими лицами организующее
+      и осуществляющее обработку персональных данных, а также определяющее цели обработки,
+      состав данных и совершаемые с ними действия.
+    </p>
+    <p>
+      <b>Обработка персональных данных</b> — любое действие или совокупность действий,
+      совершаемых с персональными данными, включая сбор, запись, систематизацию, накопление,
+      хранение, уточнение, извлечение, использование, передачу, обезличивание, блокирование,
+      удаление и уничтожение.
+    </p>
+    <p>
+      <b>Пользователь</b> — посетитель Сайта, предоставивший свои персональные данные
+      через формы Сайта.
+    </p>
+
+    <h2><span class="n">3</span>Сведения об Операторе</h2>
+    <div class="card">
+      <dl>
+        <dt>Наименование</dt>
+        <dd><span class="fill">[полное наименование ИП или организации]</span></dd>
+        <dt>ИНН</dt>
+        <dd><span class="fill">[ИНН]</span></dd>
+        <dt>ОГРН / ОГРНИП</dt>
+        <dd><span class="fill">[ОГРН или ОГРНИП]</span></dd>
+        <dt>Адрес</dt>
+        <dd><span class="fill">[юридический или почтовый адрес]</span></dd>
+        <dt>Электронная почта</dt>
+        <dd><span class="fill">[адрес для обращений]</span></dd>
+        <dt>Телефон</dt>
+        <dd><span class="fill">[телефон]</span></dd>
+      </dl>
+    </div>
+
+    <h2><span class="n">4</span>Какие данные обрабатываются</h2>
+    <p>4.1. Оператор обрабатывает персональные данные, которые пользователь сообщает сам,
+      заполняя формы на Сайте:</p>
+    <ul>
+      <li>имя;</li>
+      <li>номер телефона;</li>
+      <li>иные сведения, которые пользователь по своему усмотрению укажет в свободном поле
+        или сообщит при последующем общении.</li>
+    </ul>
+    <p>4.2. Дополнительно при посещении Сайта автоматически собираются обезличенные
+      технические данные: IP-адрес, сведения о браузере и операционной системе, дата и время
+      обращения, адрес страницы перехода. Эти данные не позволяют идентифицировать личность
+      и используются в статистических целях.</p>
+    <p>4.3. Оператор не обрабатывает специальные категории персональных данных (о расовой
+      и национальной принадлежности, политических взглядах, религиозных убеждениях, состоянии
+      здоровья, интимной жизни) и биометрические персональные данные.</p>
+
+    <h2><span class="n">5</span>Цели обработки</h2>
+    <ul>
+      <li>обработка заявок и обращений, поступивших через формы Сайта;</li>
+      <li>связь с пользователем: уточнение задачи, подготовка и направление коммерческого
+        предложения, согласование условий работы;</li>
+      <li>заключение и исполнение договора, стороной которого является пользователь;</li>
+      <li>улучшение работы Сайта и качества услуг, анализ обезличенной статистики посещений;</li>
+      <li>исполнение обязанностей, возложенных на Оператора законодательством
+        Российской Федерации.</li>
+    </ul>
+
+    <h2><span class="n">6</span>Правовые основания обработки</h2>
+    <p>6.1. Обработка осуществляется на основании согласия пользователя, выраженного путём
+      проставления отметки в форме на Сайте и её отправки (пункт 1 части 1 статьи 6
+      Федерального закона № 152-ФЗ).</p>
+    <p>6.2. Также основаниями обработки являются: необходимость исполнения договора,
+      стороной которого является субъект персональных данных (пункт 5 части 1 статьи 6),
+      и исполнение обязанностей, возложенных законодательством Российской Федерации
+      (пункт 2 части 1 статьи 6).</p>
+
+    <h2><span class="n">7</span>Порядок и условия обработки</h2>
+    <p>7.1. Обработка ведётся смешанным способом: с использованием средств автоматизации
+      и без них, с соблюдением требований законодательства Российской Федерации.</p>
+    <p>7.2. Базы данных, содержащие персональные данные граждан Российской Федерации,
+      располагаются на территории Российской Федерации в соответствии с частью 5
+      статьи 18 Федерального закона № 152-ФЗ.</p>
+    <p>7.3. Оператор не принимает решений, порождающих юридические последствия
+      в отношении пользователя, исключительно на основании автоматизированной обработки
+      его персональных данных.</p>
+    <p>7.4. Оператор не осуществляет трансграничную передачу персональных данных.</p>
+
+    <h2><span class="n">8</span>Передача данных третьим лицам</h2>
+    <p>8.1. Оператор не продаёт и не передаёт персональные данные третьим лицам,
+      за исключением случаев, прямо предусмотренных настоящей Политикой
+      и законодательством Российской Федерации.</p>
+    <p>8.2. Данные могут быть переданы:</p>
+    <ul>
+      <li>лицам, привлечённым Оператором для обработки заявок и оказания услуг, —
+        в объёме, необходимом для выполнения поручения, и при условии соблюдения
+        ими конфиденциальности;</li>
+      <li>государственным органам по основаниям и в порядке, установленным
+        законодательством Российской Федерации.</li>
+    </ul>
+
+    <h2><span class="n">9</span>Файлы cookie и сервисы статистики</h2>
+    <p>9.1. Сайт может использовать файлы cookie — небольшие текстовые файлы, которые
+      сохраняются в браузере пользователя и позволяют сохранять настройки отображения
+      и собирать обезличенную статистику посещений.</p>
+    <p>9.2. Пользователь вправе запретить сохранение cookie в настройках своего браузера.
+      Отключение cookie может повлиять на работу отдельных функций Сайта.</p>
+    <p>9.3. При использовании внешних сервисов веб-аналитики их обработка данных
+      осуществляется в соответствии с политиками конфиденциальности соответствующих
+      сервисов.</p>
+
+    <h2><span class="n">10</span>Сроки обработки и хранения</h2>
+    <p>10.1. Персональные данные обрабатываются до достижения целей обработки, отзыва
+      согласия пользователем или до истечения сроков хранения, установленных
+      законодательством Российской Федерации, — в зависимости от того, что наступит ранее.</p>
+    <p>10.2. По достижении целей обработки либо в случае отзыва согласия данные подлежат
+      уничтожению или обезличиванию в срок, не превышающий тридцати дней с даты достижения
+      цели или получения отзыва, если иное не предусмотрено законодательством.</p>
+
+    <h2><span class="n">11</span>Права пользователя</h2>
+    <p>Пользователь вправе:</p>
+    <ul>
+      <li>получать сведения об обработке своих персональных данных, предусмотренные
+        частью 7 статьи 14 Федерального закона № 152-ФЗ;</li>
+      <li>требовать уточнения своих персональных данных, их блокирования или уничтожения,
+        если данные являются неполными, устаревшими, неточными, незаконно полученными
+        или не являются необходимыми для заявленной цели обработки;</li>
+      <li>отозвать согласие на обработку персональных данных в любой момент;</li>
+      <li>обжаловать действия или бездействие Оператора в уполномоченный орган по защите
+        прав субъектов персональных данных (Роскомнадзор) или в судебном порядке.</li>
+    </ul>
+
+    <h2><span class="n">12</span>Меры по защите данных</h2>
+    <p>12.1. Оператор принимает необходимые правовые, организационные и технические меры
+      для защиты персональных данных от неправомерного или случайного доступа, уничтожения,
+      изменения, блокирования, копирования, распространения и иных неправомерных действий.</p>
+    <p>12.2. К таким мерам относятся: ограничение круга лиц, имеющих доступ к данным,
+      использование защищённого соединения при передаче данных, регулярное обновление
+      программного обеспечения и контроль за принимаемыми мерами.</p>
+
+    <h2><span class="n">13</span>Обращения и отзыв согласия</h2>
+    <p>13.1. Запросы, обращения и отзыв согласия направляются Оператору по электронной
+      почте <span class="fill">[адрес для обращений]</span> либо по почтовому адресу,
+      указанному в разделе 3 настоящей Политики.</p>
+    <p>13.2. В обращении указываются фамилия, имя, отчество субъекта персональных данных,
+      сведения, подтверждающие его взаимодействие с Оператором (например, номер телефона,
+      указанный в заявке), и суть запроса. Ответ направляется в срок, установленный
+      законодательством Российской Федерации.</p>
+
+    <h2><span class="n">14</span>Изменение Политики</h2>
+    <p>14.1. Оператор вправе вносить изменения в настоящую Политику. Новая редакция
+      вступает в силу с момента её размещения на Сайте, если иное не предусмотрено
+      новой редакцией.</p>
+    <p>14.2. Действующая редакция Политики всегда доступна по постоянной ссылке
+      на данной странице.</p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <span>© 2026 AppForse</span>
+    <a href="index.html">Вернуться на сайт</a>
+  </div>
+</footer>
+
+</body>
+</html>
