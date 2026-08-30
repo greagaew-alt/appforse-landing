@@ -157,10 +157,10 @@ p, li, .lead { text-wrap: pretty; }
 }
 .hero h1 { max-width: var(--w-h1); margin: 10px 0 0; text-wrap: normal; }
 .hero .circle { position: relative; display: inline-block; white-space: nowrap; padding: 0 .1em; }
-.hero .circle svg { position: absolute; left: -11%; top: -33%; width: 123%; height: 168%;
+.hero .circle svg { position: absolute; left: -12%; top: -38%; width: 125%; height: 177%;
   overflow: visible; pointer-events: none; }
 .hero .circle path {
-  fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round;
+  fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round;
   stroke-dasharray: 470; stroke-dashoffset: 470;
   animation: draw 1.1s var(--ease) .5s forwards;
 }
@@ -401,13 +401,16 @@ p, li, .lead { text-wrap: pretty; }
   background: linear-gradient(180deg, var(--red-lt), var(--red));
   transform-origin: top; transform: scaleY(0); transition: transform .9s var(--ease); }
 .step { position: relative; }
-.step::before { content: ''; position: absolute; left: calc(-1 * clamp(24px, 1.98vw, 38px) + 5px);
-  top: calc(50% - 6px); width: 12px; height: 12px; border-radius: 50%;
-  background: #201E26; border: 2px solid var(--ink); z-index: 1;
+/* точку держим на самом номере, иначе при двухстрочном заголовке
+   центр строки уезжает вниз и точка перестаёт совпадать с цифрой */
+.step .n { position: relative; color: #3A3742; transition: color .45s var(--ease); }
+.step .n::before { content: ''; position: absolute; z-index: 1;
+  left: calc(-1 * clamp(24px, 1.98vw, 38px) + 6px); top: 50%; margin-top: -6px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #201E26; border: 2px solid var(--ink);
   transition: background .45s var(--ease), box-shadow .45s var(--ease); }
-.step.on::before { background: var(--red); box-shadow: 0 0 0 5px rgba(232,36,60,.16); }
-.step .n { color: #3A3742; transition: color .45s var(--ease); }
 .step.on .n { color: var(--red); }
+.step.on .n::before { background: var(--red); box-shadow: 0 0 0 5px rgba(232,36,60,.16); }
 .step h3, .step p { transition: opacity .5s var(--ease), transform .5s var(--ease); }
 .step:not(.on) h3, .step:not(.on) p { opacity: .62; transform: translateX(-6px); }
 
