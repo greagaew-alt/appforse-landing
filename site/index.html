@@ -305,9 +305,6 @@ p  { margin: 0; }
   text-transform: uppercase; font-size: var(--fs-h4); }
 .price .extra p { margin-top: 10px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
-.price .shotpair { display: flex; gap: 12px; margin-top: clamp(16px, 1.25vw, 24px); }
-.price .shotpair div { border: 3px solid var(--paper); width: clamp(110px, 10vw, 190px); }
-.price .shotpair div:last-child { border-color: var(--red); }
 
 /* ── 09. Вопросы ── */
 .faq { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
@@ -694,10 +691,6 @@ const Price = () => (
               {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
             </ul>
             <a className="btn" href="#contact">Обсудить запуск</a>
-            <div className="shotpair">
-              <div><img src={SHOT1} alt="Экран приложения" /></div>
-              <div><img src={SHOT2} alt="Админ-панель" /></div>
-            </div>
           </Rise>
           <Rise className="extra" delay={220}>
             <div className="item">
