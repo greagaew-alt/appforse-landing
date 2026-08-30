@@ -429,6 +429,23 @@ p, li, .lead { text-wrap: pretty; }
   .step:not(.on) h3, .step:not(.on) p { opacity: 1; transform: none; }
 }
 
+/* ── лид-магнит: разбор бизнеса ── */
+.magnet { background: var(--red); color: var(--paper);
+  padding: clamp(24px, 2.6vw, 50px);
+  display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 460px);
+  gap: clamp(24px, 3vw, 58px); align-items: center;
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.magnet h3 { max-width: 34ch; }
+.magnet > div > p { margin-top: 14px; font-size: var(--fs-lead); line-height: var(--lh-text);
+  color: var(--on-red); max-width: 54ch; }
+.magnet .form { margin-top: 0; }
+.magnet .form input { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.34);
+  color: var(--paper); }
+.magnet .form input::placeholder { color: rgba(255,255,255,.66); }
+.magnet .form input:focus { border-color: var(--paper); }
+.magnet .form .note { color: rgba(255,255,255,.72); }
+@media (max-width: 900px) { .magnet { grid-template-columns: 1fr; } }
+
 /* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
 @media (max-width: 1180px) {
   .hero .shell { grid-template-columns: 1fr; }
@@ -738,6 +755,34 @@ const What = () => (
   </section>
 );
 
+const Magnet = () => {
+  const [sent, setSent] = useState(false);
+  return (
+    <section className="dark" id="magnet">
+      <div className="shell">
+        <Rise className="magnet">
+          <div>
+            <h3>Разберём ваш бизнес и покажем точки роста повторных продаж</h3>
+            <p>
+              Посмотрим, как приложение может работать с вашей клиентской базой,
+              возвращать покупателей и автоматизировать повторные заказы.
+            </p>
+          </div>
+          <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
+            <input name="name" placeholder="Ваше имя" required />
+            <input name="phone" type="tel" inputMode="tel"
+                   placeholder="+7 (000) 000-00-00" required />
+            <button className="btn on-red" type="submit">
+              {sent ? 'Заявка отправлена' : 'Получить разбор'}
+            </button>
+            {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
+          </form>
+        </Rise>
+      </div>
+    </section>
+  );
+};
+
 const Who = () => (
   <section className="dark" id="who">
     <div className="shell">
@@ -961,7 +1006,7 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Who /><How /><Case />
+    <Top /><Hero /><Why /><What /><Magnet /><Who /><How /><Case />
     <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );
