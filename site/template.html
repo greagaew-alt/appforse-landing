@@ -189,9 +189,13 @@ p  { margin: 0; }
 .shot.b:hover .tape { transform: translateX(-50%) rotate(5deg); }
 
 /* рваный край между секциями */
-.torn { display: block; width: 100%; height: clamp(30px, 3.1vw, 60px); }
-.torn.down path { fill: var(--red); }
-.torn.up path { fill: var(--ink); }
+/* рваный край: сам SVG красный, тёмная фигура «отъедает» его сверху.
+   Нижний край — та же фигура, перевёрнутая, поэтому тёмное уходит вниз. */
+.torn { display: block; width: 100%; height: clamp(30px, 3.1vw, 60px);
+  background: var(--red); }
+.torn path { fill: var(--ink); }
+.torn.down { margin-bottom: -1px; }
+.torn.up { margin-top: -1px; }
 
 /* ═══════════ КРАСНАЯ СЕКЦИЯ ═══════════ */
 .red { background: var(--red); color: var(--paper); }
@@ -397,6 +401,8 @@ const SHOT2  = "__SHOT2__";
 const TAPE   = "__TAPE__";
 const TORN_A = "__TORN_A__";
 const TORN_B = "__TORN_B__";
+const TORN_C = "__TORN_C__";
+const TORN_D = "__TORN_D__";
 
 const TG = 'https://t.me/shark154';
 
@@ -671,7 +677,7 @@ const Case = () => (
 
 const Price = () => (
   <section id="price">
-    <Torn d={TORN_A} dir="down" />
+    <Torn d={TORN_C} dir="down" />
     <div className="red">
       <div className="shell">
         <Rise as="h2">Стоимость запуска</Rise>
@@ -712,7 +718,7 @@ const Price = () => (
         </div>
       </div>
     </div>
-    <Torn d={TORN_B} dir="up" />
+    <Torn d={TORN_D} dir="up" />
   </section>
 );
 
@@ -741,7 +747,7 @@ const Contact = () => {
   const [sent, setSent] = useState(false);
   return (
     <section id="contact">
-      <Torn d={TORN_A} dir="down" />
+      <Torn d={TORN_C} dir="down" />
       <div className="red">
         <div className="shell">
           <Rise as="h2">Покажите свой бизнес. Покажем, как AppForse будет работать у вас</Rise>

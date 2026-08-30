@@ -14,7 +14,9 @@ out = (tpl
        .replace('__SHOT2__', a['shot2'])
        .replace('__TAPE__', a['tape'])
        .replace('__TORN_A__', a['tornA'])
-       .replace('__TORN_B__', a['tornB']))
+       .replace('__TORN_B__', a['tornB'])
+       .replace('__TORN_C__', a['tornC'])
+       .replace('__TORN_D__', a['tornD']))
 
 io.open(os.path.join(BASE, 'index.html'), 'w', encoding='utf-8').write(out)
 print('index.html собран:', len(out) // 1024, 'KB')
