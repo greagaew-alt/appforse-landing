@@ -24,6 +24,8 @@ def typo(t):
     t = re.sub(u'(?<![\\wЀ-ӿ])([\\wЀ-ӿ]{1,6})[ ]',
                lambda m: m.group(1) + NB if m.group(1).lower() in SHORT else m.group(0), t)
     t = re.sub(u'[ ]—', NB + u'—', t)          # тире остаётся на строке со своим словом
+    # последнее слово не остаётся одно на строке: склеиваем его с предыдущим
+    t = re.sub(u'[ ]([^ ]+)$', lambda m: NB + m.group(1), t)
     t = re.sub(u'(\\d)[ ](?=[\\dЀ-ӿ₽])', u'\\1' + NB, t)   # 7 дней, 150 000 ₽
     for a, b in PAIRS:
         t = t.replace(a, b)

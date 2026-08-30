@@ -85,7 +85,8 @@ h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -.02
 h2.wide { max-width: clamp(360px, 36.5vw, 700px); }
 h3 { font-size: var(--fs-h3); line-height: var(--lh-head); font-weight: 600; }
 p  { margin: 0; }
-.lead { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo); text-wrap: pretty; }
+.lead { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo); }
+p, li, .lead { text-wrap: pretty; }
 
 .shell { width: min(var(--shell), calc(100% - clamp(40px, 4.2vw, 80px))); margin: 0 auto; }
 
@@ -226,6 +227,7 @@ p  { margin: 0; }
 .panel { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: "head pic" "tags pic" "fill pic";
+  grid-template-rows: auto auto 1fr;
   gap: clamp(14px, 1.15vw, 22px) clamp(18px, 1.6vw, 30px); align-content: start; }
 .panel h3 { grid-area: head; }
 .panel .tags { grid-area: tags; align-content: start; }
@@ -273,6 +275,7 @@ p  { margin: 0; }
 .case { background: var(--ink-lift); border: 1px solid #1F1D24; padding: clamp(20px, 1.9vw, 36px);
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: "kind pic" "head pic" "text pic";
+  grid-template-rows: auto auto 1fr;
   column-gap: clamp(18px, 1.6vw, 30px); align-content: start; }
 .case .kind { grid-area: kind; }
 .case h3 { grid-area: head; }
@@ -381,10 +384,15 @@ p  { margin: 0; }
   transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
 .who:hover .ico { background: var(--red); color: #fff; transform: translateY(-2px); }
 
-/* ── теги подсвечиваются по очереди ── */
-.panel .tag { transition: background .45s var(--ease), border-color .45s var(--ease),
-  color .45s var(--ease); }
-.panel .tag.hot { background: var(--red); border-color: var(--red); color: #fff; }
+/* ── подсветка-пилюля переезжает от тега к тегу ── */
+.panel .tags { position: relative; }
+.panel .pill { position: absolute; left: 0; top: 0; border-radius: 999px; z-index: 0;
+  background: var(--red); pointer-events: none;
+  transition: transform .62s cubic-bezier(.34, 1.28, .44, 1),
+              width .62s cubic-bezier(.34, 1.28, .44, 1), opacity .35s var(--ease); }
+.panel .tag { position: relative; z-index: 1;
+  transition: color .4s var(--ease), border-color .55s var(--ease); }
+.panel .tag.hot { color: #fff; border-color: var(--red); }
 
 /* ── шаги запуска: линия прогресса заполняется по мере прокрутки ── */
 .steps { position: relative; padding-left: clamp(24px, 1.98vw, 38px); }
@@ -404,14 +412,6 @@ p  { margin: 0; }
 .step h3, .step p { transition: opacity .5s var(--ease), transform .5s var(--ease); }
 .step:not(.on) h3, .step:not(.on) p { opacity: .62; transform: translateX(-6px); }
 
-/* ── бегущая строка ── */
-.ticker { background: var(--red); overflow: hidden; padding: clamp(10px, .94vw, 18px) 0;
-  border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
-.ticker .row { display: flex; width: max-content; animation: run 42s linear infinite; }
-.ticker span { font-family: Oswald, sans-serif; font-weight: 600; text-transform: uppercase;
-  font-size: clamp(14px, 1.04vw, 20px); letter-spacing: .08em; white-space: nowrap; color: #fff; }
-@keyframes run { to { transform: translateX(-50%); } }
-.ticker:hover .row { animation-play-state: paused; }
 
 /* ── блик по верхней кромке карточки цены ── */
 .price .box { position: relative; overflow: hidden; }
@@ -429,7 +429,7 @@ p  { margin: 0; }
 @keyframes shine { to { transform: translateX(130%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .ticker .row, .price .box::after, .btn::after { animation: none; }
+  .price .box::after, .btn::after { animation: none; }
   .steps .rail { transform: scaleY(1); }
   .step:not(.on) h3, .step:not(.on) p { opacity: 1; transform: none; }
 }
@@ -475,56 +475,56 @@ const TG = 'https://t.me/shark154';
 
 /* ─────────── содержание ─────────── */
 const NAV = [
-  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
-  ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
+  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
+  ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
 ];
 
 const WHY_CARDS = [
-  { t: 'Повторные продажи',   d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.' },
-  { t: 'Своя клиентская база', d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.' },
-  { t: 'Прямой канал с клиентом', d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.' },
+  { t: 'Повторные продажи',   d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.' },
+  { t: 'Своя клиентская база', d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.' },
+  { t: 'Прямой канал с клиентом', d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.' },
 ];
 
 const AUDIENCE = [
-  { ico: 'package', t: 'Оптовые продажи', d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.' },
-  { ico: 'store', t: 'Магазины и доставка', d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.' },
-  { ico: 'bowl', t: 'Рестораны и доставка еды', d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.' },
+  { ico: 'package', t: 'Оптовые продажи', d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.' },
+  { ico: 'store', t: 'Магазины и доставка', d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.' },
+  { ico: 'bowl', t: 'Рестораны и доставка еды', d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.' },
   { ico: 'bag', t: 'Розница', d: 'Каталог, акции, бонусы и новые поступления всегда под рукой у покупателя.' },
 ];
 
 const STEPS = [
-  { t: 'Разбираемся в вашем бизнесе', d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.' },
-  { t: 'Адаптируем под ваш бренд', d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.' },
-  { t: 'Собираем приложение', d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.' },
-  { t: 'Публикуем в App Store и Google Play', d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.' },
-  { t: 'Передаём готовую систему', d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.' },
+  { t: 'Разбираемся в вашем бизнесе', d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.' },
+  { t: 'Адаптируем под ваш бренд', d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.' },
+  { t: 'Собираем приложение', d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.' },
+  { t: 'Публикуем в App Store и Google Play', d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.' },
+  { t: 'Передаём готовую систему', d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.' },
 ];
 
 const INCLUDED = [
-  'Клиентское приложение под вашим брендом',
-  'Публикация в App Store и Google Play',
-  'Каталог товаров, корзина и онлайн-оплата',
-  'Доставка и самовывоз',
-  'Бонусы, промокоды и push-уведомления',
-  'CRM и клиентская база',
-  'Админ-панель и аналитика',
+  'Клиентское приложение под вашим брендом',
+  'Публикация в App Store и Google Play',
+  'Каталог товаров, корзина и онлайн-оплата',
+  'Доставка и самовывоз',
+  'Бонусы, промокоды и push-уведомления',
+  'CRM и клиентская база',
+  'Админ-панель и аналитика',
 ];
 
 const FAQ = [
-  ['У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?',
-   'Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки.'],
-  ['Сколько времени занимает запуск?',
-   'Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения.'],
-  ['Кто делает дизайн приложения?',
-   'Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить.'],
-  ['Что нужно от меня для запуска?',
-   'Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя.'],
-  ['Я получаю исходный код?',
-   'Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно.'],
-  ['Обязательно ли платить за поддержку?',
-   'Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно.'],
-  ['Что если клиенты не станут пользоваться приложением?',
-   'До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах.'],
+  ['У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?',
+   'Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки.'],
+  ['Сколько времени занимает запуск?',
+   'Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения.'],
+  ['Кто делает дизайн приложения?',
+   'Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить.'],
+  ['Что нужно от меня для запуска?',
+   'Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя.'],
+  ['Я получаю исходный код?',
+   'Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно.'],
+  ['Обязательно ли платить за поддержку?',
+   'Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно.'],
+  ['Что если клиенты не станут пользоваться приложением?',
+   'До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах.'],
 ];
 
 /* ─────────── мелкие детали ─────────── */
@@ -547,31 +547,43 @@ const Ico = ({ name }) => (
   </svg>
 );
 
-/* Теги подсвечиваются по кругу — набор возможностей читается сам собой */
+/* Теги: подсветка-пилюля переезжает от тега к тегу.
+   Приём из «Animated Tabs» (buildui.com) и Smooth Tabs (motion.dev): в Motion это
+   общий layoutId, здесь то же самое без библиотеки — один элемент, который
+   переставляется под активный тег, а переезд делает CSS-переход. */
 const Tags = ({ items }) => {
   const [hot, setHot] = useState(0);
+  const wrap = useRef(null);
+  const [box, setBox] = useState({ x: 0, y: 0, w: 0, h: 0, ready: false });
+
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setInterval(() => setHot(v => (v + 1) % items.length), 1500);
+    const t = setInterval(() => setHot(v => (v + 1) % items.length), 2000);
     return () => clearInterval(t);
   }, [items.length]);
+
+  useEffect(() => {
+    const move = () => {
+      const el = wrap.current && wrap.current.querySelectorAll('.tag')[hot];
+      if (!el) return;
+      setBox({ x: el.offsetLeft, y: el.offsetTop,
+               w: el.offsetWidth, h: el.offsetHeight, ready: true });
+    };
+    move();
+    window.addEventListener('resize', move);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(move);
+    return () => window.removeEventListener('resize', move);
+  }, [hot, items.length]);
+
   return (
-    <div className="tags">
+    <div className="tags" ref={wrap}>
+      <span className="pill" aria-hidden="true" style={{
+        transform: 'translate(' + box.x + 'px,' + box.y + 'px)',
+        width: box.w, height: box.h, opacity: box.ready ? 1 : 0,
+      }} />
       {items.map((t, i) => (
         <span className={'tag' + (i === hot ? ' hot' : '')} key={t}>{t}</span>
       ))}
-    </div>
-  );
-};
-
-/* Бегущая строка между блоками */
-const TICK = ['Приложение под вашим брендом', '7 дней до релиза', '150 000 ₽',
-  'Каталог', 'Заказы', 'Доставка', 'Оплата', 'Бонусы', 'Push', 'CRM', 'Аналитика'];
-const Ticker = () => {
-  const line = TICK.join('   ·   ') + '   ·   ';
-  return (
-    <div className="ticker" aria-hidden="true">
-      <div className="row"><span>{line.repeat(3)}</span><span>{line.repeat(3)}</span></div>
     </div>
   );
 };
@@ -589,23 +601,29 @@ const Torn = ({ d, dir }) => (
   </svg>
 );
 
-/* появление при прокрутке */
-function Rise({ as: Tag = 'div', delay = 0, className = '', children, ...rest }) {
+/* Появление при прокрутке.
+   Класс держим в состоянии React: если добавлять его напрямую в DOM,
+   любая следующая перерисовка родителя затрёт его вместе с className. */
+function Rise({ as: Tag = 'div', delay = 0, className = '', style, children, ...rest }) {
   const ref = useRef(null);
+  const [seen, setSeen] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (!('IntersectionObserver' in window)) { setSeen(true); return; }
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        el.style.transitionDelay = delay + 'ms';
-        el.classList.add('seen');
-        io.disconnect();
-      }
+      if (e.isIntersecting) { setSeen(true); io.disconnect(); }
     }, { rootMargin: '0px 0px -12% 0px' });
     io.observe(el);
     return () => io.disconnect();
-  }, [delay]);
-  return <Tag ref={ref} className={('rise ' + className).trim()} {...rest}>{children}</Tag>;
+  }, []);
+  const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
+  return (
+    <Tag ref={ref} className={cls}
+         style={Object.assign({ transitionDelay: delay + 'ms' }, style)} {...rest}>
+      {children}
+    </Tag>
+  );
 }
 
 const Shot = ({ src, alt, cls }) => (
@@ -637,7 +655,7 @@ const Hero = () => (
   <section className="hero" id="top">
     <div className="shell">
       <div>
-        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
+        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
         <Rise as="h1" delay={70}>
           Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
@@ -650,12 +668,12 @@ const Hero = () => (
           доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
         </Rise>
         <Rise className="acts" delay={210}>
-          <a className="btn" href="#contact">Обсудить запуск</a>
-          <a className="btn ghost" href="#case">Посмотреть кейсы</a>
+          <a className="btn" href="#contact">Обсудить запуск</a>
+          <a className="btn ghost" href="#case">Посмотреть кейсы</a>
         </Rise>
         <Rise className="facts" delay={280}>
-          <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
-          <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
+          <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
+          <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
         </Rise>
       </div>
       <Rise className="shots" delay={160}>
@@ -672,7 +690,7 @@ const Why = () => (
     <div className="red">
       <div className="shell">
         <Rise as="h2">
-          Вы уже заплатили<br />за привлечение клиента.<br />Теперь верните его снова.
+          Вы уже заплатили<br />за привлечение клиента.<br />Теперь верните его снова.
         </Rise>
         <Rise as="p" className="lead" delay={80}>
           Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится
@@ -696,26 +714,26 @@ const Why = () => (
 const What = () => (
   <section className="dark" id="what">
     <div className="shell">
-      <Rise as="h2">Приложение для клиентов и панель управления для вас</Rise>
+      <Rise as="h2">Приложение для клиентов и панель управления для вас</Rise>
       <Rise as="p" className="lead" delay={80}>
         Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
         товары и аналитику в одной системе.
       </Rise>
       <div className="duo">
         <Rise className="panel" delay={140}>
-          <h3>Клиентское приложение</h3>
+          <h3>Клиентское приложение</h3>
           <Tags items={['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']} />
           <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
-             касаний, без звонков и переписки с менеджером.</p>
+             касаний, без звонков и переписки с менеджером.</p>
           <div className="pic"><img src={SHOT1} alt="Каталог с товарами" /></div>
         </Rise>
         <Rise className="panel" delay={220}>
-          <h3>Управление бизнесом</h3>
+          <h3>Управление бизнесом</h3>
           <Tags items={['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']} />
           <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
-             панели, без сторонних сервисов.</p>
+             панели, без сторонних сервисов.</p>
           <div className="pic"><img src={SHOT2} alt="Админ-панель со списком заказов" /></div>
         </Rise>
       </div>
@@ -726,7 +744,7 @@ const What = () => (
 const Who = () => (
   <section className="dark" id="who">
     <div className="shell">
-      <Rise as="h2">Бизнесам, где важны повторные покупки и своя клиентская база</Rise>
+      <Rise as="h2">Бизнесам, где важны повторные покупки и своя клиентская база</Rise>
       <div className="quad">
         {AUDIENCE.map((a, i) => (
           <Rise className="who" key={a.t} delay={60 + i * 80}>
@@ -759,7 +777,7 @@ const How = () => {
     <section className="dark" id="how">
       <div className="shell">
         <Rise as="h2" className="wide">
-          Как ваше приложение появится<br />в App Store и Google Play
+          Как ваше приложение появится<br />в App Store и Google Play
         </Rise>
         <div className="steps" ref={wrap}>
           <span className="rail" style={{ transform: 'scaleY(' + filled + ')' }} />
@@ -779,23 +797,23 @@ const How = () => {
 const Case = () => (
   <section className="dark" id="case">
     <div className="shell">
-      <Rise as="h2">Приложение, которое уже работает в реальном бизнесе</Rise>
+      <Rise as="h2">Приложение, которое уже работает в реальном бизнесе</Rise>
       <Rise as="p" className="lead" delay={80}>
         «Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
         приложение под брендом компании с каталогом, заказами, бонусами и повторными покупками.
       </Rise>
       <div className="cases">
         <Rise className="case" delay={140}>
-          <span className="kind">Доставка / розница</span>
+          <span className="kind">Доставка / розница</span>
           <h3>«Синица»</h3>
           <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
-             Работает в нескольких городах.</p>
+             Работает в нескольких городах.</p>
           <div className="pic"><img src={SHOT1} alt="Каталог продуктов" /></div>
         </Rise>
         <Rise className="case" delay={220}>
           <span className="kind">Операционка</span>
-          <h3>Менеджерское приложение</h3>
-          <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
+          <h3>Менеджерское приложение</h3>
+          <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
           <div className="pic"><img src={SHOT2} alt="Админ-панель" /></div>
         </Rise>
       </div>
@@ -808,7 +826,7 @@ const Price = () => (
     <Torn d={TORN_C} dir="down" />
     <div className="red">
       <div className="shell">
-        <Rise as="h2">Стоимость запуска</Rise>
+        <Rise as="h2">Стоимость запуска</Rise>
         <Rise as="p" className="lead" delay={80}>
           Готовое решение под вашим брендом — всё необходимое для запуска собственного
           мобильного приложения в одном пакете.
@@ -816,13 +834,13 @@ const Price = () => (
         <div className="price">
           <Rise className="box" delay={140}>
             <div>
-            <span className="tagline">Запуск платформы</span>
+            <span className="tagline">Запуск платформы</span>
             <div className="sum">150 000 ₽</div>
-            <h3>В стоимость входит</h3>
+            <h3>В стоимость входит</h3>
             <ul style={{ marginTop: 20 }}>
               {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
             </ul>
-            <a className="btn" href="#contact">Обсудить запуск</a>
+            <a className="btn" href="#contact">Обсудить запуск</a>
             </div>
             <div className="collage">
               <Shot src={SHOT1} alt="Каталог в приложении" cls="a" />
@@ -831,18 +849,18 @@ const Price = () => (
           </Rise>
           <Rise className="extra" delay={220}>
             <div className="item">
-              <b>Техническая поддержка</b>
-              <p>От 25 000 ₽/мес. По желанию, если хотите передать нам обслуживание платформы.</p>
+              <b>Техническая поддержка</b>
+              <p>От 25 000 ₽/мес. По желанию, если хотите передать нам обслуживание платформы.</p>
             </div>
             <div className="item">
-              <b>Индивидуальные доработки</b>
-              <p>Функции и интеграции под задачи вашего бизнеса. Считаем отдельно.</p>
+              <b>Индивидуальные доработки</b>
+              <p>Функции и интеграции под задачи вашего бизнеса. Считаем отдельно.</p>
             </div>
             <div className="item">
               <b>Демо-версия</b>
               <p>Скачайте демо клиентского приложения и посмотрите, как это выглядит
-                 для конечного покупателя.</p>
-              <a className="btn ghost" href={TG} style={{ marginTop: 20 }}>Скачать демо-приложение</a>
+                 для конечного покупателя.</p>
+              <a className="btn ghost" href={TG} style={{ marginTop: 20 }}>Скачать демо-приложение</a>
             </div>
           </Rise>
         </div>
@@ -857,7 +875,7 @@ const Faq = () => {
   return (
     <section className="dark" id="faq">
       <div className="shell">
-        <Rise as="h2">Отвечаем на частые вопросы</Rise>
+        <Rise as="h2">Отвечаем на частые вопросы</Rise>
         <div className="faq">
           {FAQ.map(([q, a], i) => (
             <Rise className="q" key={q} data-open={open === i ? '1' : '0'} delay={30 + i * 40}>
@@ -880,16 +898,16 @@ const Contact = () => {
       <Torn d={TORN_C} dir="down" />
       <div className="red">
         <div className="shell">
-          <Rise as="h2">Покажите свой бизнес. Покажем, как AppForse будет работать у вас</Rise>
+          <Rise as="h2">Покажите свой бизнес. Покажем, как AppForse будет работать у вас</Rise>
           <Rise as="p" className="lead" delay={80}>
             За 15 минут разберём задачу и определим, что нужно для запуска.
           </Rise>
           <div className="contact">
             <Rise className="box" delay={140}>
-              <h3>Оставить заявку</h3>
+              <h3>Оставить заявку</h3>
               <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
                 <input name="name" placeholder="Ваше имя" required />
-                <input name="contact" placeholder="Телефон или Telegram" required />
+                <input name="phone" type="tel" inputMode="tel" placeholder="+7 (000) 000-00-00" required />
                 <button className="btn" type="submit">
                   {sent ? 'Заявка отправлена' : 'Отправить заявку'}
                 </button>
@@ -901,9 +919,9 @@ const Contact = () => {
               </form>
             </Rise>
             <Rise className="box aside" delay={220}>
-              <h3>Или сразу в Telegram</h3>
-              <p>Если удобнее списаться напрямую — без формы.</p>
-              <a className="btn" href={TG}>Написать в Telegram</a>
+              <h3>Или сразу в Telegram</h3>
+              <p>Если удобнее списаться напрямую — без формы.</p>
+              <a className="btn" href={TG}>Написать в Telegram</a>
             </Rise>
           </div>
         </div>
@@ -917,7 +935,7 @@ const Foot = () => (
     <div className="shell">
       <div>
         <img className="logo" src={LOGO} alt="AppForse" />
-        <p className="tag">Мобильная торговля под вашим брендом</p>
+        <p className="tag">Мобильная торговля под вашим брендом</p>
       </div>
       <div>
         <h4>Навигация</h4>
@@ -928,7 +946,7 @@ const Foot = () => (
         <h4>Контакты</h4>
         <ul>
           <li><a href={TG}>Telegram @shark154</a></li>
-          <li><a href="#contact">Оставить заявку</a></li>
+          <li><a href="#contact">Оставить заявку</a></li>
         </ul>
       </div>
     </div>
@@ -940,7 +958,7 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Who /><Ticker /><How /><Case />
+    <Top /><Hero /><Why /><What /><Who /><How /><Case />
     <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );
