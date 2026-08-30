@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AppForse — варианты дизайна</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;600;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400;700;900&family=Montserrat:wght@600;800;900&family=Golos+Text:wght@400;600;900&family=Rubik:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E8243C;
+    --red-dk: #B3182C;
+    --red-lt: #FF5468;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #0B0B0E; font-family: Manrope, system-ui, sans-serif; }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 3px solid var(--red-lt); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+
+  /* ---------- переключатель ---------- */
+  .switcher {
+    position: sticky; top: 0; z-index: 999; background: #0B0B0E;
+    border-bottom: 1px solid #24242c; display: flex; align-items: center; gap: 8px;
+    padding: 12px 20px; overflow-x: auto;
+  }
+  .switcher .brand { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:#6b6b78; margin-right:6px; white-space:nowrap; }
+  .switcher button { font-family: Manrope, sans-serif; font-size:13px; font-weight:600;
+    padding:9px 15px; border-radius:999px; cursor:pointer; white-space:nowrap;
+    background:transparent; color:#a3a3b1; border:1px solid #32323e; }
+  .switcher button[data-on="1"] { background: var(--red); color:#fff; border-color: var(--red); }
+  .switcher .note { margin-left:auto; font-size:12px; color:#5a5a66; white-space:nowrap; font-family:'JetBrains Mono',monospace; }
+  @media (max-width: 980px) { .switcher .note { display:none; } }
+  .caption { font-family:'JetBrains Mono',monospace; font-size:12px; color:#6b6b78;
+    padding:14px 22px; background:#0B0B0E; border-top:1px solid #24242c; }
+  .caption b { color:#c7c7d4; font-weight:400; }
+
+  /* общий контейнер — широкий */
+  .wrap { max-width: 1560px; margin: 0 auto; padding: 0 40px; }
+  @media (max-width: 700px) { .wrap { padding: 0 20px; } }
+
+  .logo-img { height: 38px; width: auto; border-radius: 8px; }
+
+  /* ============ 1. СТРИТ ============ */
+  .v1 { background:#0E0C10; color:#fff; }
+  .v1 .top { padding:24px 0; display:flex; align-items:center; gap:26px; }
+  .v1 .top nav { display:flex; gap:22px; margin-left:auto; }
+  .v1 .top nav span { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#8b8b99; }
+  .v1 .hero { padding:44px 0 96px; display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; }
+  .v1 .kicker { display:inline-block; background:var(--red); color:#fff; padding:7px 14px;
+    font-family:Oswald,sans-serif; font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    transform:rotate(-1.5deg); margin-bottom:22px; }
+  .v1 h1 { font-family:Oswald,sans-serif; font-weight:700; text-transform:uppercase;
+    font-size:clamp(40px,6.6vw,92px); line-height:1.0; margin:0 0 24px; }
+  .v1 .circled { position:relative; display:inline-block; white-space:nowrap; padding:0 .12em; }
+  .v1 .circled svg { position:absolute; left:-13%; top:-22%; width:126%; height:145%; overflow:visible; pointer-events:none; }
+  .v1 .circled svg path { stroke:var(--red); stroke-width:4; fill:none; stroke-linecap:round; }
+  .v1 .lede { font-size:18px; line-height:1.55; color:#a9a9ba; max-width:46ch; margin:0 0 32px; }
+  .v1 .acts { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:36px; }
+  .v1 .btn { font-family:Oswald,sans-serif; font-size:15px; letter-spacing:.08em; text-transform:uppercase;
+    padding:16px 30px; cursor:pointer; border:2px solid var(--red); background:var(--red); color:#fff; }
+  .v1 .btn.ghost { background:transparent; color:#fff; border-color:#3a3a48; }
+  .v1 .facts { display:flex; gap:40px; }
+  .v1 .facts b { display:block; font-family:Oswald,sans-serif; font-size:29px; }
+  .v1 .facts span { font-size:12px; color:#8b8b99; }
+  .v1 .collage { position:relative; min-height:600px; }
+  .v1 .shot { position:absolute; border:4px solid #fff; background:#16161d; box-shadow:0 22px 54px rgba(0,0,0,.6); }
+  .v1 .shot img { height: 500px; width:auto; }
+  .v1 .shot.a { left:2%; top:14px; transform:rotate(-5deg); }
+  .v1 .shot.b { right:2%; top:64px; transform:rotate(4.5deg); border-color:var(--red); }
+  .v1 .tape { position:absolute; width:92px; height:28px; background:rgba(255,255,255,.75);
+    left:50%; top:-13px; transform:translateX(-50%) rotate(-3deg); z-index:2; }
+  .v1 .tornwrap { position:relative; background:var(--red); }
+  .v1 .tornwrap > svg { display:block; width:100%; height:52px; margin-top:-1px; }
+  .v1 .tornwrap > svg path { fill:#0E0C10; }
+  .v1 .problem { padding:14px 0 100px; }
+  .v1 .problem h2 { font-family:Oswald,sans-serif; font-weight:700; text-transform:uppercase;
+    font-size:clamp(30px,4.6vw,58px); line-height:1.02; margin:0 0 18px; max-width:22ch; }
+  .v1 .problem .lede { color:#ffdfe4; max-width:64ch; }
+  .v1 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:44px; }
+  .v1 .card { background:#0E0C10; padding:30px; }
+  .v1 .card i { font-family:Oswald,sans-serif; font-style:normal; font-size:12px; letter-spacing:.16em; color:var(--red-lt); display:block; margin-bottom:12px; }
+  .v1 .card h3 { font-family:Oswald,sans-serif; text-transform:uppercase; font-size:21px; margin:0 0 10px; }
+  .v1 .card p { margin:0; font-size:15px; line-height:1.5; color:#9c9caa; }
+  @media (max-width:980px){ .v1 .hero,.v1 .cards{grid-template-columns:1fr} .v1 .top nav{display:none}
+    .v1 .collage{min-height:400px} .v1 .shot img{height:320px} }
+
+  /* ============ 2. КОЛЛАЖ ============ */
+  .v2 { background:#08080A; color:#fff; font-family:'JetBrains Mono',monospace; }
+  .v2 .top { padding:22px 0; display:flex; align-items:center; gap:22px; border-bottom:2px solid var(--red); }
+  .v2 .top nav { display:flex; gap:18px; margin-left:auto; font-size:11px; text-transform:uppercase; color:#7b7b86; }
+  .v2 .hero { padding:62px 0 46px; }
+  .v2 .bars { margin-bottom:30px; }
+  .v2 .bar { display:inline-block; background:var(--red); color:#fff; font-family:Unbounded,sans-serif;
+    font-weight:900; text-transform:uppercase; font-size:clamp(24px,4.3vw,60px); line-height:1;
+    padding:9px 20px 13px; transform:skewX(-8deg); margin:0 0 10px; }
+  .v2 .bar.out { background:transparent; color:#fff; border:3px solid var(--red); }
+  .v2 .grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+  .v2 .lede { font-size:15.5px; line-height:1.68; color:#a2a2ae; max-width:48ch; }
+  .v2 .sticker { background:#16161a; border:2px dashed #3a3a44; padding:17px 19px; margin-top:24px;
+    transform:rotate(-1.6deg); position:relative; max-width:420px; }
+  .v2 .sticker::before { content:''; position:absolute; top:-11px; left:28px; width:78px; height:22px;
+    background:rgba(232,36,60,.42); transform:rotate(-4deg); }
+  .v2 .sticker b { color:var(--red-lt); }
+  .v2 .sticker p { margin:0; font-size:12.5px; line-height:1.6; color:#9d9daa; }
+  .v2 .acts { display:flex; flex-wrap:wrap; gap:12px; margin:30px 0 28px; }
+  .v2 .btn { font-family:Unbounded,sans-serif; font-weight:700; font-size:13px; text-transform:uppercase;
+    padding:16px 26px; cursor:pointer; border:3px solid var(--red); background:var(--red); color:#fff;
+    box-shadow:6px 6px 0 var(--red-dk); }
+  .v2 .btn.ghost { background:transparent; color:var(--red-lt); box-shadow:6px 6px 0 #1b1b20; }
+  .v2 .facts { display:flex; gap:32px; flex-wrap:wrap; }
+  .v2 .facts b { display:block; font-family:Unbounded,sans-serif; font-weight:900; font-size:25px; color:var(--red-lt); }
+  .v2 .facts span { font-size:11px; text-transform:uppercase; color:#7b7b86; }
+  .v2 .cut { background:#101014; border:3px solid #fff; padding:16px; transform:rotate(1.4deg);
+    box-shadow:12px 12px 0 var(--red); display:flex; justify-content:center; }
+  .v2 .cut img { max-height:470px; width:auto; }
+  .v2 .problem { padding:70px 0 96px; border-top:2px solid #1c1c22; }
+  .v2 .problem h2 { font-family:Unbounded,sans-serif; font-weight:900; text-transform:uppercase;
+    font-size:clamp(25px,3.6vw,46px); line-height:1.1; margin:0 0 18px; max-width:24ch; }
+  .v2 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:40px; }
+  .v2 .card { background:#101014; border:2px solid #26262e; padding:26px; }
+  .v2 .card:nth-child(2) { transform:rotate(-1deg); border-color:var(--red); }
+  .v2 .card h3 { font-family:Unbounded,sans-serif; font-weight:700; font-size:15px; margin:0 0 10px; text-transform:uppercase; }
+  .v2 .card p { margin:0; font-size:13px; line-height:1.65; color:#8f8f9c; }
+  @media (max-width:980px){ .v2 .grid,.v2 .cards{grid-template-columns:1fr} .v2 .top nav{display:none} }
+
+  /* ============ 3. КЛЕЙ ============ */
+  .v3 { background:#F7EFF0; color:#2A1218; font-family:Nunito,sans-serif; }
+  .v3 .top { padding:24px 0; display:flex; align-items:center; gap:22px; }
+  .v3 .top nav { display:flex; gap:22px; margin-left:auto; font-size:14px; font-weight:700; color:#8a6b71; }
+  .v3 .hero { padding:30px 0 76px; display:grid; grid-template-columns:1.02fr .98fr; gap:52px; align-items:center; }
+  .v3 .clay { background:#F7EFF0; border-radius:34px; box-shadow:13px 13px 28px #dcc8cb, -13px -13px 28px #ffffff; }
+  .v3 .pill { display:inline-block; padding:10px 19px; border-radius:999px; font-weight:800; font-size:13px;
+    color:var(--red); background:#F7EFF0; margin-bottom:22px;
+    box-shadow:inset 4px 4px 9px #dcc8cb, inset -4px -4px 9px #ffffff; }
+  .v3 h1 { font-weight:900; font-size:clamp(36px,5.4vw,68px); line-height:1.06; margin:0 0 20px; }
+  .v3 h1 em { font-style:normal; color:var(--red); }
+  .v3 .lede { font-size:18px; line-height:1.6; color:#6e565c; max-width:46ch; margin:0 0 32px; }
+  .v3 .acts { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:34px; }
+  .v3 .btn { font-family:Nunito,sans-serif; font-weight:800; font-size:15px; padding:17px 32px;
+    border:none; border-radius:999px; cursor:pointer; background:var(--red); color:#fff;
+    box-shadow:8px 8px 18px rgba(232,36,60,.34), -6px -6px 14px #ffffff; }
+  .v3 .btn.soft { background:#F7EFF0; color:var(--red); box-shadow:8px 8px 18px #dcc8cb, -8px -8px 18px #ffffff; }
+  .v3 .facts { display:flex; gap:16px; flex-wrap:wrap; }
+  .v3 .fact { padding:17px 24px; border-radius:22px; }
+  .v3 .fact b { display:block; font-size:23px; font-weight:900; color:var(--red); }
+  .v3 .fact span { font-size:12.5px; color:#8a6b71; font-weight:700; }
+  .v3 .blobwrap { position:relative; min-height:520px; display:flex; align-items:center; justify-content:center; }
+  .v3 .blob { position:absolute; border-radius:50% 46% 52% 48% / 48% 52% 46% 54%; }
+  .v3 .blob.b1 { width:330px; height:330px; left:6%; top:20px; background:#F3DADE; box-shadow:16px 16px 34px #dcc8cb, -14px -14px 30px #fff; }
+  .v3 .blob.b2 { width:160px; height:160px; right:6%; bottom:28px; background:#FBD9DE; box-shadow:12px 12px 24px #dcc8cb, -10px -10px 22px #fff; }
+  .v3 .phone { position:relative; z-index:2; padding:14px; border-radius:38px;
+    box-shadow:16px 16px 34px #d3bcc0, -14px -14px 30px #ffffff; background:#F7EFF0; }
+  .v3 .phone img { border-radius:26px; height:440px; width:auto; }
+  .v3 .problem { padding:12px 0 96px; }
+  .v3 .problem h2 { font-weight:900; font-size:clamp(28px,4vw,50px); line-height:1.1; margin:0 0 18px; max-width:24ch; }
+  .v3 .problem .lede { max-width:64ch; }
+  .v3 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:42px; }
+  .v3 .card { padding:30px; }
+  .v3 .card .dot { width:46px; height:46px; border-radius:16px; background:var(--red); margin-bottom:16px; box-shadow:6px 6px 14px rgba(232,36,60,.32); }
+  .v3 .card:nth-child(2) .dot { background:#F2758A; }
+  .v3 .card:nth-child(3) .dot { background:#8C2233; }
+  .v3 .card h3 { font-size:19px; font-weight:900; margin:0 0 10px; }
+  .v3 .card p { margin:0; font-size:15px; line-height:1.55; color:#6e565c; }
+  @media (max-width:980px){ .v3 .hero,.v3 .cards{grid-template-columns:1fr} .v3 .top nav{display:none}
+    .v3 .blobwrap{min-height:430px} .v3 .phone img{height:340px} }
+
+  /* ============ 4. ПОСТЕР (центр) ============ */
+  .v4 { background:var(--red); color:#fff; font-family:Montserrat,sans-serif; text-align:center; }
+  .v4 .top { padding:24px 0; display:flex; align-items:center; gap:22px; text-align:left; }
+  .v4 .logo-chip { background:#fff; padding:5px 9px; border-radius:11px; display:inline-flex; }
+  .v4 .logo-chip img { height:30px; border-radius:6px; }
+  .v4 .top nav { display:flex; gap:22px; margin-left:auto; font-size:13px; font-weight:600; color:rgba(255,255,255,.82); }
+  .v4 .hero { padding:56px 0 0; }
+  .v4 .eyebrow { display:inline-block; border:1.5px solid rgba(255,255,255,.5); border-radius:999px;
+    padding:8px 18px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:30px; }
+  .v4 h1 { font-weight:900; font-size:clamp(40px,7.4vw,108px); line-height:.94; letter-spacing:-.028em;
+    margin:0 auto 26px; max-width:16ch; text-transform:uppercase; }
+  .v4 h1 span { display:block; }
+  .v4 h1 u { text-decoration:none; -webkit-text-stroke:2px #fff; color:transparent;
+    display:inline-block; margin-top:.1em; }
+  .v4 .lede { font-size:19px; line-height:1.55; color:rgba(255,255,255,.86); max-width:60ch; margin:0 auto 34px; font-weight:500; }
+  .v4 .acts { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:34px; }
+  .v4 .btn { font-family:Montserrat,sans-serif; font-weight:800; font-size:15px; padding:17px 34px;
+    border-radius:999px; cursor:pointer; border:2px solid #fff; background:#fff; color:var(--red); }
+  .v4 .btn.ghost { background:transparent; color:#fff; }
+  .v4 .facts { display:flex; gap:52px; justify-content:center; flex-wrap:wrap; margin-bottom:44px; }
+  .v4 .facts b { display:block; font-size:30px; font-weight:900; }
+  .v4 .facts span { font-size:13px; color:rgba(255,255,255,.74); }
+  .v4 .duo { display:flex; justify-content:center; align-items:flex-end; gap:26px; }
+  .v4 .duo figure { margin:0; border-radius:22px 22px 0 0; overflow:hidden; background:#fff;
+    box-shadow:0 -12px 50px rgba(0,0,0,.26); border:6px solid #fff; border-bottom:none; }
+  .v4 .duo img { height:470px; width:auto; }
+  .v4 .duo figure:first-child { transform:translateY(24px); }
+  .v4 .problem { background:#fff; color:#2A1218; padding:84px 0 96px; text-align:center; }
+  .v4 .problem h2 { font-weight:900; font-size:clamp(28px,4.2vw,54px); line-height:1.06;
+    letter-spacing:-.02em; margin:0 auto 18px; max-width:24ch; }
+  .v4 .problem .lede { color:#6e565c; max-width:66ch; margin:0 auto 46px; }
+  .v4 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; text-align:left; }
+  .v4 .card { border:2px solid #F0DDE0; border-radius:20px; padding:30px; }
+  .v4 .card .num { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--red); letter-spacing:.14em; }
+  .v4 .card h3 { font-size:19px; font-weight:800; margin:12px 0 10px; }
+  .v4 .card p { margin:0; font-size:15px; line-height:1.55; color:#6e565c; }
+  @media (max-width:980px){ .v4 .cards{grid-template-columns:1fr} .v4 .top nav{display:none}
+    .v4 .duo img{height:250px} .v4 .duo{gap:12px} }
+
+  /* ============ 5. ОРГАНИКА ============ */
+  .v5 { background:#2A1016; color:#F3E7E4; font-family:'Golos Text',sans-serif; position:relative; overflow:hidden; }
+  .v5 .leaf { position:absolute; pointer-events:none; border-radius:50%; }
+  .v5 .leaf.l1 { width:560px; height:560px; right:-140px; top:-190px; background:radial-gradient(circle at 36% 36%, rgba(232,36,60,.42), transparent 66%); }
+  .v5 .leaf.l2 { width:460px; height:460px; left:-170px; bottom:-150px; background:radial-gradient(circle at 60% 42%, rgba(150,62,44,.5), transparent 66%); }
+  .v5 .wrap { position:relative; z-index:1; }
+  .v5 .top { padding:26px 0; display:flex; align-items:center; gap:22px; }
+  .v5 .top nav { display:flex; gap:22px; margin-left:auto; font-size:13px; color:rgba(243,231,228,.66); }
+  .v5 .hero { padding:36px 0 74px; display:grid; grid-template-columns:1.02fr .98fr; gap:52px; align-items:center; }
+  .v5 .eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--red-lt); margin-bottom:20px; }
+  .v5 h1 { font-weight:900; font-size:clamp(37px,5.5vw,70px); line-height:1.04; letter-spacing:-.02em; margin:0 0 22px; }
+  .v5 h1 em { font-style:normal; color:var(--red-lt); }
+  .v5 .lede { font-size:18px; line-height:1.62; color:rgba(243,231,228,.76); max-width:47ch; margin:0 0 32px; }
+  .v5 .acts { display:flex; flex-wrap:wrap; gap:13px; margin-bottom:36px; }
+  .v5 .btn { font-family:'Golos Text',sans-serif; font-weight:600; font-size:15px; padding:17px 32px;
+    border-radius:40px; cursor:pointer; border:1px solid var(--red); background:var(--red); color:#fff; }
+  .v5 .btn.ghost { background:transparent; color:#F3E7E4; border-color:rgba(243,231,228,.32); }
+  .v5 .facts { display:flex; gap:36px; flex-wrap:wrap; }
+  .v5 .facts b { display:block; font-size:27px; font-weight:900; }
+  .v5 .facts span { font-size:12.5px; color:rgba(243,231,228,.6); }
+  .v5 .organic { position:relative; min-height:520px; display:flex; align-items:center; justify-content:center; }
+  .v5 .shape { position:absolute; border-radius:58% 42% 46% 54% / 46% 54% 46% 54%; }
+  .v5 .shape.s1 { width:360px; height:390px; left:4%; top:16px; background:linear-gradient(150deg,#4A1420,#33101A); }
+  .v5 .shape.s2 { width:200px; height:210px; right:4%; bottom:24px; background:linear-gradient(150deg,rgba(232,36,60,.34),rgba(120,40,30,.34)); }
+  .v5 .frame { position:relative; z-index:2; padding:12px; border-radius:26px;
+    background:rgba(243,231,228,.1); border:1px solid rgba(243,231,228,.2);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  .v5 .frame img { border-radius:18px; height:440px; width:auto; }
+  .v5 .problem { padding:8px 0 98px; }
+  .v5 .problem h2 { font-weight:900; font-size:clamp(28px,4vw,50px); line-height:1.08; letter-spacing:-.02em; margin:0 0 18px; max-width:24ch; }
+  .v5 .problem .lede { max-width:64ch; }
+  .v5 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:42px; }
+  .v5 .card { padding:28px; border-radius:22px; background:rgba(243,231,228,.07); border:1px solid rgba(243,231,228,.14); }
+  .v5 .card h3 { font-size:19px; font-weight:900; margin:0 0 10px; }
+  .v5 .card p { margin:0; font-size:15px; line-height:1.56; color:rgba(243,231,228,.72); }
+  @media (max-width:980px){ .v5 .hero,.v5 .cards{grid-template-columns:1fr} .v5 .top nav{display:none}
+    .v5 .organic{min-height:420px} .v5 .frame img{height:340px} }
+
+  /* ============ 6. ФЛЭТ ============ */
+  .v6 { background:#FFF4F0; color:#1A1013; font-family:Rubik,sans-serif; }
+  .v6 .top { padding:22px 0; display:flex; align-items:center; gap:22px; }
+  .v6 .top nav { display:flex; gap:22px; margin-left:auto; font-size:14px; font-weight:600; }
+  .v6 .top .mini { font-weight:800; font-size:13px; padding:11px 20px; border:3px solid #1A1013;
+    background:var(--red); color:#fff; border-radius:11px; }
+  .v6 .hero { padding:30px 0 66px; display:grid; grid-template-columns:1.02fr .98fr; gap:52px; align-items:center; }
+  .v6 .tagpill { display:inline-block; font-weight:800; font-size:13px; padding:10px 18px;
+    border:3px solid #1A1013; border-radius:999px; background:#fff; margin-bottom:22px; }
+  .v6 h1 { font-weight:900; font-size:clamp(38px,5.8vw,74px); line-height:1.02; margin:0 0 20px; letter-spacing:-.02em; }
+  .v6 h1 mark { background:var(--red); color:#fff; padding:0 10px; border-radius:10px; white-space:nowrap;
+    -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+  .v6 .lede { font-size:18px; line-height:1.58; margin:0 0 32px; max-width:47ch; color:#4a3238; }
+  .v6 .acts { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:32px; }
+  .v6 .btn { font-family:Rubik,sans-serif; font-weight:800; font-size:15px; padding:16px 30px;
+    border:3px solid #1A1013; border-radius:13px; cursor:pointer; background:var(--red); color:#fff; box-shadow:5px 5px 0 #1A1013; }
+  .v6 .btn.alt { background:#fff; color:#1A1013; }
+  .v6 .facts { display:flex; gap:14px; flex-wrap:wrap; }
+  .v6 .fact { background:#fff; border:3px solid #1A1013; border-radius:14px; padding:14px 22px; box-shadow:4px 4px 0 #1A1013; }
+  .v6 .fact b { display:block; font-size:22px; font-weight:900; }
+  .v6 .fact span { font-size:12.5px; color:#63494f; }
+  .v6 .art { position:relative; min-height:500px; display:flex; align-items:center; justify-content:center; gap:18px; }
+  .v6 .art figure { margin:0; border:3px solid #1A1013; border-radius:20px; box-shadow:8px 8px 0 #1A1013;
+    overflow:hidden; background:#fff; }
+  .v6 .art img { height:420px; width:auto; }
+  .v6 .art figure:nth-child(2) { transform:translateY(28px) rotate(2deg); }
+  .v6 .wave { display:block; width:100%; height:58px; }
+  .v6 .problem { background:var(--red); color:#fff; padding:14px 0 92px; }
+  .v6 .problem h2 { font-weight:900; font-size:clamp(28px,4.1vw,52px); line-height:1.06; margin:0 0 18px; max-width:24ch; letter-spacing:-.02em; }
+  .v6 .problem .lede { color:rgba(255,255,255,.9); max-width:64ch; }
+  .v6 .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:40px; }
+  .v6 .card { background:#fff; color:#1A1013; border:3px solid #1A1013; border-radius:18px; padding:26px; box-shadow:6px 6px 0 #1A1013; }
+  .v6 .card .ico { width:44px; height:44px; border-radius:12px; border:3px solid #1A1013; background:var(--red); margin-bottom:14px; }
+  .v6 .card:nth-child(2) .ico { background:#FFC7CF; }
+  .v6 .card:nth-child(3) .ico { background:#1A1013; }
+  .v6 .card h3 { font-size:19px; font-weight:900; margin:0 0 10px; }
+  .v6 .card p { margin:0; font-size:15px; line-height:1.55; color:#4a3238; }
+  @media (max-width:980px){ .v6 .hero,.v6 .cards{grid-template-columns:1fr} .v6 .top nav{display:none}
+    .v6 .art{min-height:380px} .v6 .art img{height:280px} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+const LOGO   = "__LOGO__";
+const SHOT1  = "__SHOT1__";   /* каталог — клиентское приложение */
+const SHOT2  = "__SHOT2__";   /* заказы — менеджерское приложение */
+const TORN_A = "__TORN_A__";
+const TORN_B = "__TORN_B__";
+
+const C = {
+  nav: ['Зачем приложение','Возможности','Для кого','Кейс','Цена'],
+  eyebrow: 'Готовое приложение под вашим брендом',
+  h1a: 'Готовое приложение для вашего магазина',
+  h1b: 'за 7 дней',
+  lede: 'Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы, доставка, оплата, бонусы, push-уведомления и клиентская база — без разработки с нуля.',
+  cta1: 'Обсудить запуск',
+  cta2: 'Посмотреть кейсы',
+  price: '150 000 ₽', priceLabel: 'запуск под вашим брендом',
+  term: '7 дней',     termLabel: 'и приложение уже в сторах',
+  p2h: 'Вы уже заплатили за привлечение клиента. Теперь верните его снова.',
+  p2lede: 'Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится снова тратить деньги на рекламу, чтобы вернуть тех, кто уже однажды у вас покупал.',
+  cards: [
+    { t:'Повторные продажи',      d:'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.' },
+    { t:'Своя клиентская база',   d:'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.' },
+    { t:'Прямой канал с клиентом',d:'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.' },
+  ],
+};
+
+const Nav = () => <nav>{C.nav.map(n => <span key={n}>{n}</span>)}</nav>;
+const Logo = () => <img className="logo-img" src={LOGO} alt="AppForse" />;
+
+/* ---- 1. СТРИТ ---- */
+const V1 = () => (
+  <div className="v1">
+    <div className="wrap">
+      <header className="top"><Logo /><Nav /></header>
+      <section className="hero">
+        <div>
+          <div className="kicker">{C.eyebrow}</div>
+          <h1>{C.h1a} — <span className="circled">{C.h1b}
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
+            </svg></span></h1>
+          <p className="lede">{C.lede}</p>
+          <div className="acts">
+            <button className="btn">{C.cta1}</button>
+            <button className="btn ghost">{C.cta2}</button>
+          </div>
+          <div className="facts">
+            <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+            <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+          </div>
+        </div>
+        <div className="collage">
+          <div className="shot a"><div className="tape" /><img src={SHOT1} alt="Каталог в приложении" /></div>
+          <div className="shot b"><div className="tape" /><img src={SHOT2} alt="Заказы в админ-панели" /></div>
+        </div>
+      </section>
+    </div>
+    <div className="tornwrap">
+      <svg viewBox="0 0 1600 60" preserveAspectRatio="none" aria-hidden="true"><path d={TORN_A} /></svg>
+      <div className="wrap">
+        <section className="problem">
+          <h2>{C.p2h}</h2>
+          <p className="lede">{C.p2lede}</p>
+          <div className="cards">{C.cards.map((c,i)=>(
+            <div className="card" key={c.t}><i>{String(i+1).padStart(2,'0')}</i><h3>{c.t}</h3><p>{c.d}</p></div>
+          ))}</div>
+        </section>
+      </div>
+    </div>
+  </div>
+);
+
+/* ---- 2. КОЛЛАЖ ---- */
+const V2 = () => (
+  <div className="v2">
+    <div className="wrap">
+      <header className="top"><Logo /><Nav /></header>
+      <section className="hero">
+        <div className="bars">
+          <div className="bar">Готовое приложение</div><br />
+          <div className="bar">для вашего магазина</div><br />
+          <div className="bar out">за 7 дней</div>
+        </div>
+        <div className="grid">
+          <div>
+            <p className="lede">{C.lede}</p>
+            <div className="acts">
+              <button className="btn">{C.cta1}</button>
+              <button className="btn ghost">{C.cta2}</button>
+            </div>
+            <div className="facts">
+              <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+              <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+            </div>
+            <div className="sticker"><p><b>Без разработки с нуля.</b> Платформа уже работает в действующем бизнесе в нескольких городах.</p></div>
+          </div>
+          <div className="cut"><img src={SHOT1} alt="Каталог в приложении" /></div>
+        </div>
+      </section>
+      <section className="problem">
+        <h2>{C.p2h}</h2>
+        <p className="lede">{C.p2lede}</p>
+        <div className="cards">{C.cards.map(c=>(
+          <div className="card" key={c.t}><h3>{c.t}</h3><p>{c.d}</p></div>
+        ))}</div>
+      </section>
+    </div>
+  </div>
+);
+
+/* ---- 3. КЛЕЙ ---- */
+const V3 = () => (
+  <div className="v3">
+    <div className="wrap">
+      <header className="top"><Logo /><Nav /></header>
+      <section className="hero">
+        <div>
+          <div className="pill">{C.eyebrow}</div>
+          <h1>{C.h1a} — <em>{C.h1b}</em></h1>
+          <p className="lede">{C.lede}</p>
+          <div className="acts">
+            <button className="btn">{C.cta1}</button>
+            <button className="btn soft">{C.cta2}</button>
+          </div>
+          <div className="facts">
+            <div className="fact clay"><b>{C.price}</b><span>{C.priceLabel}</span></div>
+            <div className="fact clay"><b>{C.term}</b><span>{C.termLabel}</span></div>
+          </div>
+        </div>
+        <div className="blobwrap">
+          <div className="blob b1" /><div className="blob b2" />
+          <div className="phone"><img src={SHOT1} alt="Каталог в приложении" /></div>
+        </div>
+      </section>
+      <section className="problem">
+        <h2>{C.p2h}</h2>
+        <p className="lede">{C.p2lede}</p>
+        <div className="cards">{C.cards.map(c=>(
+          <div className="card clay" key={c.t}><div className="dot" /><h3>{c.t}</h3><p>{c.d}</p></div>
+        ))}</div>
+      </section>
+    </div>
+  </div>
+);
+
+/* ---- 4. ПОСТЕР (центрированный) ---- */
+const V4 = () => (
+  <div className="v4">
+    <div className="wrap">
+      <header className="top">
+        <span className="logo-chip"><img src={LOGO} alt="AppForse" /></span>
+        <Nav />
+      </header>
+      <section className="hero">
+        <div className="eyebrow">{C.eyebrow}</div>
+        <h1><span>Готовое приложение</span><span>для вашего магазина</span><span><u>за 7 дней</u></span></h1>
+        <p className="lede">{C.lede}</p>
+        <div className="acts">
+          <button className="btn">{C.cta1}</button>
+          <button className="btn ghost">{C.cta2}</button>
+        </div>
+        <div className="facts">
+          <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+          <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+        </div>
+        <div className="duo">
+          <figure><img src={SHOT1} alt="Каталог в приложении" /></figure>
+          <figure><img src={SHOT2} alt="Заказы в админ-панели" /></figure>
+        </div>
+      </section>
+    </div>
+    <div className="problem">
+      <div className="wrap">
+        <h2>{C.p2h}</h2>
+        <p className="lede">{C.p2lede}</p>
+        <div className="cards">{C.cards.map((c,i)=>(
+          <div className="card" key={c.t}><span className="num">{String(i+1).padStart(2,'0')}</span><h3>{c.t}</h3><p>{c.d}</p></div>
+        ))}</div>
+      </div>
+    </div>
+  </div>
+);
+
+/* ---- 5. ОРГАНИКА ---- */
+const V5 = () => (
+  <div className="v5">
+    <div className="leaf l1" /><div className="leaf l2" />
+    <div className="wrap">
+      <header className="top"><Logo /><Nav /></header>
+      <section className="hero">
+        <div>
+          <div className="eyebrow">{C.eyebrow}</div>
+          <h1>{C.h1a} — <em>{C.h1b}</em></h1>
+          <p className="lede">{C.lede}</p>
+          <div className="acts">
+            <button className="btn">{C.cta1}</button>
+            <button className="btn ghost">{C.cta2}</button>
+          </div>
+          <div className="facts">
+            <div><b>{C.price}</b><span>{C.priceLabel}</span></div>
+            <div><b>{C.term}</b><span>{C.termLabel}</span></div>
+          </div>
+        </div>
+        <div className="organic">
+          <div className="shape s1" /><div className="shape s2" />
+          <div className="frame"><img src={SHOT2} alt="Заказы в админ-панели" /></div>
+        </div>
+      </section>
+      <section className="problem">
+        <h2>{C.p2h}</h2>
+        <p className="lede">{C.p2lede}</p>
+        <div className="cards">{C.cards.map(c=>(
+          <div className="card" key={c.t}><h3>{c.t}</h3><p>{c.d}</p></div>
+        ))}</div>
+      </section>
+    </div>
+  </div>
+);
+
+/* ---- 6. ФЛЭТ ---- */
+const V6 = () => (
+  <div className="v6">
+    <div className="wrap">
+      <header className="top"><Logo /><Nav /><button className="mini">{C.cta1}</button></header>
+      <section className="hero">
+        <div>
+          <div className="tagpill">{C.eyebrow}</div>
+          <h1>{C.h1a} — <mark>{C.h1b}</mark></h1>
+          <p className="lede">{C.lede}</p>
+          <div className="acts">
+            <button className="btn">{C.cta1}</button>
+            <button className="btn alt">{C.cta2}</button>
+          </div>
+          <div className="facts">
+            <div className="fact"><b>{C.price}</b><span>{C.priceLabel}</span></div>
+            <div className="fact"><b>{C.term}</b><span>{C.termLabel}</span></div>
+          </div>
+        </div>
+        <div className="art">
+          <figure><img src={SHOT1} alt="Каталог в приложении" /></figure>
+          <figure><img src={SHOT2} alt="Заказы в админ-панели" /></figure>
+        </div>
+      </section>
+    </div>
+    <svg className="wave" viewBox="0 0 1440 58" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="#E8243C" d="M0 30c120-28 240 22 360 20s240-42 360-38 240 44 360 42 240-38 360-38v42H0z" />
+    </svg>
+    <div className="problem">
+      <div className="wrap">
+        <h2>{C.p2h}</h2>
+        <p className="lede">{C.p2lede}</p>
+        <div className="cards">{C.cards.map(c=>(
+          <div className="card" key={c.t}><div className="ico" /><h3>{c.t}</h3><p>{c.d}</p></div>
+        ))}</div>
+      </div>
+    </div>
+  </div>
+);
+
+const VARIANTS = [
+  { n:1, name:'Стрит',    ref:'референс Emil Dance Room — рваная бумага, обводка от руки, экраны на скотче', Cmp:V1 },
+  { n:2, name:'Коллаж',   ref:'референс Resonance Studio — скошенные плашки, стикер, жёсткая тень', Cmp:V2 },
+  { n:3, name:'Клей',     ref:'референс с астронавтом — объёмные мягкие формы, двойные тени', Cmp:V3 },
+  { n:4, name:'Постер',   ref:'новая концепция — центрированная композиция, фирменный красный во всю площадь', Cmp:V4 },
+  { n:5, name:'Органика', ref:'референс с листьями — слоистые формы, глубокий винный фон', Cmp:V5 },
+  { n:6, name:'Флэт',     ref:'референсы Super Hello и Zombify — волна, толстые контуры', Cmp:V6 },
+];
+
+function App() {
+  const [cur, setCur] = useState(1);
+  const v = VARIANTS.find(x => x.n === cur);
+  const Cmp = v.Cmp;
+  return (
+    <React.Fragment>
+      <div className="switcher">
+        <span className="brand">Вариант дизайна</span>
+        {VARIANTS.map(x => (
+          <button key={x.n} data-on={x.n === cur ? '1' : '0'} onClick={() => setCur(x.n)}>{x.n}. {x.name}</button>
+        ))}
+        <span className="note">первый экран + второй блок</span>
+      </div>
+      <div className="stage"><Cmp /></div>
+      <div className="caption">Вариант {v.n} — «{v.name}»: <b>{v.ref}</b></div>
+    </React.Fragment>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
