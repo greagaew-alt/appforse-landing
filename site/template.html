@@ -880,13 +880,17 @@ const checked = el => el && el.checked;
 
 /* Поле телефона: «+7» стоит сразу, дальше цифры сами раскладываются
    по формату — клиент начинал набор с восьмёрки и путался */
-const asPhone = raw => {
-  let d = String(raw).replace(/[^0-9]/g, '');
-  if (d[0] === '7' || d[0] === '8') d = d.slice(1);   // код страны уже в маске
-  if (d.length > 10 && (d[0] === '8' || d[0] === '7')) d = d.slice(1);  // набрали через 8
-  d = d.slice(0, 10);
-  let out = '+7';
-  if (d.length) out += ' (' + d.slice(0, 3);
+const digitsOf = v => {
+  // префикс маски отбрасываем текстом, иначе его семёрка при удалении
+  // возвращалась обратно в номер и поле нельзя было очистить
+  let d = String(v).replace(/^\+7\s*/, '').replace(/[^0-9]/g, '');
+  if (d.length === 11 && (d[0] === '7' || d[0] === '8')) d = d.slice(1);
+  return d.slice(0, 10);
+};
+
+const fmtPhone = d => {
+  if (!d) return '';                       // пусто — показываем подсказку
+  let out = '+7 (' + d.slice(0, 3);
   if (d.length >= 3) out += ') ' + d.slice(3, 6);
   if (d.length >= 6) out += '-' + d.slice(6, 8);
   if (d.length >= 8) out += '-' + d.slice(8, 10);
@@ -894,12 +898,19 @@ const asPhone = raw => {
 };
 
 const PhoneField = ({ err, onFix }) => {
-  const [val, setVal] = useState('+7 ');
+  const [val, setVal] = useState('');
+  const change = e => {
+    const raw = e.target.value;
+    let d = digitsOf(raw);
+    // стёрли разделитель: цифр столько же, а строка короче — значит
+    // человек метил в цифру перед ним, иначе удаление упирается в тупик
+    if (raw.length < val.length && digitsOf(val).length === d.length) d = d.slice(0, -1);
+    setVal(fmtPhone(d));
+    onFix();
+  };
   return (
     <Field name="phone" type="tel" inputMode="tel" err={err} value={val}
-           placeholder="+7 (000) 000-00-00" autoComplete="tel"
-           onChange={e => { setVal(asPhone(e.target.value)); onFix(); }}
-           onFocus={e => { if (!e.target.value) setVal('+7 '); }} />
+           placeholder="+7 (000) 000-00-00" autoComplete="tel" onChange={change} />
   );
 };
 
