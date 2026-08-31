@@ -426,7 +426,8 @@ p, li, .lead { text-wrap: pretty; }
   gap: clamp(28px, 5.2vw, 100px);
   padding-top: clamp(32px, 2.9vw, 56px); padding-bottom: clamp(24px, 2vw, 38px); }
 .foot .brand { max-width: 34ch; }
-.foot .logo { height: 38px; width: auto; }
+.foot .logo { height: 38px; width: auto; transition: opacity .2s var(--ease); }
+.foot .brand a:hover .logo { opacity: .8; }
 .foot .tag { margin-top: 14px; font-size: var(--fs-body); color: var(--muted-hi); }
 .foot h4 { font-family: Oswald, sans-serif; font-weight: 500; text-transform: uppercase;
   letter-spacing: .12em; font-size: var(--fs-cap); color: var(--muted-hi); margin: 0 0 14px; }
@@ -1262,7 +1263,9 @@ const Foot = () => (
   <footer className="foot" id="contacts">
     <div className="shell">
       <div className="brand">
-        <img className="logo" src={LOGO} alt="AppForse" />
+        <a href="#top" aria-label="Наверх, к началу страницы">
+          <img className="logo" src={LOGO} alt="AppForse" />
+        </a>
         <p className="tag">Мобильная торговля под вашим брендом</p>
       </div>
       <div>
