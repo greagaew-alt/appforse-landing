@@ -63,7 +63,7 @@
   --w-h1: 730px;
   --w-h2: clamp(320px, 31.25vw, 600px);
   --w-lead: clamp(260px, 22.9vw, 440px);
-  --w-lead-wide: clamp(280px, 29.2vw, 560px);
+  --w-lead-wide: clamp(280px, 35.4vw, 680px);   /* подводка секции: строка длиннее — строк меньше */
 
   /* у Oswald ножки «Д» и краткая над «Й» выходят за строку: при .96 они
      задевали соседние строки, поэтому шаг чуть больше макетного */
@@ -133,6 +133,7 @@ p, li, .lead { text-wrap: pretty; }
               transform .2s var(--ease), box-shadow .2s var(--ease);
   text-decoration: none;
 }
+.btn-ico { width: 18px; height: 18px; flex: none; margin-right: 10px; }
 .btn:hover { background: var(--red-dk); border-color: var(--red-dk);
   transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232,36,60,.34); }
 .btn:active { transform: translateY(0); }
@@ -162,7 +163,8 @@ p, li, .lead { text-wrap: pretty; }
 .top .shell { display: flex; align-items: center; gap: var(--s6);
   padding-top: var(--s6); padding-bottom: var(--s6); }
 .top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
-.top nav { display: flex; gap: clamp(14px, 1.2vw, 23px); margin-left: auto; align-items: center; }
+.top nav { margin-left: auto; }
+.top nav .inner { display: flex; gap: clamp(14px, 1.2vw, 23px); align-items: center; }
 .top nav a {
   font-family: Oswald, sans-serif; font-size: var(--fs-nav); font-weight: 500;
   letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
@@ -191,11 +193,14 @@ p, li, .lead { text-wrap: pretty; }
 
 @media (max-width: 1100px) {
   .burger { display: flex; }
+  /* закрытое меню не должно оставлять под шапкой ни полосы, ни отступа */
   .top nav { display: grid; position: fixed; inset: 0 0 auto; top: var(--top-h, 94px);
-    background: var(--ink); border-bottom: 1px solid #1F1D24;
-    padding: 8px clamp(20px, 4.2vw, 40px) 22px; gap: 0; margin: 0;
-    grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease);
-    max-height: calc(100vh - var(--top-h, 94px)); overflow: hidden; }
+    background: var(--ink); border-bottom: 0 solid #1F1D24;
+    padding: 0 clamp(20px, 4.2vw, 40px); gap: 0; margin: 0;
+    grid-template-rows: 0fr; overflow: hidden;
+    transition: grid-template-rows .35s var(--ease), padding .35s var(--ease);
+    max-height: calc(100vh - var(--top-h, 94px)); }
+  .top.open nav { padding-block: 8px 22px; border-bottom-width: 1px; }
   .top nav > * { min-height: 0; }
   .top.open nav { grid-template-rows: 1fr; overflow-y: auto; }
   .top nav .inner { display: flex; flex-direction: column; overflow: hidden; }
@@ -362,7 +367,7 @@ p, li, .lead { text-wrap: pretty; }
 .price li { display: flex; gap: 12px; font-size: var(--fs-body); line-height: var(--lh-text);
   color: var(--muted-lo); }
 .price li svg { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--red); }
-.price .box > div { display: flex; flex-direction: column; }
+.price .box > div:first-child { display: flex; flex-direction: column; }
 .price .box ul { margin-bottom: auto; }
 .price .btn { margin-top: clamp(20px, 1.46vw, 28px); }
 .price .extra { display: grid; gap: clamp(12px, .89vw, 17px); align-content: start; }
@@ -433,7 +438,8 @@ p, li, .lead { text-wrap: pretty; }
 .foot .rule .shell { display: flex; flex-wrap: wrap; justify-content: space-between;
   gap: 12px clamp(20px, 3vw, 48px);
   padding-top: 20px; padding-bottom: 26px; font-size: var(--fs-cap); color: var(--muted-hi); }
-.foot .rule .by { margin-left: auto; }
+.foot .rule .by { margin-left: auto; color: var(--muted-lo); }
+.foot .rule .by:hover { color: var(--paper); }
 .foot .rule a { text-decoration: none; }
 @media (max-width: 760px) { .foot .rule .by { margin-left: 0; } }
 
@@ -548,26 +554,46 @@ p, li, .lead { text-wrap: pretty; }
   .price .collage { justify-self: center; margin-top: 0; }
 }
 @media (max-width: 760px) {
+  /* ручные переносы рассчитаны на широкую колонку: на узкой они дробят
+     заголовок на короткие строки, поэтому текст раскладывается сам */
+  h2 br { display: none; }
+  h2, h2.wide { max-width: 100%; text-wrap: pretty; }
+  .lead, .red h2 + .lead, .dark h2 + .lead, .hero .lead,
+  .magnet > div > p, .case p, .panel > p { max-width: 100%; }
   .hero .shell { gap: clamp(24px, 5vw, 40px); }
   .shots { justify-content: center; width: 100%; }
   .shot { width: calc((100% - var(--shot-gap)) / 2); }
   .shot img { width: 100%; height: auto; }
-  .price .collage { width: min(100%, 300px); min-height: 260px; }
-  .price .collage .shot.a { width: 40%; }
-  .price .collage .shot.b { width: 47%; top: 46px; }
+  /* на узких снимки встают в ряд: наложение здесь только мельчит их
+     и норовит вылезти за карточку */
+  .price .collage { position: static; display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; min-height: 0; }
+  .price .collage .shot.a, .price .collage .shot.b {
+    position: static; left: auto; right: auto; top: auto;
+    width: calc((100% - 12px) / 2); }
+  .price .collage .shot.b { margin-top: 22px; }
   .steps { padding-left: 26px; }
   .step { grid-template-columns: 40px 1fr; row-gap: 8px; }
   .step h3 { grid-column: 2; }
   .step p { grid-column: 2; }
-  .foot .shell { grid-template-columns: 1fr; gap: 28px; }
-  .foot .rule .shell { flex-direction: column; align-items: flex-start; }
+  /* на узких подвал целиком по центру */
+  .foot .shell { grid-template-columns: 1fr; gap: 28px; justify-items: center;
+    text-align: center; }
+  .foot .brand { max-width: 100%; }
+  .foot .logo { margin: 0 auto; }
+  .foot .social { justify-content: center; }
+  .foot ul { justify-items: center; }
+  .foot .rule .shell { flex-direction: column; align-items: center; text-align: center; }
+  .foot .rule .by { margin-left: 0; }
 }
 @media (max-width: 520px) {
+  /* на узкой колонке крупный заголовок разваливается на пять строк */
+  :root { --fs-h2: 22px; --fs-h1: clamp(30px, 8.4vw, 34px); }
   .hero .acts .btn, .magnet .btn, .form .btn { width: 100%; }
   .hero .facts { gap: 16px 28px; }
   .card, .who, .panel, .case, .price .box, .price .extra .item, .contact .box,
   .magnet { padding: clamp(18px, 5vw, 24px); }
-  .price .collage { width: min(100%, 260px); min-height: 230px; }
+
 }
 @media (max-width: 380px) {
   .hero .facts { flex-direction: column; }
@@ -583,8 +609,12 @@ p, li, .lead { text-wrap: pretty; }
 }
 @media (max-width: 900px) {
   .deck, .duo, .quad, .cases, .foot .shell { grid-template-columns: 1fr; }
+  /* именованные области заданы точнее, чем «.panel > *», поэтому на узких
+     сбрасываем их теми же селекторами — иначе блоки наезжают друг на друга */
   .panel, .case { grid-template-columns: 1fr; grid-template-areas: none; }
-  .panel > *, .case > * { grid-area: auto; }
+  .panel h3, .panel .tags, .panel .pic, .panel > p,
+  .case .kind, .case h3, .case p, .case .pic { grid-area: auto; }
+  .panel .pic, .case .pic { width: min(100%, 260px); }
   .case .pic { margin-top: 20px; }
   .step { grid-template-columns: 44px 1fr; }
   .step p { grid-column: 2; }
@@ -783,6 +813,12 @@ const SOCIAL = [
   { url: TG, name: 'Telegram', d: 'M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z' },
   { url: VK, name: 'ВКонтакте', d: 'M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.66 2 15.07 2zm3.15 14.27h-1.5c-.55 0-.72-.45-1.72-1.44-.87-.84-1.24-.95-1.46-.95-.3 0-.38.08-.38.49v1.32c0 .35-.11.56-1.04.56-1.53 0-3.22-.93-4.41-2.65-1.79-2.52-2.28-4.42-2.28-4.81 0-.21.08-.4.49-.4h1.5c.37 0 .51.17.65.56.73 2.13 1.96 3.99 2.47 3.99.19 0 .28-.09.28-.57V9.71c-.06-1-.59-1.09-.59-1.45 0-.17.14-.34.37-.34h2.36c.31 0 .42.17.42.54v2.98c0 .31.14.42.23.42.19 0 .34-.11.68-.45 1.06-1.19 1.82-3.02 1.82-3.02.1-.21.27-.41.64-.41h1.5c.45 0 .55.23.45.54-.19.87-2.02 3.45-2.02 3.45-.16.25-.22.37 0 .65.15.21.66.65 1 1.04.62.7 1.09 1.29 1.22 1.7.12.4-.08.61-.49.61z' },
 ];
+const TgIcon = () => (
+  <svg className="btn-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d={SOCIAL[0].d} />
+  </svg>
+);
+
 const Social = () => (
   <div className="social">
     {SOCIAL.map(s => (
@@ -884,7 +920,7 @@ const Why = () => (
     <div className="red">
       <div className="shell">
         <Rise as="h2">
-          Вы уже заплатили<br />за привлечение клиента.<br />Теперь верните его снова.
+          Вы уже заплатили{' '}<br />за привлечение клиента.{' '}<br />Теперь верните его снова.
         </Rise>
         <Rise as="p" className="lead" delay={80}>
           Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится
@@ -909,7 +945,7 @@ const What = () => (
   <section className="dark" id="what">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Приложение для клиентов<br />и панель управления для вас
+        Приложение для клиентов{' '}<br />и панель управления для вас
       </Rise>
       <Rise as="p" className="lead" delay={80}>
         Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
@@ -943,7 +979,7 @@ const Magnet = () => {
   return (
     <Rise className="magnet" id="magnet">
           <div>
-            <h2>Разберём ваш бизнес и покажем<br />точки роста повторных продаж</h2>
+            <h2>Разберём ваш бизнес и покажем{' '}<br />точки роста повторных продаж</h2>
             <p>
               Посмотрим, как приложение может работать с вашей клиентской базой,
               возвращать покупателей и автоматизировать повторные заказы.
@@ -972,7 +1008,7 @@ const Who = () => (
   <section className="dark" id="who">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Бизнесам, где важны повторные покупки<br />и своя клиентская база
+        Бизнесам, где важны повторные покупки{' '}<br />и своя клиентская база
       </Rise>
       <div className="quad">
         {AUDIENCE.map((a, i) => (
@@ -1006,7 +1042,7 @@ const How = () => {
     <section className="dark" id="how">
       <div className="shell">
         <Rise as="h2" className="wide">
-          Как ваше приложение появится<br />в App Store и Google Play
+          Как ваше приложение появится{' '}<br />в App Store и Google Play
         </Rise>
         <div className="steps" ref={wrap}>
           <span className="rail" style={{ transform: 'scaleY(' + filled + ')' }} />
@@ -1027,7 +1063,7 @@ const Case = () => (
   <section className="dark" id="case">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Приложение, которое уже работает<br />в реальном бизнесе
+        Приложение, которое уже работает{' '}<br />в реальном бизнесе
       </Rise>
       <Rise as="p" className="lead" delay={80}>
         «Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
@@ -1130,7 +1166,7 @@ const Contact = () => {
       <div className="red">
         <div className="shell">
           <Rise as="h2" className="wide">
-        Покажите свой бизнес. Покажем,<br />как AppForse будет работать у вас
+        Покажите свой бизнес. Покажем,{' '}<br />как AppForse будет работать у вас
       </Rise>
           <Rise as="p" className="lead" delay={80}>
             За 15 минут разберём задачу и определим, что нужно для запуска.
@@ -1156,7 +1192,9 @@ const Contact = () => {
             <Rise className="box aside" delay={220}>
               <h3>Или сразу в Telegram</h3>
               <p>Если удобнее списаться напрямую — без формы.</p>
-              <a className="btn" href={TG}>Написать в Telegram</a>
+              <a className="btn" href={TG} target="_blank" rel="noopener">
+                <TgIcon />Написать в Telegram
+              </a>
             </Rise>
           </div>
         </div>
@@ -1187,10 +1225,7 @@ const Foot = () => (
       <div className="shell">
         <span>© 2026 AppForse</span>
         <a href="privacy.html">Политика обработки персональных данных</a>
-        <span className="by">
-          Разработка сайта&nbsp;—{' '}
-          <a href={DEV} target="_blank" rel="noopener">Глеб Слободчиков</a>
-        </span>
+        <a className="by" href={DEV} target="_blank" rel="noopener">Разработка сайта</a>
       </div>
     </div>
   </footer>
