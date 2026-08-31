@@ -910,7 +910,10 @@ const PhoneField = ({ err, onFix }) => {
   };
   return (
     <Field name="phone" type="tel" inputMode="tel" err={err} value={val}
-           placeholder="+7 (000) 000-00-00" autoComplete="tel" onChange={change} />
+           placeholder="+7 (000) 000-00-00" autoComplete="tel" onChange={change}
+           // код страны появляется сразу при клике, чтобы набирать номер с девятки
+           onFocus={() => { if (!val) setVal('+7 '); }}
+           onBlur={() => { if (!digitsOf(val)) setVal(''); }} />
   );
 };
 
