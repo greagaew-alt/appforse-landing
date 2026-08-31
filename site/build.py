@@ -8,11 +8,15 @@ ASSETS = r"C:\Users\greag\AppData\Local\Temp\claude\c--Users-greag-Desktop------
 a = json.load(open(ASSETS, encoding='utf-8'))
 tpl = io.open(os.path.join(BASE, 'template.html'), encoding='utf-8').read()
 
+# картинки лежат отдельными файлами: страница перестаёт весить почти мегабайт
+# и рисуется, не дожидаясь их загрузки
+img = json.load(io.open(os.path.join(BASE, 'img', 'paths.json'), encoding='utf-8'))
+
 out = (tpl
-       .replace('__LOGO__', a['logo'])
-       .replace('__SHOT1__', a['shot1'])
-       .replace('__SHOT2__', a['shot2'])
-       .replace('__TAPE__', a['tape'])
+       .replace('__LOGO__', img['logo'])
+       .replace('__SHOT1__', img['shot1'])
+       .replace('__SHOT2__', img['shot2'])
+       .replace('__TAPE__', img['tape'])
        .replace('__TORN_A__', a['tornA'])
        .replace('__TORN_B__', a['tornB'])
        .replace('__TORN_C__', a['tornC'])
