@@ -36,3 +36,8 @@ io.open(os.path.join(BASE, '404.html'), 'w', encoding='utf-8').write(
 io.open(os.path.join(BASE, '..', '404.html'), 'w', encoding='utf-8').write(
     e404.replace('__HOME__', '/appforse-landing/site/'))
 print('404.html собран:', len(e404) // 1024, 'KB')
+
+# JSX компилируем сразу: браузеру не нужно тащить Babel и разбирать разметку
+import subprocess as _sp
+_r = _sp.run(['python', os.path.join(BASE, 'compile.py')], capture_output=True, text=True)
+print((_r.stdout or _r.stderr).strip().splitlines()[-1] if (_r.stdout or _r.stderr) else 'compile.py')

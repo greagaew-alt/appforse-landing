@@ -76,6 +76,7 @@
   --s5: 20px;  --s6: 24px;  --s8: 32px;  --s10: 40px;
   --s12: 48px; --s16: 64px; --s20: 80px; --s25: 100px;
   --gap-block: clamp(56px, 5.2vw, 100px);   /* отступ между блоками */
+  --gap-dark:  clamp(46px, 4.7vw, 90px);    /* между блоками на тёмном — плотнее */
 
   /* ── сетка ── */
   --shell: 1505px;
@@ -144,9 +145,12 @@ p, li, .lead { text-wrap: pretty; }
   box-shadow: 0 8px 22px rgba(0,0,0,.24); }
 
 /* ── появление при прокрутке ── */
-.rise { opacity: 0; transform: translateY(26px); }
+.rise { opacity: 0; transform: translateY(18px); }
 .rise.seen { opacity: 1; transform: none;
-  transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  transition: opacity .85s var(--ease), transform .85s var(--ease); }
+/* страница проявляется целиком, а не выскакивает кусками после сборки скрипта */
+#root { opacity: 0; transition: opacity .4s ease; }
+#root.ready { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rise, .rise.seen { opacity: 1; transform: none; transition: none; }
@@ -252,11 +256,12 @@ p, li, .lead { text-wrap: pretty; }
 .shot.b:hover .tape { transform: translateX(-50%) rotate(5deg); }
 
 /* рваный край между секциями */
-/* рваный край: сам SVG красный, тёмная фигура «отъедает» его сверху.
-   Нижний край — та же фигура, перевёрнутая, поэтому тёмное уходит вниз. */
+/* рваный край: SVG прозрачный, красная фигура на нём одна.
+   Раньше SVG был залит красным, а тёмная фигура его «отъедала» — при сжатии
+   на мобильном кромка не докрывала верх и по стыку шла красная полоска. */
 .torn { display: block; width: 100%; height: clamp(30px, 3.1vw, 60px);
-  background: var(--red); }
-.torn path { fill: var(--ink); }
+  background: transparent; }
+.torn path { fill: var(--red); }
 .torn.down { margin-bottom: -1px; margin-top: -1px; }
 .torn.up { margin-top: -1px; margin-bottom: -1px; }
 
@@ -278,7 +283,7 @@ p, li, .lead { text-wrap: pretty; }
 .card p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
 
 /* ═══════════ ТЁМНАЯ СЕКЦИЯ ═══════════ */
-.dark .shell { padding-top: var(--gap-block); padding-bottom: var(--gap-block); }
+.dark .shell { padding-top: var(--gap-dark); padding-bottom: var(--gap-dark); }
 .dark h2 + .lead { margin-top: clamp(16px, 1.35vw, 26px); max-width: var(--w-lead-wide); }
 .sec-head { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 
@@ -636,6 +641,8 @@ p, li, .lead { text-wrap: pretty; }
 </head>
 <body>
 <div id="root"></div>
+<script>/* если скрипт не отработает, страница всё равно проявится */
+setTimeout(function () { document.getElementById("root").classList.add("ready"); }, 3000);</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
@@ -789,19 +796,26 @@ const Torn = ({ d, dir }) => (
 /* Появление при прокрутке.
    Класс держим в состоянии React: если добавлять его напрямую в DOM,
    любая следующая перерисовка родителя затрёт его вместе с className. */
-function Rise({ as: Tag = 'div', delay = 0, className = '', style, children, ...rest }) {
+function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, children, ...rest }) {
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (!('IntersectionObserver' in window)) { setSeen(true); return; }
+    // первый экран показываем сразу: ждать наблюдателя незачем, а кнопки
+    // из-за этого появлялись последними
+    if (now || !('IntersectionObserver' in window)) {
+      const raf = requestAnimationFrame(() => setSeen(true));
+      return () => cancelAnimationFrame(raf);
+    }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { setSeen(true); io.disconnect(); }
-    }, { rootMargin: '0px 0px -12% 0px' });
+    }, { rootMargin: '0px 0px -8% 0px' });
     io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    // страховка: при быстрой прокрутке или перерисовке наблюдатель мог не сработать
+    const guard = setTimeout(() => setSeen(true), 2500);
+    return () => { io.disconnect(); clearTimeout(guard); };
+  }, [now]);
   const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
   return (
     <Tag ref={ref} className={cls}
@@ -861,7 +875,33 @@ function useForm(rules) {
 }
 
 const filled = el => el && el.value.trim().length > 1;
+const phoneOk = el => el && el.value.replace(/\D/g, '').length === 11;
 const checked = el => el && el.checked;
+
+/* Поле телефона: «+7» стоит сразу, дальше цифры сами раскладываются
+   по формату — клиент начинал набор с восьмёрки и путался */
+const asPhone = raw => {
+  let d = String(raw).replace(/[^0-9]/g, '');
+  if (d[0] === '7' || d[0] === '8') d = d.slice(1);   // код страны уже в маске
+  if (d.length > 10 && (d[0] === '8' || d[0] === '7')) d = d.slice(1);  // набрали через 8
+  d = d.slice(0, 10);
+  let out = '+7';
+  if (d.length) out += ' (' + d.slice(0, 3);
+  if (d.length >= 3) out += ') ' + d.slice(3, 6);
+  if (d.length >= 6) out += '-' + d.slice(6, 8);
+  if (d.length >= 8) out += '-' + d.slice(8, 10);
+  return out;
+};
+
+const PhoneField = ({ err, onFix }) => {
+  const [val, setVal] = useState('+7 ');
+  return (
+    <Field name="phone" type="tel" inputMode="tel" err={err} value={val}
+           placeholder="+7 (000) 000-00-00" autoComplete="tel"
+           onChange={e => { setVal(asPhone(e.target.value)); onFix(); }}
+           onFocus={e => { if (!e.target.value) setVal('+7 '); }} />
+  );
+};
 
 const Social = () => (
   <div className="social">
@@ -929,28 +969,28 @@ const Hero = () => (
   <section className="hero" id="top">
     <div className="shell">
       <div>
-        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
-        <Rise as="h1" delay={70}>
+        <Rise className="eyebrow" as="div" now>Готовое приложение под вашим брендом</Rise>
+        <Rise as="h1" delay={60} now>
           Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
               <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
             </svg>
           </span>
         </Rise>
-        <Rise as="p" className="lead" delay={140}>
+        <Rise as="p" className="lead" delay={120} now>
           Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
           доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
         </Rise>
-        <Rise className="acts" delay={210}>
+        <Rise className="acts" delay={180} now>
           <a className="btn" href="#contact">Обсудить запуск</a>
           <a className="btn ghost" href="#case">Посмотреть кейсы</a>
         </Rise>
-        <Rise className="facts" delay={280}>
+        <Rise className="facts" delay={240} now>
           <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
           <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
         </Rise>
       </div>
-      <Rise className="shots" delay={160}>
+      <Rise className="shots" delay={150} now>
         <Shot src={SHOT1} alt="Каталог в клиентском приложении" cls="a" />
         <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
       </Rise>
@@ -1021,7 +1061,7 @@ const What = () => (
 const Magnet = () => {
   const { err, sent, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
-    ['phone', filled, 'Оставьте номер телефона'],
+    ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
   ]);
   return (
@@ -1036,8 +1076,7 @@ const Magnet = () => {
           <form className="form" noValidate onSubmit={submit}>
             <Field name="name" placeholder="Ваше имя" err={err.name}
                    onInput={() => clear('name')} />
-            <Field name="phone" type="tel" inputMode="tel" err={err.phone}
-                   placeholder="+7 (000) 000-00-00" onInput={() => clear('phone')} />
+            <PhoneField err={err.phone} onFix={() => clear('phone')} />
             <button className="btn on-red" type="submit">
               {sent ? 'Заявка отправлена' : 'Получить разбор'}
             </button>
@@ -1211,7 +1250,7 @@ const Faq = () => {
 const Contact = () => {
   const { err, sent, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
-    ['phone', filled, 'Оставьте номер телефона'],
+    ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
   ]);
   return (
@@ -1230,8 +1269,7 @@ const Contact = () => {
               <form className="form" noValidate onSubmit={submit}>
                 <Field name="name" placeholder="Ваше имя" err={err.name}
                        onInput={() => clear('name')} />
-                <Field name="phone" type="tel" inputMode="tel" err={err.phone}
-                       placeholder="+7 (000) 000-00-00" onInput={() => clear('phone')} />
+                <PhoneField err={err.phone} onFix={() => clear('phone')} />
                 <button className="btn" type="submit">
                   {sent ? 'Заявка отправлена' : 'Получить предложение'}
                 </button>
@@ -1296,7 +1334,9 @@ const App = () => (
   </React.Fragment>
 );
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+const rootEl = document.getElementById('root');
+ReactDOM.createRoot(rootEl).render(<App />);
+requestAnimationFrame(() => rootEl.classList.add('ready'));
 </script>
 </body>
 </html>
