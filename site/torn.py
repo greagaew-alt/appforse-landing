@@ -28,7 +28,7 @@ def edge(seed, base, spread):
 def path_top(seed):
     """Тёмная фигура сверху: рваная нижняя кромка."""
     pts = edge(seed, H * .58, H * .42)
-    d = ['M0,-2', 'L%g,-2' % W]
+    d = ['M0,-10', 'L%g,-10' % W]
     for x, y in reversed(pts):
         d.append('L%g,%g' % (x, y))
     d.append('Z')
@@ -38,7 +38,7 @@ def path_top(seed):
 def path_bottom(seed):
     """Тёмная фигура снизу: рваная верхняя кромка, нарисована независимо."""
     pts = edge(seed, H * .42, H * .42)
-    d = ['M0,%g' % (H + 2), 'L%g,%g' % (W, H + 2)]
+    d = ['M0,%g' % (H + 10), 'L%g,%g' % (W, H + 10)]
     for x, y in reversed(pts):
         d.append('L%g,%g' % (x, y))
     d.append('Z')
