@@ -242,7 +242,7 @@ p, li, .lead { text-wrap: pretty; }
 .shot img { width: 100%; height: auto; }
 .tape {
   position: absolute; z-index: 3; width: var(--tape-w); height: auto;
-  left: 50%; top: -9px; transform: translateX(-50%) rotate(-1.5deg);
+  left: 50%; top: -13px; transform: translateX(-50%) rotate(-1.5deg);
   opacity: .9; filter: drop-shadow(0 3px 6px rgba(0,0,0,.5)); pointer-events: none;
   transition: transform .4s var(--ease);
 }
@@ -1218,11 +1218,10 @@ const Contact = () => {
       <Torn d={TORN_C} dir="down" />
       <div className="red">
         <div className="shell">
-          <Rise as="h2" className="wide">
-        Покажите свой бизнес. Покажем,{' '}<br />как AppForse будет работать у вас
-      </Rise>
+          <Rise as="h2">Узнайте, каким будет ваше приложение</Rise>
           <Rise as="p" className="lead" delay={80}>
-            За 15 минут разберём задачу и определим, что нужно для запуска.
+            Разберём ваш бизнес и покажем, как готовая платформа будет
+            работать с вашими товарами, заказами и клиентами.
           </Rise>
           <div className="contact">
             <Rise className="box" delay={140}>
@@ -1233,7 +1232,7 @@ const Contact = () => {
                 <Field name="phone" type="tel" inputMode="tel" err={err.phone}
                        placeholder="+7 (000) 000-00-00" onInput={() => clear('phone')} />
                 <button className="btn" type="submit">
-                  {sent ? 'Заявка отправлена' : 'Отправить заявку'}
+                  {sent ? 'Заявка отправлена' : 'Получить предложение'}
                 </button>
                 <label className="agree">
                   <input type="checkbox" name="agree" onChange={() => clear('agree')} />
