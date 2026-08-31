@@ -561,8 +561,9 @@ p, li, .lead { text-wrap: pretty; }
   .lead, .red h2 + .lead, .dark h2 + .lead, .hero .lead,
   .magnet > div > p, .case p, .panel > p { max-width: 100%; }
   .hero .shell { gap: clamp(24px, 5vw, 40px); }
-  .shots { justify-content: center; width: 100%; }
-  .shot { width: calc((100% - var(--shot-gap)) / 2); }
+  .shots { justify-content: center; width: 100%; align-items: flex-start; }
+  /* сдвиг второго снимка на узких делал его рамку короче первой */
+  .shot, .shot.b { width: calc((100% - var(--shot-gap)) / 2); margin-top: 0; }
   .shot img { width: 100%; height: auto; }
   /* на узких снимки встают в ряд: наложение здесь только мельчит их
      и норовит вылезти за карточку */
@@ -599,6 +600,14 @@ p, li, .lead { text-wrap: pretty; }
   .hero .facts { flex-direction: column; }
   .social a { width: 40px; height: 40px; }
 }
+
+/* ── подсказки формы ── */
+.field { display: grid; gap: 6px; }
+.form input.bad { border-color: var(--red); background: rgba(232,36,60,.08); }
+.err { font-size: var(--fs-cap); line-height: 1.4; color: var(--red-lt); }
+.magnet .form input.bad { border-color: var(--paper);
+  background: rgba(255,255,255,.2); }
+.magnet .err { color: var(--paper); font-weight: 600; }
 
 /* ── адаптив: пока правим только крупные сломы, мобильная версия отдельно ── */
 @media (max-width: 1180px) {
@@ -819,6 +828,39 @@ const TgIcon = () => (
   </svg>
 );
 
+/* Свои подсказки вместо браузерных: те говорят «Заполните это поле»
+   системным жёлтым пузырём, который выбивается из оформления */
+const Field = ({ err, ...rest }) => (
+  <div className="field">
+    <input {...rest} className={err ? 'bad' : ''} onInvalid={e => e.preventDefault()} />
+    {err && <span className="err">{err}</span>}
+  </div>
+);
+
+function useForm(rules) {
+  const [err, setErr] = useState({});
+  const [sent, setSent] = useState(false);
+  const submit = e => {
+    e.preventDefault();
+    const f = e.target;
+    const next = {};
+    rules.forEach(([name, check, msg]) => {
+      const el = f.elements[name];
+      if (!check(el)) next[name] = msg;
+    });
+    setErr(next);
+    if (!Object.keys(next).length) setSent(true);
+  };
+  const clear = name => setErr(prev => {
+    if (!prev[name]) return prev;
+    const next = { ...prev }; delete next[name]; return next;
+  });
+  return { err, sent, submit, clear };
+}
+
+const filled = el => el && el.value.trim().length > 1;
+const checked = el => el && el.checked;
+
 const Social = () => (
   <div className="social">
     {SOCIAL.map(s => (
@@ -975,7 +1017,11 @@ const What = () => (
 );
 
 const Magnet = () => {
-  const [sent, setSent] = useState(false);
+  const { err, sent, submit, clear } = useForm([
+    ['name', filled, 'Как к вам обращаться?'],
+    ['phone', filled, 'Оставьте номер телефона'],
+    ['agree', checked, 'Нужно согласие на обработку данных'],
+  ]);
   return (
     <Rise className="magnet" id="magnet">
           <div>
@@ -985,19 +1031,21 @@ const Magnet = () => {
               возвращать покупателей и автоматизировать повторные заказы.
             </p>
           </div>
-          <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
-            <input name="name" placeholder="Ваше имя" required />
-            <input name="phone" type="tel" inputMode="tel"
-                   placeholder="+7 (000) 000-00-00" required />
+          <form className="form" noValidate onSubmit={submit}>
+            <Field name="name" placeholder="Ваше имя" err={err.name}
+                   onInput={() => clear('name')} />
+            <Field name="phone" type="tel" inputMode="tel" err={err.phone}
+                   placeholder="+7 (000) 000-00-00" onInput={() => clear('phone')} />
             <button className="btn on-red" type="submit">
               {sent ? 'Заявка отправлена' : 'Получить разбор'}
             </button>
             <label className="agree">
-              <input type="checkbox" name="agree" required />
+              <input type="checkbox" name="agree" onChange={() => clear('agree')} />
               <span>Согласен на обработку персональных данных
                 и принимаю <a href="privacy.html" target="_blank"
                 rel="noopener">политику конфиденциальности</a>.</span>
             </label>
+            {err.agree && <span className="err">{err.agree}</span>}
             {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
           </form>
     </Rise>
@@ -1159,7 +1207,11 @@ const Faq = () => {
 };
 
 const Contact = () => {
-  const [sent, setSent] = useState(false);
+  const { err, sent, submit, clear } = useForm([
+    ['name', filled, 'Как к вам обращаться?'],
+    ['phone', filled, 'Оставьте номер телефона'],
+    ['agree', checked, 'Нужно согласие на обработку данных'],
+  ]);
   return (
     <section id="contact">
       <Torn d={TORN_C} dir="down" />
@@ -1174,18 +1226,21 @@ const Contact = () => {
           <div className="contact">
             <Rise className="box" delay={140}>
               <h3>Оставить заявку</h3>
-              <form className="form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
-                <input name="name" placeholder="Ваше имя" required />
-                <input name="phone" type="tel" inputMode="tel" placeholder="+7 (000) 000-00-00" required />
+              <form className="form" noValidate onSubmit={submit}>
+                <Field name="name" placeholder="Ваше имя" err={err.name}
+                       onInput={() => clear('name')} />
+                <Field name="phone" type="tel" inputMode="tel" err={err.phone}
+                       placeholder="+7 (000) 000-00-00" onInput={() => clear('phone')} />
                 <button className="btn" type="submit">
                   {sent ? 'Заявка отправлена' : 'Отправить заявку'}
                 </button>
                 <label className="agree">
-                  <input type="checkbox" name="agree" required />
+                  <input type="checkbox" name="agree" onChange={() => clear('agree')} />
                   <span>Согласен на обработку персональных данных
                     и принимаю <a href="privacy.html" target="_blank"
                     rel="noopener">политику конфиденциальности</a>.</span>
                 </label>
+                {err.agree && <span className="err">{err.agree}</span>}
                 {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
               </form>
             </Rise>
