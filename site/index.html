@@ -595,8 +595,6 @@ p, li, .lead { text-wrap: pretty; }
   .foot .logo { margin: 0 auto; }
   .foot .social { justify-content: center; }
   .foot ul { justify-items: center; }
-  .foot .rule .shell { flex-direction: column; align-items: center; text-align: center; }
-  .foot .rule .by { margin-left: 0; }
 }
 @media (max-width: 520px) {
   /* на узкой колонке крупный заголовок разваливается на пять строк */
@@ -640,6 +638,24 @@ p, li, .lead { text-wrap: pretty; }
 }
 @media (max-width: 900px) {
   .deck, .duo, .quad, .cases, .foot .shell { grid-template-columns: 1fr; }
+  /* нижняя строка подвала — в столбик и по центру уже с планшета; ссылки
+     получают вертикальный отступ, чтобы палец попадал (иначе высота ~19px) */
+  .foot .rule .shell { flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+  .foot .rule .by { margin-left: 0; }
+  .foot .rule a { display: block; padding: 12px 8px; }
+  /* чекбокс согласия: на тач-экранах поле нажатия — 44px, а видимый
+     квадрат остаётся 22px (уходит на ::after); галочку держим поверх */
+  .agree input[type="checkbox"] { width: 44px; height: 44px; margin: -11px; }
+  .agree input[type="checkbox"],
+  .agree input[type="checkbox"]:checked,
+  .magnet .agree input[type="checkbox"],
+  .magnet .agree input[type="checkbox"]:checked { border: 0; background: none; }
+  .agree input[type="checkbox"]::before { z-index: 1; }
+  .agree input[type="checkbox"]::after { content: ''; position: absolute; inset: 11px;
+    border: 1px solid #3A3742; background: #131117; }
+  .agree input[type="checkbox"]:checked::after { background: var(--red); border-color: var(--red); }
+  .magnet .agree input[type="checkbox"]::after { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+  .magnet .agree input[type="checkbox"]:checked::after { background: var(--paper); border-color: var(--paper); }
   /* именованные области заданы точнее, чем «.panel > *», поэтому на узких
      сбрасываем их теми же селекторами — иначе блоки наезжают друг на друга */
   .panel, .case { grid-template-columns: 1fr; grid-template-areas: none; }
@@ -652,7 +668,7 @@ p, li, .lead { text-wrap: pretty; }
   .demo { grid-template-columns: 1fr; }
 }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://greagaew-alt.github.io/appforse-landing/site/#org","name":"AppForse","url":"https://greagaew-alt.github.io/appforse-landing/site/","logo":"https://greagaew-alt.github.io/appforse-landing/site/icon-192.png","image":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg","description":"Готовая платформа мобильных приложений для торговли под брендом заказчика","sameAs":["https://vk.com/appforse","https://t.me/shark154"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/shark154","availableLanguage":"Russian"}]},{"@type":"WebSite","@id":"https://greagaew-alt.github.io/appforse-landing/site/#site","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"AppForse","inLanguage":"ru-RU","publisher":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"}},{"@type":"WebPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#page","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"Мобильное приложение под вашим брендом за 7 дней — AppForse","isPartOf":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#site"},"about":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"inLanguage":"ru-RU","primaryImageOfPage":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg"},{"@type":"Service","@id":"https://greagaew-alt.github.io/appforse-landing/site/#service","name":"Запуск мобильного приложения под брендом заказчика","serviceType":"Разработка мобильного приложения на готовой платформе","provider":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"areaServed":{"@type":"Country","name":"Россия"},"audience":[{"@type":"BusinessAudience","name":"Оптовые продажи"},{"@type":"BusinessAudience","name":"Магазины и доставка"},{"@type":"BusinessAudience","name":"Рестораны и доставка еды"},{"@type":"BusinessAudience","name":"Розница"}],"description":"Клиентское приложение и админ-панель под брендом заказчика: каталог, заказы, доставка, оплата, бонусы, push-уведомления и CRM. Публикация в App Store и Google Play за 7 рабочих дней.","offers":{"@type":"Offer","price":"150000","priceCurrency":"RUB","availability":"https://schema.org/InStock","url":"https://greagaew-alt.github.io/appforse-landing/site/#price","itemOffered":{"@type":"Service","name":"Запуск платформы под вашим брендом"}},"hasOfferCatalog":{"@type":"OfferCatalog","name":"В стоимость входит","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Клиентское приложение под вашим брендом"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Публикация в App Store и Google Play"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Каталог товаров, корзина и онлайн-оплата"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Доставка и самовывоз"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Бонусы, промокоды и push-уведомления"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM и клиентская база"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Админ-панель и аналитика"}}]}},{"@type":"FAQPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#faq","mainEntity":[{"@type":"Question","name":"У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?","acceptedAnswer":{"@type":"Answer","text":"Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки."}},{"@type":"Question","name":"Сколько времени занимает запуск?","acceptedAnswer":{"@type":"Answer","text":"Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения."}},{"@type":"Question","name":"Кто делает дизайн приложения?","acceptedAnswer":{"@type":"Answer","text":"Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить."}},{"@type":"Question","name":"Что нужно от меня для запуска?","acceptedAnswer":{"@type":"Answer","text":"Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя."}},{"@type":"Question","name":"Я получаю исходный код?","acceptedAnswer":{"@type":"Answer","text":"Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно."}},{"@type":"Question","name":"Обязательно ли платить за поддержку?","acceptedAnswer":{"@type":"Answer","text":"Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно."}},{"@type":"Question","name":"Что если клиенты не станут пользоваться приложением?","acceptedAnswer":{"@type":"Answer","text":"До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах."}}]}]}</script>
+<script type="application/ld+json">__JSONLD__</script>
 </head>
 <body>
 <div id="root"></div>
@@ -860,15 +876,10 @@ function Rise({
         io.disconnect();
       }
     }, {
-      rootMargin: '0px 0px -8% 0px'
+      rootMargin: '0px 0px -12% 0px'
     });
     io.observe(el);
-    // страховка: при быстрой прокрутке или перерисовке наблюдатель мог не сработать
-    const guard = setTimeout(() => setSeen(true), 2500);
-    return () => {
-      io.disconnect();
-      clearTimeout(guard);
-    };
+    return () => io.disconnect();
   }, [now]);
   const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
   return /*#__PURE__*/React.createElement(Tag, _extends({
@@ -968,17 +979,18 @@ const filled = el => el && el.value.trim().length > 1;
 const phoneOk = el => el && el.value.replace(/\D/g, '').length === 11;
 const checked = el => el && el.checked;
 
-/* Поле телефона: «+7» стоит сразу, дальше цифры сами раскладываются
-   по формату — клиент начинал набор с восьмёрки и путался */
+/* Поле телефона: «+7» стоит в поле с самого начала и не стирается —
+   так же, как в форме заявки на других наших сайтах. Клиент начинал
+   набор с восьмёрки и путался, поэтому код страны задан жёстко. */
 const digitsOf = v => {
-  // префикс маски отбрасываем текстом, иначе его семёрка при удалении
-  // возвращалась обратно в номер и поле нельзя было очистить
+  // «+7» — часть маски, а не номер: отбрасываем его текстом, иначе
+  // семёрка префикса попадёт в подсчёт и номер съедет на цифру
   let d = String(v).replace(/^\+7\s*/, '').replace(/[^0-9]/g, '');
   if (d.length === 11 && (d[0] === '7' || d[0] === '8')) d = d.slice(1);
   return d.slice(0, 10);
 };
 const fmtPhone = d => {
-  if (!d) return ''; // пусто — показываем подсказку
+  if (!d) return '+7 '; // цифр нет — в поле остаётся только префикс
   let out = '+7 (' + d.slice(0, 3);
   if (d.length >= 3) out += ') ' + d.slice(3, 6);
   if (d.length >= 6) out += '-' + d.slice(6, 8);
@@ -990,7 +1002,7 @@ const PhoneField = ({
   err,
   onFix
 }) => {
-  const [val, setVal] = useState('');
+  const [val, setVal] = useState('+7 ');
   const change = e => {
     const raw = e.target.value;
     let d = digitsOf(raw);
@@ -999,6 +1011,13 @@ const PhoneField = ({
     if (raw.length < val.length && digitsOf(val).length === d.length) d = d.slice(0, -1);
     setVal(fmtPhone(d));
     onFix();
+  };
+  // Backspace/Delete на пустом номере упёрся бы в «+7» — не даём его стереть
+  const keyDown = e => {
+    if ((e.key === 'Backspace' || e.key === 'Delete') && !digitsOf(e.target.value)) {
+      e.preventDefault();
+      if (val !== '+7 ') setVal('+7 ');
+    }
   };
   // незаполненный хвост маски виден серым, поверх него человек печатает свой номер
   const shown = val || '+7 ';
@@ -1018,12 +1037,10 @@ const PhoneField = ({
     className: err ? 'bad' : '',
     value: val,
     onChange: change,
+    onKeyDown: keyDown,
     onInvalid: e => e.preventDefault(),
-    onFocus: () => {
-      if (!val) setVal('+7 ');
-    },
     onBlur: () => {
-      if (!digitsOf(val)) setVal('');
+      if (!val) setVal('+7 ');
     }
   })), err && /*#__PURE__*/React.createElement("span", {
     className: "err"

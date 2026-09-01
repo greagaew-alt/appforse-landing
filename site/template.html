@@ -595,8 +595,6 @@ p, li, .lead { text-wrap: pretty; }
   .foot .logo { margin: 0 auto; }
   .foot .social { justify-content: center; }
   .foot ul { justify-items: center; }
-  .foot .rule .shell { flex-direction: column; align-items: center; text-align: center; }
-  .foot .rule .by { margin-left: 0; }
 }
 @media (max-width: 520px) {
   /* на узкой колонке крупный заголовок разваливается на пять строк */
@@ -640,6 +638,24 @@ p, li, .lead { text-wrap: pretty; }
 }
 @media (max-width: 900px) {
   .deck, .duo, .quad, .cases, .foot .shell { grid-template-columns: 1fr; }
+  /* нижняя строка подвала — в столбик и по центру уже с планшета; ссылки
+     получают вертикальный отступ, чтобы палец попадал (иначе высота ~19px) */
+  .foot .rule .shell { flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+  .foot .rule .by { margin-left: 0; }
+  .foot .rule a { display: block; padding: 12px 8px; }
+  /* чекбокс согласия: на тач-экранах поле нажатия — 44px, а видимый
+     квадрат остаётся 22px (уходит на ::after); галочку держим поверх */
+  .agree input[type="checkbox"] { width: 44px; height: 44px; margin: -11px; }
+  .agree input[type="checkbox"],
+  .agree input[type="checkbox"]:checked,
+  .magnet .agree input[type="checkbox"],
+  .magnet .agree input[type="checkbox"]:checked { border: 0; background: none; }
+  .agree input[type="checkbox"]::before { z-index: 1; }
+  .agree input[type="checkbox"]::after { content: ''; position: absolute; inset: 11px;
+    border: 1px solid #3A3742; background: #131117; }
+  .agree input[type="checkbox"]:checked::after { background: var(--red); border-color: var(--red); }
+  .magnet .agree input[type="checkbox"]::after { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+  .magnet .agree input[type="checkbox"]:checked::after { background: var(--paper); border-color: var(--paper); }
   /* именованные области заданы точнее, чем «.panel > *», поэтому на узких
      сбрасываем их теми же селекторами — иначе блоки наезжают друг на друга */
   .panel, .case { grid-template-columns: 1fr; grid-template-areas: none; }
@@ -825,11 +841,9 @@ function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, 
     }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { setSeen(true); io.disconnect(); }
-    }, { rootMargin: '0px 0px -8% 0px' });
+    }, { rootMargin: '0px 0px -12% 0px' });
     io.observe(el);
-    // страховка: при быстрой прокрутке или перерисовке наблюдатель мог не сработать
-    const guard = setTimeout(() => setSeen(true), 2500);
-    return () => { io.disconnect(); clearTimeout(guard); };
+    return () => io.disconnect();
   }, [now]);
   const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
   return (
@@ -894,18 +908,19 @@ const filled = el => el && el.value.trim().length > 1;
 const phoneOk = el => el && el.value.replace(/\D/g, '').length === 11;
 const checked = el => el && el.checked;
 
-/* Поле телефона: «+7» стоит сразу, дальше цифры сами раскладываются
-   по формату — клиент начинал набор с восьмёрки и путался */
+/* Поле телефона: «+7» стоит в поле с самого начала и не стирается —
+   так же, как в форме заявки на других наших сайтах. Клиент начинал
+   набор с восьмёрки и путался, поэтому код страны задан жёстко. */
 const digitsOf = v => {
-  // префикс маски отбрасываем текстом, иначе его семёрка при удалении
-  // возвращалась обратно в номер и поле нельзя было очистить
+  // «+7» — часть маски, а не номер: отбрасываем его текстом, иначе
+  // семёрка префикса попадёт в подсчёт и номер съедет на цифру
   let d = String(v).replace(/^\+7\s*/, '').replace(/[^0-9]/g, '');
   if (d.length === 11 && (d[0] === '7' || d[0] === '8')) d = d.slice(1);
   return d.slice(0, 10);
 };
 
 const fmtPhone = d => {
-  if (!d) return '';                       // пусто — показываем подсказку
+  if (!d) return '+7 ';                     // цифр нет — в поле остаётся только префикс
   let out = '+7 (' + d.slice(0, 3);
   if (d.length >= 3) out += ') ' + d.slice(3, 6);
   if (d.length >= 6) out += '-' + d.slice(6, 8);
@@ -916,7 +931,7 @@ const fmtPhone = d => {
 const PHONE_MASK = '+7 (000) 000-00-00';
 
 const PhoneField = ({ err, onFix }) => {
-  const [val, setVal] = useState('');
+  const [val, setVal] = useState('+7 ');
   const change = e => {
     const raw = e.target.value;
     let d = digitsOf(raw);
@@ -925,6 +940,13 @@ const PhoneField = ({ err, onFix }) => {
     if (raw.length < val.length && digitsOf(val).length === d.length) d = d.slice(0, -1);
     setVal(fmtPhone(d));
     onFix();
+  };
+  // Backspace/Delete на пустом номере упёрся бы в «+7» — не даём его стереть
+  const keyDown = e => {
+    if ((e.key === 'Backspace' || e.key === 'Delete') && !digitsOf(e.target.value)) {
+      e.preventDefault();
+      if (val !== '+7 ') setVal('+7 ');
+    }
   };
   // незаполненный хвост маски виден серым, поверх него человек печатает свой номер
   const shown = val || '+7 ';
@@ -935,9 +957,8 @@ const PhoneField = ({ err, onFix }) => {
         <span className="ghost" aria-hidden="true"><i>{shown}</i>{tail}</span>
         <input name="phone" type="tel" inputMode="tel" autoComplete="tel"
                className={err ? 'bad' : ''} value={val} onChange={change}
-               onInvalid={e => e.preventDefault()}
-               onFocus={() => { if (!val) setVal('+7 '); }}
-               onBlur={() => { if (!digitsOf(val)) setVal(''); }} />
+               onKeyDown={keyDown} onInvalid={e => e.preventDefault()}
+               onBlur={() => { if (!val) setVal('+7 '); }} />
       </div>
       {err && <span className="err">{err}</span>}
     </div>

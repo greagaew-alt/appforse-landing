@@ -33,8 +33,11 @@ img { max-width: 100%; display: block; }
 
 .top { border-bottom: 1px solid #1F1D24; }
 .top .shell { display: flex; align-items: center; gap: 24px; padding: 24px 0; }
+/* inline-flex убирает зазор под картинкой и даёт ссылкам нормальную высоту нажатия */
+.top a { display: inline-flex; align-items: center; }
 .top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
-.top a.back { margin-left: auto; padding: 8px 0; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
+.top a.back { margin-left: auto; display: inline-flex; align-items: center; min-height: 44px;
+  padding: 8px 6px; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
   text-decoration: none; transition: color .2s var(--ease); }
 .top a.back:hover { color: var(--paper); }
@@ -74,7 +77,8 @@ a { color: var(--paper); text-underline-offset: 3px; }
 .foot { border-top: 1px solid #1F1D24; }
 .foot .shell { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
   padding: 26px 0; font-size: var(--fs-cap); color: var(--muted-hi); }
-.foot a { color: var(--muted-lo); text-decoration: none; padding: 6px 0; display: inline-block; }
+.foot a { color: var(--muted-lo); text-decoration: none; padding: 12px 8px;
+  display: inline-flex; align-items: center; min-height: 44px; }
 .foot a:hover { color: var(--paper); }
 </style>
 </head>
