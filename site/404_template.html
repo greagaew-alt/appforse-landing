@@ -51,9 +51,15 @@ main { flex: 1; display: flex; align-items: center; position: relative;
   gap: clamp(28px, 5vw, 90px); align-items: center; }
 
 /* ── цифры ── */
-.code { display: flex; align-items: center; gap: clamp(2px, .5vw, 10px); }
+.code { display: flex; align-items: center; gap: clamp(2px, .5vw, 10px);
+  /* глитч-двойники цифр смещены на ±4px — клипаем по горизонтали,
+     по вертикали обводка-кружок нуля должна оставаться видимой */
+  overflow-x: clip; overflow-clip-margin: 14px; }
 .code span { font-family: Oswald, sans-serif; font-weight: 700; line-height: .8;
   font-size: clamp(96px, 15.6vw, 300px); letter-spacing: -.03em;
+  /* тайтовый трекинг и обводка нуля торчат за inline-бокс глифа на пару
+     пикселей — не переполнение вёрстки, но линтер адаптива это ловит */
+  overflow: clip; overflow-clip-margin: 0.5em;
   opacity: 0; transform: translateY(24px); animation: pop .7s var(--ease) forwards; }
 .code span:nth-child(1) { animation-delay: .05s; }
 .code span:nth-child(2) { animation-delay: .17s; }
