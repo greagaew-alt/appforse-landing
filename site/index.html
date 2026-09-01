@@ -149,12 +149,9 @@ p, li, .lead { text-wrap: pretty; }
   box-shadow: 0 8px 22px rgba(0,0,0,.24); }
 
 /* ── появление при прокрутке ── */
-.rise { opacity: 0; transform: translateY(18px); }
+.rise { opacity: 0; transform: translateY(26px); }
 .rise.seen { opacity: 1; transform: none;
-  transition: opacity .85s var(--ease), transform .85s var(--ease); }
-/* страница проявляется целиком, а не выскакивает кусками после сборки скрипта */
-#root { opacity: 0; transition: opacity .4s ease; }
-#root.ready { opacity: 1; }
+  transition: opacity .7s var(--ease), transform .7s var(--ease); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rise, .rise.seen { opacity: 1; transform: none; transition: none; }
@@ -672,8 +669,6 @@ p, li, .lead { text-wrap: pretty; }
 </head>
 <body>
 <div id="root"></div>
-<script>/* если скрипт не отработает, страница всё равно проявится */
-setTimeout(function () { document.getElementById("root").classList.add("ready"); }, 3000);</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
@@ -853,7 +848,6 @@ const Torn = ({
 function Rise({
   as: Tag = 'div',
   delay = 0,
-  now = false,
   className = '',
   style,
   children,
@@ -864,11 +858,9 @@ function Rise({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // первый экран показываем сразу: ждать наблюдателя незачем, а кнопки
-    // из-за этого появлялись последними
-    if (now || !('IntersectionObserver' in window)) {
-      const raf = requestAnimationFrame(() => setSeen(true));
-      return () => cancelAnimationFrame(raf);
+    if (!('IntersectionObserver' in window)) {
+      setSeen(true);
+      return;
     }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
@@ -880,7 +872,7 @@ function Rise({
     });
     io.observe(el);
     return () => io.disconnect();
-  }, [now]);
+  }, []);
   const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
   return /*#__PURE__*/React.createElement(Tag, _extends({
     ref: ref,
@@ -1127,12 +1119,10 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   className: "shell"
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Rise, {
   className: "eyebrow",
-  as: "div",
-  now: true
+  as: "div"
 }, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C"), /*#__PURE__*/React.createElement(Rise, {
   as: "h1",
-  delay: 60,
-  now: true
+  delay: 60
 }, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u043B\u044F\xA0\u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430\xA0\u2014 ", /*#__PURE__*/React.createElement("span", {
   className: "circle"
 }, "\u0437\u0430\xA07\xA0\u0434\u043D\u0435\u0439", /*#__PURE__*/React.createElement("svg", {
@@ -1144,12 +1134,10 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
 })))), /*#__PURE__*/React.createElement(Rise, {
   as: "p",
   className: "lead",
-  delay: 120,
-  now: true
+  delay: 120
 }, "\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430\xA0\u043D\u0430\u0448\u0435\u0439 \u0433\u043E\u0442\u043E\u0432\u043E\u0439 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0435 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C: \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0437\u0430\u043A\u0430\u0437\u044B, \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430, \u043E\u043F\u043B\u0430\u0442\u0430, \u0431\u043E\u043D\u0443\u0441\u044B, push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F \u0438\xA0\u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0430\u044F \u0431\u0430\u0437\u0430\xA0\u2014 \u0431\u0435\u0437\xA0\u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u0441\xA0\u043D\u0443\u043B\u044F."), /*#__PURE__*/React.createElement(Rise, {
   className: "acts",
-  delay: 180,
-  now: true
+  delay: 180
 }, /*#__PURE__*/React.createElement("a", {
   className: "btn",
   href: "#contact"
@@ -1158,12 +1146,10 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   href: "#case"
 }, "\u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C\xA0\u043A\u0435\u0439\u0441\u044B")), /*#__PURE__*/React.createElement(Rise, {
   className: "facts",
-  delay: 240,
-  now: true
+  delay: 240
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "150 000 \u20BD"), /*#__PURE__*/React.createElement("span", null, "\u0437\u0430\u043F\u0443\u0441\u043A \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "7\xA0\u0434\u043D\u0435\u0439"), /*#__PURE__*/React.createElement("span", null, "\u0438\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u0443\u0436\u0435\xA0\u0432\xA0\u0441\u0442\u043E\u0440\u0430\u0445")))), /*#__PURE__*/React.createElement(Rise, {
   className: "shots",
-  delay: 150,
-  now: true
+  delay: 150
 }, /*#__PURE__*/React.createElement(Shot, {
   src: SHOT1,
   alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0432 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
@@ -1572,9 +1558,7 @@ const Foot = () => /*#__PURE__*/React.createElement("footer", {
   rel: "noopener"
 }, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u0441\u0430\u0439\u0442\u0430"))));
 const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
-const rootEl = document.getElementById('root');
-ReactDOM.createRoot(rootEl).render(/*#__PURE__*/React.createElement(App, null));
-requestAnimationFrame(() => rootEl.classList.add('ready'));
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 </script>
 
 <script>

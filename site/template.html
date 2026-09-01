@@ -149,12 +149,9 @@ p, li, .lead { text-wrap: pretty; }
   box-shadow: 0 8px 22px rgba(0,0,0,.24); }
 
 /* ── появление при прокрутке ── */
-.rise { opacity: 0; transform: translateY(18px); }
+.rise { opacity: 0; transform: translateY(26px); }
 .rise.seen { opacity: 1; transform: none;
-  transition: opacity .85s var(--ease), transform .85s var(--ease); }
-/* страница проявляется целиком, а не выскакивает кусками после сборки скрипта */
-#root { opacity: 0; transition: opacity .4s ease; }
-#root.ready { opacity: 1; }
+  transition: opacity .7s var(--ease), transform .7s var(--ease); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rise, .rise.seen { opacity: 1; transform: none; transition: none; }
@@ -672,8 +669,6 @@ p, li, .lead { text-wrap: pretty; }
 </head>
 <body>
 <div id="root"></div>
-<script>/* если скрипт не отработает, страница всё равно проявится */
-setTimeout(function () { document.getElementById("root").classList.add("ready"); }, 3000);</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
@@ -827,24 +822,19 @@ const Torn = ({ d, dir }) => (
 /* Появление при прокрутке.
    Класс держим в состоянии React: если добавлять его напрямую в DOM,
    любая следующая перерисовка родителя затрёт его вместе с className. */
-function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, children, ...rest }) {
+function Rise({ as: Tag = 'div', delay = 0, className = '', style, children, ...rest }) {
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // первый экран показываем сразу: ждать наблюдателя незачем, а кнопки
-    // из-за этого появлялись последними
-    if (now || !('IntersectionObserver' in window)) {
-      const raf = requestAnimationFrame(() => setSeen(true));
-      return () => cancelAnimationFrame(raf);
-    }
+    if (!('IntersectionObserver' in window)) { setSeen(true); return; }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { setSeen(true); io.disconnect(); }
     }, { rootMargin: '0px 0px -12% 0px' });
     io.observe(el);
     return () => io.disconnect();
-  }, [now]);
+  }, []);
   const cls = 'rise' + (seen ? ' seen' : '') + (className ? ' ' + className : '');
   return (
     <Tag ref={ref} className={cls}
@@ -1031,28 +1021,28 @@ const Hero = () => (
   <section className="hero" id="top">
     <div className="shell">
       <div>
-        <Rise className="eyebrow" as="div" now>Готовое приложение под вашим брендом</Rise>
-        <Rise as="h1" delay={60} now>
+        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
+        <Rise as="h1" delay={60}>
           Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
               <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
             </svg>
           </span>
         </Rise>
-        <Rise as="p" className="lead" delay={120} now>
+        <Rise as="p" className="lead" delay={120}>
           Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
           доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
         </Rise>
-        <Rise className="acts" delay={180} now>
+        <Rise className="acts" delay={180}>
           <a className="btn" href="#contact">Обсудить запуск</a>
           <a className="btn ghost" href="#case">Посмотреть кейсы</a>
         </Rise>
-        <Rise className="facts" delay={240} now>
+        <Rise className="facts" delay={240}>
           <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
           <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
         </Rise>
       </div>
-      <Rise className="shots" delay={150} now>
+      <Rise className="shots" delay={150}>
         <Shot src={SHOT1} alt="Каталог в клиентском приложении" cls="a" />
         <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
       </Rise>
@@ -1396,9 +1386,7 @@ const App = () => (
   </React.Fragment>
 );
 
-const rootEl = document.getElementById('root');
-ReactDOM.createRoot(rootEl).render(<App />);
-requestAnimationFrame(() => rootEl.classList.add('ready'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 
 <script>
