@@ -822,10 +822,13 @@ const Torn = ({ d, dir }) => (
 /* Появление при прокрутке.
    Класс держим в состоянии React: если добавлять его напрямую в DOM,
    любая следующая перерисовка родителя затрёт его вместе с className. */
-function Rise({ as: Tag = 'div', delay = 0, className = '', style, children, ...rest }) {
+function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, children, ...rest }) {
   const ref = useRef(null);
-  const [seen, setSeen] = useState(false);
+  // now — блоки первого экрана: видны сразу, без ожидания наблюдателя прокрутки,
+  // иначе кнопки и факты «доезжают» почти секунду после загрузки
+  const [seen, setSeen] = useState(now);
   useEffect(() => {
+    if (now) return;
     const el = ref.current;
     if (!el) return;
     if (!('IntersectionObserver' in window)) { setSeen(true); return; }
@@ -1021,28 +1024,28 @@ const Hero = () => (
   <section className="hero" id="top">
     <div className="shell">
       <div>
-        <Rise className="eyebrow" as="div">Готовое приложение под вашим брендом</Rise>
-        <Rise as="h1" delay={60}>
+        <Rise className="eyebrow" as="div" now>Готовое приложение под вашим брендом</Rise>
+        <Rise as="h1" delay={60} now>
           Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
               <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
             </svg>
           </span>
         </Rise>
-        <Rise as="p" className="lead" delay={120}>
+        <Rise as="p" className="lead" delay={120} now>
           Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
           доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
         </Rise>
-        <Rise className="acts" delay={180}>
+        <Rise className="acts" delay={180} now>
           <a className="btn" href="#contact">Обсудить запуск</a>
           <a className="btn ghost" href="#case">Посмотреть кейсы</a>
         </Rise>
-        <Rise className="facts" delay={240}>
+        <Rise className="facts" delay={240} now>
           <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
           <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
         </Rise>
       </div>
-      <Rise className="shots" delay={150}>
+      <Rise className="shots" delay={150} now>
         <Shot src={SHOT1} alt="Каталог в клиентском приложении" cls="a" />
         <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
       </Rise>

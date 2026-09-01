@@ -848,14 +848,18 @@ const Torn = ({
 function Rise({
   as: Tag = 'div',
   delay = 0,
+  now = false,
   className = '',
   style,
   children,
   ...rest
 }) {
   const ref = useRef(null);
-  const [seen, setSeen] = useState(false);
+  // now — блоки первого экрана: видны сразу, без ожидания наблюдателя прокрутки,
+  // иначе кнопки и факты «доезжают» почти секунду после загрузки
+  const [seen, setSeen] = useState(now);
   useEffect(() => {
+    if (now) return;
     const el = ref.current;
     if (!el) return;
     if (!('IntersectionObserver' in window)) {
@@ -1119,10 +1123,12 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   className: "shell"
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Rise, {
   className: "eyebrow",
-  as: "div"
+  as: "div",
+  now: true
 }, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C"), /*#__PURE__*/React.createElement(Rise, {
   as: "h1",
-  delay: 60
+  delay: 60,
+  now: true
 }, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u043B\u044F\xA0\u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430\xA0\u2014 ", /*#__PURE__*/React.createElement("span", {
   className: "circle"
 }, "\u0437\u0430\xA07\xA0\u0434\u043D\u0435\u0439", /*#__PURE__*/React.createElement("svg", {
@@ -1134,10 +1140,12 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
 })))), /*#__PURE__*/React.createElement(Rise, {
   as: "p",
   className: "lead",
-  delay: 120
+  delay: 120,
+  now: true
 }, "\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430\xA0\u043D\u0430\u0448\u0435\u0439 \u0433\u043E\u0442\u043E\u0432\u043E\u0439 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0435 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C: \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0437\u0430\u043A\u0430\u0437\u044B, \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430, \u043E\u043F\u043B\u0430\u0442\u0430, \u0431\u043E\u043D\u0443\u0441\u044B, push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F \u0438\xA0\u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0430\u044F \u0431\u0430\u0437\u0430\xA0\u2014 \u0431\u0435\u0437\xA0\u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u0441\xA0\u043D\u0443\u043B\u044F."), /*#__PURE__*/React.createElement(Rise, {
   className: "acts",
-  delay: 180
+  delay: 180,
+  now: true
 }, /*#__PURE__*/React.createElement("a", {
   className: "btn",
   href: "#contact"
@@ -1146,10 +1154,12 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   href: "#case"
 }, "\u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C\xA0\u043A\u0435\u0439\u0441\u044B")), /*#__PURE__*/React.createElement(Rise, {
   className: "facts",
-  delay: 240
+  delay: 240,
+  now: true
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "150 000 \u20BD"), /*#__PURE__*/React.createElement("span", null, "\u0437\u0430\u043F\u0443\u0441\u043A \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "7\xA0\u0434\u043D\u0435\u0439"), /*#__PURE__*/React.createElement("span", null, "\u0438\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u0443\u0436\u0435\xA0\u0432\xA0\u0441\u0442\u043E\u0440\u0430\u0445")))), /*#__PURE__*/React.createElement(Rise, {
   className: "shots",
-  delay: 150
+  delay: 150,
+  now: true
 }, /*#__PURE__*/React.createElement(Shot, {
   src: SHOT1,
   alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0432 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
