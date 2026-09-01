@@ -152,9 +152,30 @@ p, li, .lead { text-wrap: pretty; }
 .rise { opacity: 0; transform: translateY(26px); }
 .rise.seen { opacity: 1; transform: none;
   transition: opacity .7s var(--ease), transform .7s var(--ease); }
+
+/* первый экран: сам контейнер виден сразу, а его содержимое выезжает
+   поэтапно сверху вниз — один общий триггер .seen, задержки заданы в CSS,
+   поэтому порядок детерминирован и «кнопки последними» не выпадают рывком */
+.hero .rise.shell { opacity: 1; transform: none; transition: none; }
+.hero .shell > div > *,
+.hero .shell > .shots {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+.hero .shell.seen > div > *,
+.hero .shell.seen > .shots { opacity: 1; transform: none; }
+.hero .shell.seen .eyebrow { transition-delay: 0ms; }
+.hero .shell.seen h1       { transition-delay: 70ms; }
+.hero .shell.seen > .shots { transition-delay: 110ms; }
+.hero .shell.seen .lead    { transition-delay: 140ms; }
+.hero .shell.seen .acts    { transition-delay: 210ms; }
+.hero .shell.seen .facts   { transition-delay: 280ms; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rise, .rise.seen { opacity: 1; transform: none; transition: none; }
+  .hero .shell > div > *, .hero .shell > .shots {
+    opacity: 1; transform: none; transition: none; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
