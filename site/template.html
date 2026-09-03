@@ -518,15 +518,16 @@ p, li, .lead { text-wrap: pretty; }
 .qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
 .qz-card { position: relative; display: flex; flex-direction: column; align-items: flex-start;
-  gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap); color: var(--paper);
-  background: #131117; border: 1px solid #2A2830; padding: clamp(14px, 1.25vw, 20px);
-  cursor: pointer;
+  min-width: 0; gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap);
+  color: var(--paper); background: #131117; border: 1px solid #2A2830;
+  padding: clamp(14px, 1.25vw, 20px); cursor: pointer; overflow-wrap: break-word;
   transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
 .qz-card:hover { background: #1B1920; border-color: #3A3742; }
 .qz-card.on { border-color: var(--red); background: #1B1119; transform: translateY(-2px); }
 .qz-ico { display: grid; place-items: center; width: 30px; height: 30px; color: var(--muted-hi);
   transition: color .25s var(--ease); }
 .qz-ico .lu { width: 22px; height: 22px; }
+.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: break-word; }
 .qz-card.on .qz-ico { color: var(--red-lt); }
 .qz-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
   border-radius: 50%; background: var(--red); color: var(--paper); display: grid; place-items: center; }
@@ -537,9 +538,6 @@ p, li, .lead { text-wrap: pretty; }
   margin-top: clamp(6px, .6vw, 10px); }
 .qz-nav .btn { flex: 1; justify-content: center; }
 .qz-nav .btn[disabled] { opacity: .4; cursor: not-allowed; pointer-events: none; }
-.qz-priv { display: flex; align-items: center; gap: 8px; margin-top: clamp(14px, 1.25vw, 22px);
-  font-size: var(--fs-cap); color: var(--muted-hi); }
-.qz-priv .lu { width: 14px; height: 14px; flex: none; }
 
 .qz-back { margin-top: 4px; background: none; border: 0; padding: 6px 0; font: inherit;
   font-size: var(--fs-cap); letter-spacing: .04em; color: var(--muted-hi); cursor: pointer; }
@@ -873,7 +871,7 @@ const DEV = 'https://t.me/glebbnov';
 
 /* ─────────── содержание ─────────── */
 const NAV = [
-  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Тест', '#quiz'], ['Для кого', '#who'],
+  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'], ['Тест', '#quiz'],
   ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
   ['Контакты', '#contacts'],
 ];
@@ -938,7 +936,7 @@ const QUIZ_Q = [
     ic: ['bag', 'bike', 'laptop', 'factory', 'more-horizontal'] },
   { t: 'Как клиенты обычно покупают?',
     h: 'Так мы поймём, какие функции продаж вам нужны в первую очередь.',
-    a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Через маркетплейсы и агрегаторы', 'Несколько каналов'],
+    a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Маркетплейсы', 'Несколько каналов'],
     ic: ['globe', 'store', 'headphones', 'shopping-cart', 'shuffle'] },
   { t: 'Есть ли у вас повторные покупки?',
     h: 'Покажет, насколько сильно приложение может увеличить повторные продажи.',
@@ -1628,7 +1626,7 @@ const QuizForm = () => {
 
 const Quiz = () => {
   const total = QUIZ_Q.length;
-  const [step, setStep] = useState(0);        // 0 — интро, 1..total — вопросы, total+1 — результат
+  const [step, setStep] = useState(1);        // 1..total — вопросы (без интро), total+1 — результат
   const [dir, setDir] = useState(1);
   const [answers, setAnswers] = useState({});
   const [picked, setPicked] = useState(-1);
@@ -1640,12 +1638,13 @@ const Quiz = () => {
     }
   }, [step]);
 
-  /* карточка с вариантами выше, чем интро с одной кнопкой — без этого
-     после «Начать тест» вопрос обрывался внизу экрана, а докрутить
-     самому не всегда очевидно. Подводим верх карточки под шапку на
-     каждом шаге, кроме сброса на интро. */
+  /* карточка с вариантами выше следующей — без этого при переходе вопрос
+     обрывался внизу экрана, а докрутить самому не всегда очевидно.
+     Подводим верх карточки под шапку на каждом шаге, кроме самого первого
+     рендера — иначе страница дёргалась бы к квизу сразу при загрузке. */
+  const mounted = useRef(false);
   useEffect(() => {
-    if (step === 0) return;
+    if (!mounted.current) { mounted.current = true; return; }
     const el = document.getElementById('qz-box');
     if (!el) return;
     const raf = requestAnimationFrame(() => {
@@ -1670,12 +1669,12 @@ const Quiz = () => {
     setDir(1);
     setStep(s => s + 1);
   };
-  const back = () => { setDir(-1); setStep(s => Math.max(0, s - 1)); };
-  const restart = () => { setAnswers({}); setPicked(-1); setDir(1); setStep(0); };
+  const back = () => { setDir(-1); setStep(s => Math.max(1, s - 1)); };
+  const restart = () => { setAnswers({}); setPicked(-1); setDir(1); setStep(1); };
 
   // текущий вопрос считается пройденным сегментом (вопрос 1 из 5 = 20%,
   // а не 0% — иначе на первом же шаге полоса выглядит пустой)
-  const filledCount = step === 0 ? 0 : Math.min(step, total);
+  const filledCount = Math.min(step, total);
   const pct = Math.round((filledCount / total) * 100);
   const lastAns = answers[total];
   const noteIdx = lastAns ? Math.max(0, QUIZ_Q[total - 1].a.indexOf(lastAns)) : 0;
@@ -1686,38 +1685,24 @@ const Quiz = () => {
         <div className="qz-layout">
           <div className="qz-side">
             <Rise as="span" className="kicker">Экспресс-проверка</Rise>
-            <Rise as="h2" className="wide" delay={40}>Ответьте на 5 вопросов — покажем, какие функции AppForse можно использовать именно в вашем бизнесе</Rise>
+            <Rise as="h2" delay={40}>Подходит ли вашему бизнесу{' '}<br />собственное приложение?</Rise>
             <Rise as="p" className="lead" delay={90}>
-              Самый универсальный способ понять это — не гадать, а проверить за минуту.
+              Ответьте на 5 вопросов — покажем, какие функции AppForse можно использовать именно в вашем бизнесе.
             </Rise>
           </div>
 
           <Rise className="qz" delay={140} id="qz-box">
-            {step > 0 && (
-              <div className="qz-top">
-                <span className="qz-count">
-                  {step <= total ? ('Вопрос ' + step + ' из ' + total) : 'Готово'}
-                </span>
-                <div className="qz-dashes">
-                  {QUIZ_Q.map((_, i) => (
-                    <span key={i} className={'dash' + (i < filledCount ? ' on' : '')} />
-                  ))}
-                </div>
-                <span className="qz-pct">{pct}%</span>
+            <div className="qz-top">
+              <span className="qz-count">
+                {step <= total ? ('Вопрос ' + step + ' из ' + total) : 'Готово'}
+              </span>
+              <div className="qz-dashes">
+                {QUIZ_Q.map((_, i) => (
+                  <span key={i} className={'dash' + (i < filledCount ? ' on' : '')} />
+                ))}
               </div>
-            )}
-
-            {step === 0 && (
-              <div className="qz-panel" key="intro">
-                <p className="qz-intro">
-                  Проверьте, есть ли смысл вашему бизнесу запускать собственное приложение —
-                  5 коротких вопросов, ответ сразу.
-                </p>
-                <button type="button" className="btn" onClick={() => { setDir(1); setStep(1); }}>
-                  Начать тест
-                </button>
-              </div>
-            )}
+              <span className="qz-pct">{pct}%</span>
+            </div>
 
             {step >= 1 && step <= total && (
               <div className={'qz-panel' + (dir < 0 ? ' back' : '')} key={'q' + step}>
@@ -1731,7 +1716,7 @@ const Quiz = () => {
                               className={'qz-card' + (picked === i ? ' on' : '')}
                               onClick={() => choose(i)}>
                         <span className="qz-ico"><Ico name={QUIZ_Q[step - 1].ic[i]} /></span>
-                        <span>{label}</span>
+                        <span className="qz-label">{label}</span>
                         {picked === i && <span className="qz-badge"><Check /></span>}
                       </button>
                     ))}
@@ -1749,12 +1734,11 @@ const Quiz = () => {
                 )}
 
                 <div className="qz-nav">
-                  <button type="button" className="btn ghost" onClick={back}>← Назад</button>
+                  {step > 1 && <button type="button" className="btn ghost" onClick={back}>← Назад</button>}
                   <button type="button" className="btn" disabled={picked === -1} onClick={next}>
                     {step === total ? 'Показать результат →' : 'Далее →'}
                   </button>
                 </div>
-                <p className="qz-priv"><Ico name="lock" />Ваши ответы используются только для расчёта результата</p>
               </div>
             )}
 
@@ -1883,7 +1867,7 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Quiz /><Who /><How /><Case /><Founder />
+    <Top /><Hero /><Why /><What /><Founder /><Who /><Quiz /><How /><Case />
     <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );

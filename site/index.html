@@ -518,15 +518,16 @@ p, li, .lead { text-wrap: pretty; }
 .qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
 .qz-card { position: relative; display: flex; flex-direction: column; align-items: flex-start;
-  gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap); color: var(--paper);
-  background: #131117; border: 1px solid #2A2830; padding: clamp(14px, 1.25vw, 20px);
-  cursor: pointer;
+  min-width: 0; gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap);
+  color: var(--paper); background: #131117; border: 1px solid #2A2830;
+  padding: clamp(14px, 1.25vw, 20px); cursor: pointer; overflow-wrap: break-word;
   transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
 .qz-card:hover { background: #1B1920; border-color: #3A3742; }
 .qz-card.on { border-color: var(--red); background: #1B1119; transform: translateY(-2px); }
 .qz-ico { display: grid; place-items: center; width: 30px; height: 30px; color: var(--muted-hi);
   transition: color .25s var(--ease); }
 .qz-ico .lu { width: 22px; height: 22px; }
+.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: break-word; }
 .qz-card.on .qz-ico { color: var(--red-lt); }
 .qz-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
   border-radius: 50%; background: var(--red); color: var(--paper); display: grid; place-items: center; }
@@ -537,9 +538,6 @@ p, li, .lead { text-wrap: pretty; }
   margin-top: clamp(6px, .6vw, 10px); }
 .qz-nav .btn { flex: 1; justify-content: center; }
 .qz-nav .btn[disabled] { opacity: .4; cursor: not-allowed; pointer-events: none; }
-.qz-priv { display: flex; align-items: center; gap: 8px; margin-top: clamp(14px, 1.25vw, 22px);
-  font-size: var(--fs-cap); color: var(--muted-hi); }
-.qz-priv .lu { width: 14px; height: 14px; flex: none; }
 
 .qz-back { margin-top: 4px; background: none; border: 0; padding: 6px 0; font: inherit;
   font-size: var(--fs-cap); letter-spacing: .04em; color: var(--muted-hi); cursor: pointer; }
@@ -874,7 +872,7 @@ const VK = 'https://vk.com/appforse';
 const DEV = 'https://t.me/glebbnov';
 
 /* ─────────── содержание ─────────── */
-const NAV = [['Зачем приложение', '#why'], ['Возможности', '#what'], ['Тест', '#quiz'], ['Для кого', '#who'], ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'], ['Контакты', '#contacts']];
+const NAV = [['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'], ['Тест', '#quiz'], ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'], ['Контакты', '#contacts']];
 const WHY_CARDS = [{
   t: 'Повторные продажи',
   d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.'
@@ -932,7 +930,7 @@ const QUIZ_Q = [{
 }, {
   t: 'Как клиенты обычно покупают?',
   h: 'Так мы поймём, какие функции продаж вам нужны в первую очередь.',
-  a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Через маркетплейсы и агрегаторы', 'Несколько каналов'],
+  a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Маркетплейсы', 'Несколько каналов'],
   ic: ['globe', 'store', 'headphones', 'shopping-cart', 'shuffle']
 }, {
   t: 'Есть ли у вас повторные покупки?',
@@ -1852,7 +1850,7 @@ const QuizForm = () => {
 };
 const Quiz = () => {
   const total = QUIZ_Q.length;
-  const [step, setStep] = useState(0); // 0 — интро, 1..total — вопросы, total+1 — результат
+  const [step, setStep] = useState(1); // 1..total — вопросы (без интро), total+1 — результат
   const [dir, setDir] = useState(1);
   const [answers, setAnswers] = useState({});
   const [picked, setPicked] = useState(-1);
@@ -1863,12 +1861,16 @@ const Quiz = () => {
     }
   }, [step]);
 
-  /* карточка с вариантами выше, чем интро с одной кнопкой — без этого
-     после «Начать тест» вопрос обрывался внизу экрана, а докрутить
-     самому не всегда очевидно. Подводим верх карточки под шапку на
-     каждом шаге, кроме сброса на интро. */
+  /* карточка с вариантами выше следующей — без этого при переходе вопрос
+     обрывался внизу экрана, а докрутить самому не всегда очевидно.
+     Подводим верх карточки под шапку на каждом шаге, кроме самого первого
+     рендера — иначе страница дёргалась бы к квизу сразу при загрузке. */
+  const mounted = useRef(false);
   useEffect(() => {
-    if (step === 0) return;
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
     const el = document.getElementById('qz-box');
     if (!el) return;
     const raf = requestAnimationFrame(() => {
@@ -1899,18 +1901,18 @@ const Quiz = () => {
   };
   const back = () => {
     setDir(-1);
-    setStep(s => Math.max(0, s - 1));
+    setStep(s => Math.max(1, s - 1));
   };
   const restart = () => {
     setAnswers({});
     setPicked(-1);
     setDir(1);
-    setStep(0);
+    setStep(1);
   };
 
   // текущий вопрос считается пройденным сегментом (вопрос 1 из 5 = 20%,
   // а не 0% — иначе на первом же шаге полоса выглядит пустой)
-  const filledCount = step === 0 ? 0 : Math.min(step, total);
+  const filledCount = Math.min(step, total);
   const pct = Math.round(filledCount / total * 100);
   const lastAns = answers[total];
   const noteIdx = lastAns ? Math.max(0, QUIZ_Q[total - 1].a.indexOf(lastAns)) : 0;
@@ -1928,17 +1930,16 @@ const Quiz = () => {
     className: "kicker"
   }, "\u042D\u043A\u0441\u043F\u0440\u0435\u0441\u0441-\u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0430"), /*#__PURE__*/React.createElement(Rise, {
     as: "h2",
-    className: "wide",
     delay: 40
-  }, "\u041E\u0442\u0432\u0435\u0442\u044C\u0442\u0435 \u043D\u0430\xA05\xA0\u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432\xA0\u2014 \u043F\u043E\u043A\u0430\u0436\u0435\u043C, \u043A\u0430\u043A\u0438\u0435 \u0444\u0443\u043D\u043A\u0446\u0438\u0438 AppForse \u043C\u043E\u0436\u043D\u043E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0438\u043C\u0435\u043D\u043D\u043E \u0432\xA0\u0432\u0430\u0448\u0435\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0435"), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u041F\u043E\u0434\u0445\u043E\u0434\u0438\u0442 \u043B\u0438 \u0432\u0430\u0448\u0435\u043C\u0443 \u0431\u0438\u0437\u043D\u0435\u0441\u0443", ' ', /*#__PURE__*/React.createElement("br", null), "\u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435?"), /*#__PURE__*/React.createElement(Rise, {
     as: "p",
     className: "lead",
     delay: 90
-  }, "\u0421\u0430\u043C\u044B\u0439 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0430\u043B\u044C\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431 \u043F\u043E\u043D\u044F\u0442\u044C \u044D\u0442\u043E\xA0\u2014 \u043D\u0435\xA0\u0433\u0430\u0434\u0430\u0442\u044C, \u0430\xA0\u043F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0437\u0430\xA0\u043C\u0438\u043D\u0443\u0442\u0443.")), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u041E\u0442\u0432\u0435\u0442\u044C\u0442\u0435 \u043D\u0430\xA05\xA0\u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432\xA0\u2014 \u043F\u043E\u043A\u0430\u0436\u0435\u043C, \u043A\u0430\u043A\u0438\u0435 \u0444\u0443\u043D\u043A\u0446\u0438\u0438 AppForse \u043C\u043E\u0436\u043D\u043E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0438\u043C\u0435\u043D\u043D\u043E \u0432\xA0\u0432\u0430\u0448\u0435\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0435.")), /*#__PURE__*/React.createElement(Rise, {
     className: "qz",
     delay: 140,
     id: "qz-box"
-  }, step > 0 && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     className: "qz-top"
   }, /*#__PURE__*/React.createElement("span", {
     className: "qz-count"
@@ -1949,19 +1950,7 @@ const Quiz = () => {
     className: 'dash' + (i < filledCount ? ' on' : '')
   }))), /*#__PURE__*/React.createElement("span", {
     className: "qz-pct"
-  }, pct, "%")), step === 0 && /*#__PURE__*/React.createElement("div", {
-    className: "qz-panel",
-    key: "intro"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "qz-intro"
-  }, "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435, \u0435\u0441\u0442\u044C\xA0\u043B\u0438\xA0\u0441\u043C\u044B\u0441\u043B \u0432\u0430\u0448\u0435\u043C\u0443 \u0431\u0438\u0437\u043D\u0435\u0441\u0443 \u0437\u0430\u043F\u0443\u0441\u043A\u0430\u0442\u044C \u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u2014 5\xA0\u043A\u043E\u0440\u043E\u0442\u043A\u0438\u0445 \u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432, \u043E\u0442\u0432\u0435\u0442 \u0441\u0440\u0430\u0437\u0443."), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "btn",
-    onClick: () => {
-      setDir(1);
-      setStep(1);
-    }
-  }, "\u041D\u0430\u0447\u0430\u0442\u044C \u0442\u0435\u0441\u0442")), step >= 1 && step <= total && /*#__PURE__*/React.createElement("div", {
+  }, pct, "%")), step >= 1 && step <= total && /*#__PURE__*/React.createElement("div", {
     className: 'qz-panel' + (dir < 0 ? ' back' : ''),
     key: 'q' + step
   }, /*#__PURE__*/React.createElement("h3", null, QUIZ_Q[step - 1].t), QUIZ_Q[step - 1].h && /*#__PURE__*/React.createElement("p", {
@@ -1977,7 +1966,9 @@ const Quiz = () => {
     className: "qz-ico"
   }, /*#__PURE__*/React.createElement(Ico, {
     name: QUIZ_Q[step - 1].ic[i]
-  })), /*#__PURE__*/React.createElement("span", null, label), picked === i && /*#__PURE__*/React.createElement("span", {
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "qz-label"
+  }, label), picked === i && /*#__PURE__*/React.createElement("span", {
     className: "qz-badge"
   }, /*#__PURE__*/React.createElement(Check, null))))) : /*#__PURE__*/React.createElement("div", {
     className: "qz-opts"
@@ -1990,7 +1981,7 @@ const Quiz = () => {
     className: "qz-dot"
   }), label))), /*#__PURE__*/React.createElement("div", {
     className: "qz-nav"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, step > 1 && /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "btn ghost",
     onClick: back
@@ -1999,11 +1990,7 @@ const Quiz = () => {
     className: "btn",
     disabled: picked === -1,
     onClick: next
-  }, step === total ? 'Показать результат →' : 'Далее →')), /*#__PURE__*/React.createElement("p", {
-    className: "qz-priv"
-  }, /*#__PURE__*/React.createElement(Ico, {
-    name: "lock"
-  }), "\u0412\u0430\u0448\u0438 \u043E\u0442\u0432\u0435\u0442\u044B \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u044E\u0442\u0441\u044F \u0442\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F\xA0\u0440\u0430\u0441\u0447\u0451\u0442\u0430 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u0430")), step === total + 1 && /*#__PURE__*/React.createElement("div", {
+  }, step === total ? 'Показать результат →' : 'Далее →'))), step === total + 1 && /*#__PURE__*/React.createElement("div", {
     className: 'qz-panel qz-result' + (dir < 0 ? ' back' : ''),
     key: "result"
   }, /*#__PURE__*/React.createElement("h3", null, "\u041F\u043E\u0445\u043E\u0436\u0435, \u044D\u0442\u043E\xA0\u0432\u0430\u0448 \u0441\u043B\u0443\u0447\u0430\u0439"), /*#__PURE__*/React.createElement("p", {
@@ -2143,7 +2130,7 @@ const Foot = () => /*#__PURE__*/React.createElement("footer", {
   target: "_blank",
   rel: "noopener"
 }, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\u0430\u0439\u0442\u0430"))));
-const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Quiz, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
+const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(Quiz, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 </script>
 
