@@ -466,13 +466,23 @@ p, li, .lead { text-wrap: pretty; }
   color: var(--muted-lo); }
 
 /* ── 08b. Экспресс-тест ── */
-.qz { position: relative; overflow: hidden; max-width: 720px;
+.qz-layout { display: grid; grid-template-columns: minmax(260px, .85fr) minmax(340px, 1.15fr);
+  gap: clamp(28px, 3.75vw, 72px); align-items: start; }
+.qz-side { padding-top: clamp(4px, .6vw, 12px); }
+.qz { position: relative; overflow: hidden;
   background: var(--ink); border: 1px solid #1F1D24;
   padding: clamp(24px, 2.2vw, 44px); margin-top: clamp(28px, 2.4vw, 46px); }
-.qz-rail-wrap { position: relative; height: 2px; background: #232128;
-  margin-bottom: clamp(24px, 2.1vw, 40px); }
-.qz-rail { position: absolute; inset: 0; background: var(--red); transform-origin: left center;
-  transform: scaleX(0); transition: transform .5s var(--ease); }
+
+/* строка прогресса: подпись слева, сегменты по центру, процент справа —
+   вместо одной сплошной полосы, которая не показывала номер вопроса */
+.qz-top { display: flex; align-items: center; gap: clamp(12px, 1.25vw, 24px);
+  margin-bottom: clamp(20px, 1.9vw, 32px); }
+.qz-top .qz-count { margin: 0; flex: none; }
+.qz-dashes { display: flex; gap: 6px; flex: 1; }
+.qz-dashes .dash { flex: 1; height: 4px; background: #232128; transition: background .3s var(--ease); }
+.qz-dashes .dash.on { background: var(--red); }
+.qz-pct { flex: none; font-family: Oswald, sans-serif; font-size: var(--fs-cap); color: var(--muted-hi); }
+
 /* каждый шаг — свой key, поэтому вход анимируется заново при каждой смене экрана */
 .qz-panel { animation: qz-in .4s var(--ease); }
 .qz-panel.back { animation: qz-in-back .4s var(--ease); }
@@ -485,7 +495,10 @@ p, li, .lead { text-wrap: pretty; }
   margin-bottom: clamp(10px, .94vw, 18px); }
 .qz-intro { font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--muted-lo);
   max-width: 52ch; margin-bottom: clamp(20px, 1.9vw, 32px); }
-.qz-panel h3 { max-width: 36ch; }
+.qz-panel h3 { max-width: 40ch; }
+.qz-help { margin-top: 6px; font-size: var(--fs-cap); color: var(--muted-hi); }
+
+/* список без иконок — «да / иногда / нет» и подобные ответы */
 .qz-opts { display: grid; gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
 .qz-opt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
   font: inherit; font-size: var(--fs-body); color: var(--paper);
@@ -500,6 +513,34 @@ p, li, .lead { text-wrap: pretty; }
 .qz-opt.on .qz-dot { border-color: var(--red); background: var(--red); }
 .qz-opt.on .qz-dot::after { content: ''; position: absolute; inset: 4px;
   border-radius: 50%; background: var(--paper); }
+
+/* сетка с иконками — «чем занимаетесь / как покупают / что важнее» */
+.qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
+.qz-card { position: relative; display: flex; flex-direction: column; align-items: flex-start;
+  gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap); color: var(--paper);
+  background: #131117; border: 1px solid #2A2830; padding: clamp(14px, 1.25vw, 20px);
+  cursor: pointer;
+  transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
+.qz-card:hover { background: #1B1920; border-color: #3A3742; }
+.qz-card.on { border-color: var(--red); background: #1B1119; transform: translateY(-2px); }
+.qz-ico { display: grid; place-items: center; width: 30px; height: 30px; color: var(--muted-hi);
+  transition: color .25s var(--ease); }
+.qz-ico .lu { width: 22px; height: 22px; }
+.qz-card.on .qz-ico { color: var(--red-lt); }
+.qz-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
+  border-radius: 50%; background: var(--red); color: var(--paper); display: grid; place-items: center; }
+.qz-badge svg { width: 11px; height: 11px; }
+
+/* назад / далее */
+.qz-nav { display: flex; align-items: center; gap: clamp(12px, 1.15vw, 20px);
+  margin-top: clamp(6px, .6vw, 10px); }
+.qz-nav .btn { flex: 1; justify-content: center; }
+.qz-nav .btn[disabled] { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.qz-priv { display: flex; align-items: center; gap: 8px; margin-top: clamp(14px, 1.25vw, 22px);
+  font-size: var(--fs-cap); color: var(--muted-hi); }
+.qz-priv .lu { width: 14px; height: 14px; flex: none; }
+
 .qz-back { margin-top: 4px; background: none; border: 0; padding: 6px 0; font: inherit;
   font-size: var(--fs-cap); letter-spacing: .04em; color: var(--muted-hi); cursor: pointer; }
 .qz-back:hover { color: var(--paper); }
@@ -510,7 +551,7 @@ p, li, .lead { text-wrap: pretty; }
 .qz-recap b { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   letter-spacing: .1em; text-transform: uppercase; color: var(--red-lt); margin-bottom: 8px; }
 .qz-recap p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.qz-form { max-width: 380px; }
+.qz-form { max-width: 420px; }
 .qz-form .btn { width: 100%; }
 
 /* ── 09. Вопросы ── */
@@ -651,6 +692,7 @@ p, li, .lead { text-wrap: pretty; }
 .magnet .form input:focus { border-color: var(--paper); }
 .magnet .form .note { color: rgba(255,255,255,.72); }
 @media (max-width: 900px) { .magnet { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .qz-layout { grid-template-columns: 1fr; } }
 
 /* ── согласие на обработку данных ── */
 .agree { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
@@ -884,19 +926,27 @@ const FAQ = [['У меня уже есть сайт и другие кана
    входа проигрывается сама, без ручного управления transition-состояниями. */
 const QUIZ_Q = [{
   t: 'Чем занимается ваш бизнес?',
-  a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство и продажи', 'Другое']
+  h: 'Это поможет подобрать подходящий сценарий приложения.',
+  a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство и продажи', 'Другое'],
+  ic: ['bag', 'bike', 'laptop', 'factory', 'more-horizontal']
 }, {
   t: 'Как клиенты обычно покупают?',
-  a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Через маркетплейсы и агрегаторы', 'Несколько каналов']
+  h: 'Так мы поймём, какие функции продаж вам нужны в первую очередь.',
+  a: ['Через сайт', 'В магазине', 'Через менеджеров', 'Через маркетплейсы и агрегаторы', 'Несколько каналов'],
+  ic: ['globe', 'store', 'headphones', 'shopping-cart', 'shuffle']
 }, {
   t: 'Есть ли у вас повторные покупки?',
+  h: 'Покажет, насколько сильно приложение может увеличить повторные продажи.',
   a: ['Да, покупают регулярно', 'Иногда', 'Практически нет']
 }, {
   t: 'Есть ли клиентская база?',
+  h: 'От этого зависит, с чего начнётся работа с бонусами и рассылками.',
   a: ['Да, большая', 'Есть, но небольшая', 'Нет, не собираем']
 }, {
   t: 'Что сейчас важнее всего?',
-  a: ['Увеличить повторные продажи', 'Вернуть клиентов', 'Снизить нагрузку на менеджеров', 'Создать собственный канал продаж']
+  h: 'Определит, какую пользу приложения показать вам в первую очередь.',
+  a: ['Увеличить повторные продажи', 'Вернуть клиентов', 'Снизить нагрузку на менеджеров', 'Создать собственный канал продаж'],
+  ic: ['trending-up', 'user-check', 'headphones', 'smartphone']
 }];
 /* короткая расшифровка под финальным ответом — по последнему вопросу,
    текстом уже проверенным на сайте (Zачем приложение / Для кого) */
@@ -908,7 +958,95 @@ const PATHS = {
   package: ['m7.5 4.27 9 5.15', 'M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z', 'm3.3 7 8.7 5 8.7-5', 'M12 22V12'],
   store: ['m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7', 'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8', 'M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4', 'M2 7h20'],
   bowl: ['M12 2v2', 'M2 12h20', 'M4 12a8 8 0 0 0 16 0', 'M6 20h12', 'M15.5 4.5c1 1 1 2.5 0 3.5'],
-  bag: ['M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z', 'M3 6h18', 'M16 10a4 4 0 0 1-8 0']
+  bag: ['M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z', 'M3 6h18', 'M16 10a4 4 0 0 1-8 0'],
+  laptop: ['M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z', 'M20.054 15.987H3.946'],
+  factory: ['M12 16h.01', 'M16 16h.01', 'M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z', 'M8 16h.01'],
+  headphones: ['M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3'],
+  shuffle: ['m18 14 4 4-4 4', 'm18 2 4 4-4 4', 'M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22', 'M2 6h1.972a4 4 0 0 1 3.6 2.2', 'M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45'],
+  'trending-up': ['M16 7h6v6', 'm22 7-8.5 8.5-5-5L2 17']
+};
+/* иконки с составными фигурами (круг, прямоугольник) — обычный PATHS/Ico тянет
+   только <path>, эти же четыре Lucide-иконки без круга не собрать */
+const SHAPES = {
+  bike: [['circle', {
+    cx: 18.5,
+    cy: 17.5,
+    r: 3.5
+  }], ['circle', {
+    cx: 5.5,
+    cy: 17.5,
+    r: 3.5
+  }], ['circle', {
+    cx: 15,
+    cy: 5,
+    r: 1
+  }], ['path', {
+    d: 'M12 17.5V14l-3-3 4-3 2 3h2'
+  }]],
+  globe: [['circle', {
+    cx: 12,
+    cy: 12,
+    r: 10
+  }], ['path', {
+    d: 'M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20'
+  }], ['path', {
+    d: 'M2 12h20'
+  }]],
+  'more-horizontal': [['circle', {
+    cx: 12,
+    cy: 12,
+    r: 1
+  }], ['circle', {
+    cx: 19,
+    cy: 12,
+    r: 1
+  }], ['circle', {
+    cx: 5,
+    cy: 12,
+    r: 1
+  }]],
+  'shopping-cart': [['path', {
+    d: 'm2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18'
+  }], ['path', {
+    d: 'M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25'
+  }], ['circle', {
+    cx: 18,
+    cy: 20,
+    r: 2
+  }], ['circle', {
+    cx: 8,
+    cy: 20,
+    r: 2
+  }]],
+  smartphone: [['rect', {
+    x: 5,
+    y: 2,
+    width: 14,
+    height: 20,
+    rx: 2,
+    ry: 2
+  }], ['path', {
+    d: 'M12 18h.01'
+  }]],
+  'user-check': [['path', {
+    d: 'm16 11 2 2 4-4'
+  }], ['path', {
+    d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'
+  }], ['circle', {
+    cx: 9,
+    cy: 7,
+    r: 4
+  }]],
+  lock: [['rect', {
+    width: 18,
+    height: 11,
+    x: 3,
+    y: 11,
+    rx: 2,
+    ry: 2
+  }], ['path', {
+    d: 'M7 11V7a5 5 0 0 1 10 0v4'
+  }]]
 };
 const Ico = ({
   name
@@ -921,10 +1059,16 @@ const Ico = ({
   strokeLinecap: "round",
   strokeLinejoin: "round",
   "aria-hidden": "true"
-}, PATHS[name].map((d, i) => /*#__PURE__*/React.createElement("path", {
+}, PATHS[name] ? PATHS[name].map((d, i) => /*#__PURE__*/React.createElement("path", {
   d: d,
   key: i
-})));
+})) : SHAPES[name].map(([tag, at], i) => tag === 'circle' ? /*#__PURE__*/React.createElement("circle", _extends({
+  key: i
+}, at)) : tag === 'rect' ? /*#__PURE__*/React.createElement("rect", _extends({
+  key: i
+}, at)) : /*#__PURE__*/React.createElement("path", _extends({
+  key: i
+}, at))));
 
 /* Теги: подсветка-пилюля переезжает от тега к тегу.
    Приём из «Animated Tabs» (buildui.com) и Smooth Tabs (motion.dev): в Motion это
@@ -1719,7 +1863,7 @@ const Quiz = () => {
     }
   }, [step]);
 
-  /* карточка с 5 вариантами выше, чем интро с одной кнопкой — без этого
+  /* карточка с вариантами выше, чем интро с одной кнопкой — без этого
      после «Начать тест» вопрос обрывался внизу экрана, а докрутить
      самому не всегда очевидно. Подводим верх карточки под шапку на
      каждом шаге, кроме сброса на интро. */
@@ -1741,14 +1885,17 @@ const Quiz = () => {
     });
     return () => cancelAnimationFrame(raf);
   }, [step]);
-  const choose = i => {
-    if (picked !== -1) return;
-    setPicked(i);
+
+  /* выбор варианта только подсвечивает карточку — переход делает «Далее»,
+     раньше клик сам вёл на следующий шаг через паузу */
+  const choose = i => setPicked(i);
+  const next = () => {
+    if (picked === -1) return;
     setAnswers(prev => Object.assign({}, prev, {
-      [step]: QUIZ_Q[step - 1].a[i]
+      [step]: QUIZ_Q[step - 1].a[picked]
     }));
     setDir(1);
-    setTimeout(() => setStep(s => s + 1), 320);
+    setStep(s => s + 1);
   };
   const back = () => {
     setDir(-1);
@@ -1760,7 +1907,11 @@ const Quiz = () => {
     setDir(1);
     setStep(0);
   };
-  const pct = Math.min(Math.max(step - 1, 0), total) / total;
+
+  // текущий вопрос считается пройденным сегментом (вопрос 1 из 5 = 20%,
+  // а не 0% — иначе на первом же шаге полоса выглядит пустой)
+  const filledCount = step === 0 ? 0 : Math.min(step, total);
+  const pct = Math.round(filledCount / total * 100);
   const lastAns = answers[total];
   const noteIdx = lastAns ? Math.max(0, QUIZ_Q[total - 1].a.indexOf(lastAns)) : 0;
   return /*#__PURE__*/React.createElement("section", {
@@ -1768,6 +1919,10 @@ const Quiz = () => {
     id: "quiz"
   }, /*#__PURE__*/React.createElement("div", {
     className: "shell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "qz-layout"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "qz-side"
   }, /*#__PURE__*/React.createElement(Rise, {
     as: "span",
     className: "kicker"
@@ -1779,18 +1934,22 @@ const Quiz = () => {
     as: "p",
     className: "lead",
     delay: 90
-  }, "\u0421\u0430\u043C\u044B\u0439 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0430\u043B\u044C\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431 \u043F\u043E\u043D\u044F\u0442\u044C \u044D\u0442\u043E\xA0\u2014 \u043D\u0435\xA0\u0433\u0430\u0434\u0430\u0442\u044C, \u0430\xA0\u043F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0437\u0430\xA0\u043C\u0438\u043D\u0443\u0442\u0443."), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u0421\u0430\u043C\u044B\u0439 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0430\u043B\u044C\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431 \u043F\u043E\u043D\u044F\u0442\u044C \u044D\u0442\u043E\xA0\u2014 \u043D\u0435\xA0\u0433\u0430\u0434\u0430\u0442\u044C, \u0430\xA0\u043F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0437\u0430\xA0\u043C\u0438\u043D\u0443\u0442\u0443.")), /*#__PURE__*/React.createElement(Rise, {
     className: "qz",
     delay: 140,
     id: "qz-box"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "qz-rail-wrap"
+  }, step > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "qz-top"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "qz-rail",
-    style: {
-      transform: 'scaleX(' + pct + ')'
-    }
-  })), step === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "qz-count"
+  }, step <= total ? 'Вопрос ' + step + ' из ' + total : 'Готово'), /*#__PURE__*/React.createElement("div", {
+    className: "qz-dashes"
+  }, QUIZ_Q.map((_, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: 'dash' + (i < filledCount ? ' on' : '')
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "qz-pct"
+  }, pct, "%")), step === 0 && /*#__PURE__*/React.createElement("div", {
     className: "qz-panel",
     key: "intro"
   }, /*#__PURE__*/React.createElement("p", {
@@ -1805,9 +1964,22 @@ const Quiz = () => {
   }, "\u041D\u0430\u0447\u0430\u0442\u044C \u0442\u0435\u0441\u0442")), step >= 1 && step <= total && /*#__PURE__*/React.createElement("div", {
     className: 'qz-panel' + (dir < 0 ? ' back' : ''),
     key: 'q' + step
+  }, /*#__PURE__*/React.createElement("h3", null, QUIZ_Q[step - 1].t), QUIZ_Q[step - 1].h && /*#__PURE__*/React.createElement("p", {
+    className: "qz-help"
+  }, QUIZ_Q[step - 1].h), QUIZ_Q[step - 1].ic ? /*#__PURE__*/React.createElement("div", {
+    className: "qz-grid"
+  }, QUIZ_Q[step - 1].a.map((label, i) => /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    key: label,
+    className: 'qz-card' + (picked === i ? ' on' : ''),
+    onClick: () => choose(i)
   }, /*#__PURE__*/React.createElement("span", {
-    className: "qz-count"
-  }, "\u0412\u043E\u043F\u0440\u043E\u0441 ", step, " \u0438\u0437 ", total), /*#__PURE__*/React.createElement("h3", null, QUIZ_Q[step - 1].t), /*#__PURE__*/React.createElement("div", {
+    className: "qz-ico"
+  }, /*#__PURE__*/React.createElement(Ico, {
+    name: QUIZ_Q[step - 1].ic[i]
+  })), /*#__PURE__*/React.createElement("span", null, label), picked === i && /*#__PURE__*/React.createElement("span", {
+    className: "qz-badge"
+  }, /*#__PURE__*/React.createElement(Check, null))))) : /*#__PURE__*/React.createElement("div", {
     className: "qz-opts"
   }, QUIZ_Q[step - 1].a.map((label, i) => /*#__PURE__*/React.createElement("button", {
     type: "button",
@@ -1816,16 +1988,25 @@ const Quiz = () => {
     onClick: () => choose(i)
   }, /*#__PURE__*/React.createElement("span", {
     className: "qz-dot"
-  }), label))), step > 1 && /*#__PURE__*/React.createElement("button", {
+  }), label))), /*#__PURE__*/React.createElement("div", {
+    className: "qz-nav"
+  }, /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: "qz-back",
+    className: "btn ghost",
     onClick: back
-  }, "\u2190\xA0\u041D\u0430\u0437\u0430\u0434")), step === total + 1 && /*#__PURE__*/React.createElement("div", {
+  }, "\u2190\xA0\u041D\u0430\u0437\u0430\u0434"), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "btn",
+    disabled: picked === -1,
+    onClick: next
+  }, step === total ? 'Показать результат →' : 'Далее →')), /*#__PURE__*/React.createElement("p", {
+    className: "qz-priv"
+  }, /*#__PURE__*/React.createElement(Ico, {
+    name: "lock"
+  }), "\u0412\u0430\u0448\u0438 \u043E\u0442\u0432\u0435\u0442\u044B \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u044E\u0442\u0441\u044F \u0442\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F\xA0\u0440\u0430\u0441\u0447\u0451\u0442\u0430 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u0430")), step === total + 1 && /*#__PURE__*/React.createElement("div", {
     className: 'qz-panel qz-result' + (dir < 0 ? ' back' : ''),
     key: "result"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "qz-count"
-  }, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442"), /*#__PURE__*/React.createElement("h3", null, "\u041F\u043E\u0445\u043E\u0436\u0435, \u044D\u0442\u043E\xA0\u0432\u0430\u0448 \u0441\u043B\u0443\u0447\u0430\u0439"), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("h3", null, "\u041F\u043E\u0445\u043E\u0436\u0435, \u044D\u0442\u043E\xA0\u0432\u0430\u0448 \u0441\u043B\u0443\u0447\u0430\u0439"), /*#__PURE__*/React.createElement("p", {
     className: "lead"
   }, "\u041F\u043E\xA0\u0432\u0430\u0448\u0438\u043C \u043E\u0442\u0432\u0435\u0442\u0430\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u043E\u043B\u0435\u0437\u043D\u044B\u043C \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u043C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u0439 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0431\u0430\u0437\u043E\u0439."), /*#__PURE__*/React.createElement("div", {
     className: "qz-recap"
@@ -1833,7 +2014,7 @@ const Quiz = () => {
     type: "button",
     className: "qz-back",
     onClick: restart
-  }, "\u041F\u0440\u043E\u0439\u0442\u0438\xA0\u0435\u0449\u0451\xA0\u0440\u0430\u0437")))));
+  }, "\u041F\u0440\u043E\u0439\u0442\u0438\xA0\u0435\u0449\u0451\xA0\u0440\u0430\u0437"))))));
 };
 const Faq = () => {
   const [open, setOpen] = useState(0);
