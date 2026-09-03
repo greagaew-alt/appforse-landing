@@ -374,6 +374,64 @@ p, li, .lead { text-wrap: pretty; }
 .case .pic img { width: 100%; }
 .case:nth-child(2) .pic { border-color: var(--red); }
 
+/* ── Слово основателя ── */
+.fv { display: grid; grid-template-columns: clamp(240px, 24vw, 380px) minmax(0, 1fr);
+  grid-template-areas: "media head" "media body";
+  column-gap: clamp(24px, 3.1vw, 60px); align-content: center; }
+.fv-media { grid-area: media; align-self: center; }
+.fv-head { grid-area: head; align-self: end; }
+.fv-body { grid-area: body; align-self: start;
+  padding-top: clamp(16px, 1.35vw, 26px); }
+.kicker { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--red-lt);
+  margin-bottom: clamp(10px, .94vw, 18px); }
+
+/* обложка + кнопка: пока не нажали, видео на странице нет вовсе.
+   Пропорция задана контейнеру, а не картинке: у img заданы HTML-атрибуты
+   width/height (для decode без прыжка вёрстки), и вместе с CSS aspect-ratio
+   на самой картинке браузер игнорировал пропорцию и растягивал её на всю
+   естественную высоту — на мобильном видео съедало экран целиком. */
+.fv-open { display: block; position: relative; width: 100%; aspect-ratio: 9 / 16;
+  padding: 0; overflow: hidden;
+  border: 3px solid var(--paper); background: none; cursor: pointer;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
+.fv-open:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.4); }
+.fv-open img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fv-open::after { content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(14,12,16,.1), rgba(14,12,16,.5)); }
+.fv-vid { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover;
+  border: 3px solid var(--paper); background: #000; }
+.fv-play { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; }
+.fv-play > span { position: relative; display: grid; place-items: center;
+  width: clamp(54px, 4.7vw, 86px); aspect-ratio: 1; border-radius: 50%;
+  background: var(--red); color: var(--paper); padding-left: 4px;
+  transition: transform .35s var(--ease), background .35s var(--ease); }
+.fv-play > span::before { content: ''; position: absolute; inset: -2px; border-radius: 50%;
+  border: 2px solid var(--red); animation: fv-pulse 2.6s var(--ease) infinite; }
+@keyframes fv-pulse { 0% { transform: scale(1); opacity: .75 }
+  70%, 100% { transform: scale(1.6); opacity: 0 } }
+.fv-open:hover .fv-play > span { transform: scale(1.08); background: var(--red-lt); }
+.fv-time { position: absolute; right: 10px; bottom: 10px; z-index: 1; line-height: 1;
+  font-family: Oswald, sans-serif; font-size: var(--fs-cap); letter-spacing: .08em;
+  color: var(--paper); background: rgba(14,12,16,.72); padding: 5px 9px; }
+
+/* два столбца сравнения: слева как у всех, справа как у нас */
+.fv-cmp { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 1.25vw, 24px);
+  margin-top: clamp(20px, 2vw, 38px); }
+.fv-col { background: var(--ink-lift); border: 1px solid #1F1D24;
+  padding: clamp(16px, 1.5vw, 28px); }
+.fv-col.on { border-color: var(--red); }
+.fv-col b { display: block; font-family: Oswald, sans-serif; font-weight: 600;
+  font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted-hi); }
+.fv-col.on b { color: var(--red-lt); }
+.fv-col ul { display: grid; gap: clamp(7px, .63vw, 12px); margin-top: clamp(11px, 1vw, 18px); }
+.fv-col li { position: relative; padding-left: 16px; font-size: var(--fs-body);
+  line-height: var(--lh-text); color: var(--muted-lo); }
+.fv-col li::before { content: ''; position: absolute; left: 0; top: .68em;
+  width: 7px; height: 1px; background: var(--muted-hi); }
+.fv-col.on li::before { background: var(--red); }
+
 /* ── 08. Цена ── */
 .price { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 24.1vw, 462px);
   gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
@@ -381,11 +439,12 @@ p, li, .lead { text-wrap: pretty; }
     padding: clamp(20px, 1.67vw, 32px) clamp(22px, 2.5vw, 48px);
     display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 20.6vw, 395px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
-  .price .collage { position: relative; justify-self: start; margin-top: -10px;
+  .price .collage { position: relative; justify-self: start; margin-top: 10px;
+    margin-left: 10px;
     width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
   .price .collage .shot { position: absolute; }
-  .price .collage .shot.a { left: 0; top: 0; width: clamp(88px, 7.9vw, 152px); }
-  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(104px, 9.4vw, 180px); }
+  .price .collage .shot.a { left: 0; top: 0; width: clamp(93px, 8.18vw, 157px); }
+  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(109px, 9.64vw, 185px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
@@ -596,7 +655,13 @@ p, li, .lead { text-wrap: pretty; }
   /* на узких снимки встают в ряд: наложение здесь только мельчит их
      и норовит вылезти за карточку */
   .price .collage { position: static; display: flex; gap: 12px; align-items: flex-start;
-    width: 100%; min-height: 0; }
+    width: 100%; min-height: 0; margin-top: 0; margin-left: 0; }
+  /* видео сверху заняло бы весь экран: сначала заголовок, чтобы было ясно, о чём ролик */
+  .fv { grid-template-columns: 1fr; grid-template-areas: "head" "media" "body";
+    row-gap: clamp(20px, 4.2vw, 30px); }
+  .fv-media { max-width: 300px; width: 100%; margin: 0 auto; }
+  .fv-body { padding-top: 0; }
+  .fv-cmp { grid-template-columns: 1fr; }
   /* relative, а не static: иначе скотч теряет опору и уезжает на карточку */
   .price .collage .shot.a, .price .collage .shot.b {
     position: relative; left: auto; right: auto; top: auto;
@@ -686,7 +751,7 @@ p, li, .lead { text-wrap: pretty; }
   .demo { grid-template-columns: 1fr; }
 }
 </style>
-<script type="application/ld+json">__JSONLD__</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://greagaew-alt.github.io/appforse-landing/site/#org","name":"AppForse","url":"https://greagaew-alt.github.io/appforse-landing/site/","logo":"https://greagaew-alt.github.io/appforse-landing/site/icon-192.png","image":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg","description":"Готовая платформа мобильных приложений для торговли под брендом заказчика","sameAs":["https://vk.com/appforse","https://t.me/shark154"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/shark154","availableLanguage":"Russian"}]},{"@type":"WebSite","@id":"https://greagaew-alt.github.io/appforse-landing/site/#site","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"AppForse","inLanguage":"ru-RU","publisher":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"}},{"@type":"WebPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#page","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"Мобильное приложение под вашим брендом за 7 дней — AppForse","isPartOf":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#site"},"about":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"inLanguage":"ru-RU","primaryImageOfPage":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg"},{"@type":"Service","@id":"https://greagaew-alt.github.io/appforse-landing/site/#service","name":"Запуск мобильного приложения под брендом заказчика","serviceType":"Разработка мобильного приложения на готовой платформе","provider":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"areaServed":{"@type":"Country","name":"Россия"},"audience":[{"@type":"BusinessAudience","name":"Оптовые продажи"},{"@type":"BusinessAudience","name":"Магазины и доставка"},{"@type":"BusinessAudience","name":"Рестораны и доставка еды"},{"@type":"BusinessAudience","name":"Розница"}],"description":"Клиентское приложение и админ-панель под брендом заказчика: каталог, заказы, доставка, оплата, бонусы, push-уведомления и CRM. Публикация в App Store и Google Play за 7 рабочих дней.","offers":{"@type":"Offer","price":"150000","priceCurrency":"RUB","availability":"https://schema.org/InStock","url":"https://greagaew-alt.github.io/appforse-landing/site/#price","itemOffered":{"@type":"Service","name":"Запуск платформы под вашим брендом"}},"hasOfferCatalog":{"@type":"OfferCatalog","name":"В стоимость входит","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Клиентское приложение под вашим брендом"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Публикация в App Store и Google Play"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Каталог товаров, корзина и онлайн-оплата"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Доставка и самовывоз"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Бонусы, промокоды и push-уведомления"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM и клиентская база"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Админ-панель и аналитика"}}]}},{"@type":"FAQPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#faq","mainEntity":[{"@type":"Question","name":"У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?","acceptedAnswer":{"@type":"Answer","text":"Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки."}},{"@type":"Question","name":"Чем это отличается от разработки приложения с нуля?","acceptedAnswer":{"@type":"Answer","text":"При разработке с нуля вы оплачиваете целую команду — аналитика, дизайнера, разработчиков под iOS и Android, тестировщика и менеджера проекта. Они заново пишут каталог, корзину, оплату и бонусную систему — это сотни часов и месяцы работы. У нас платформа уже написана, отлажена и работает в действующем бизнесе — мы разворачиваем её под ваш бренд за 7 дней. Индивидуальная разработка оправдана, когда у бизнеса действительно нестандартная задача."}},{"@type":"Question","name":"Сколько времени занимает запуск?","acceptedAnswer":{"@type":"Answer","text":"Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения."}},{"@type":"Question","name":"Кто делает дизайн приложения?","acceptedAnswer":{"@type":"Answer","text":"Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить."}},{"@type":"Question","name":"Что нужно от меня для запуска?","acceptedAnswer":{"@type":"Answer","text":"Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя."}},{"@type":"Question","name":"Я получаю исходный код?","acceptedAnswer":{"@type":"Answer","text":"Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно."}},{"@type":"Question","name":"Обязательно ли платить за поддержку?","acceptedAnswer":{"@type":"Answer","text":"Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно."}},{"@type":"Question","name":"Что если клиенты не станут пользоваться приложением?","acceptedAnswer":{"@type":"Answer","text":"До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах."}}]}]}</script>
 </head>
 <body>
 <div id="root"></div>
@@ -709,6 +774,10 @@ const TORN_A = "M0,70 L1600,70 L1600,25.2 L1585.2,37.1 L1576.1,29.9 L1566.6,36.6
 const TORN_B = "M0,-10 L1600,-10 L1600,34.8 L1599.1,28 L1583.6,13 L1559.2,3 L1538.4,50.2 L1517.2,27.1 L1489.6,30.8 L1469.8,12.5 L1458.4,41.5 L1431.1,5.6 L1408,34.1 L1385.1,45.8 L1359,46.1 L1344.9,17.4 L1318.8,11.1 L1290.5,3 L1261.7,27.1 L1237.3,32.6 L1213,3 L1195.6,25.6 L1168.8,3 L1154.1,14.6 L1128.8,3.1 L1113.1,23.7 L1094.6,22 L1077.8,3 L1063.4,29.1 L1033.7,35.7 L1014.5,20.2 L985,57 L974.8,33.8 L953.2,40.2 L929.3,16.9 L907.1,57 L886.4,19.6 L864.3,15.1 L842.3,28.6 L823.8,20.9 L811,49.4 L784.3,39.4 L764.3,28 L740,13 L725.1,27.9 L700.8,32.6 L672.6,19 L647.5,29.4 L627.7,49.5 L606.7,48.9 L577.3,57 L557.3,18.8 L533.9,36.6 L514.4,57 L504.7,45.7 L493.5,47.2 L474.7,29.9 L445.5,22.1 L418.4,26.5 L406.7,19.4 L395.3,46.3 L377.5,23.7 L351.2,38.8 L336.1,49.2 L315.1,53.2 L301.8,10.3 L274.3,16.5 L262.6,57 L239.7,57 L213.6,57 L189.3,56.9 L177.8,54.4 L151.4,28.2 L130.7,37 L115.4,16 L90.7,56.8 L67.5,51.1 L38.1,17.3 L15.2,31.2 L0,5.3 Z";
 const TORN_C = "M0,70 L1600,70 L1600,25.2 L1589.7,26 L1574.7,16.3 L1557.6,29.3 L1538,16.1 L1514.2,3 L1485.1,44 L1462.8,3 L1432.8,3 L1422.5,17.1 L1400.1,55.4 L1377.4,3 L1361.8,11.2 L1335.2,55.4 L1305.6,3 L1292.6,28.3 L1266.5,23.6 L1249.1,47.3 L1226.1,8.3 L1206,31 L1194.1,3 L1165,12 L1153.5,3 L1144.4,19.6 L1117,3 L1096.6,3 L1070.2,3 L1052.2,44.3 L1041.3,3 L1031.3,3 L1006.7,3 L982.9,29 L966.9,34.6 L945.9,30.8 L921.9,7.1 L911.6,28.5 L886.7,16.4 L857.1,25.9 L827.7,13 L800.2,31.3 L790.5,29.9 L776.2,10.7 L753,30 L740.9,21.7 L720,30.4 L709.3,11 L680,34.7 L652,37.4 L636.7,21.1 L625,42 L614.8,27.8 L605.1,44.3 L583.9,39.2 L574.3,33.2 L563.8,26.7 L552.9,50.5 L542.7,47.3 L526.1,50.7 L512.4,42.5 L488.5,57 L465.2,57 L443.9,7.5 L426.7,24.4 L401.4,44.4 L391.8,57 L374.2,27.5 L362.7,17.2 L352.2,44 L338.4,17.7 L319,36.3 L307.2,19.4 L297.4,41.7 L274,29.9 L254,19.3 L240.8,36.9 L213.2,29.7 L195.9,8.2 L169.9,33.2 L160.6,18 L146.8,57 L118.3,46.2 L100.1,16.8 L71.9,11.7 L46.1,14.7 L18.2,8.2 L0,17.4 Z";
 const TORN_D = "M0,-10 L1600,-10 L1600,34.8 L1598.5,34.7 L1586.7,21.7 L1576.8,31.9 L1562,32 L1552.7,34.7 L1543.4,45 L1517.9,32 L1506,55.3 L1485.5,19.8 L1474,28.8 L1452.9,17.6 L1423.2,22.2 L1397.9,29.3 L1388.2,10.9 L1362.4,10.9 L1338,11 L1325.8,21.3 L1310.9,6.2 L1289.8,7.7 L1268,23.6 L1256.2,24.8 L1242.4,15.2 L1228.8,57 L1218.3,26.1 L1194.7,36.8 L1165.1,57 L1140.4,48.6 L1126.8,47 L1101.7,36.4 L1079.6,35.9 L1066.7,29.3 L1048.7,39.5 L1022.5,26.5 L1009.8,34.8 L991.5,41.1 L962.5,15 L950.5,34.3 L934.4,26.6 L925.3,39.8 L895.5,57 L868.9,31.7 L843.4,36.3 L822.1,49 L801.8,42.8 L783.6,57 L758.8,57 L745,52 L716.1,41.4 L697,41.4 L679.4,39.2 L655.2,42.6 L626.3,38.4 L609.9,54.7 L583.1,51.2 L569.2,52.2 L543.2,57 L515.5,52.7 L491.5,43 L480.6,48 L453.9,10 L437.7,57 L424.5,34.2 L414,37.5 L386.1,50.8 L373.7,57 L359,42.2 L337,57 L326.1,36.6 L316.8,46.7 L303.1,57 L283.2,51.8 L255.5,30.1 L230.7,3 L209.5,14 L184.7,27.9 L168.6,22.8 L156.2,29.1 L127.4,3 L101.5,13.6 L77.7,3 L62.4,6.4 L39.9,33.4 L27.5,26.1 L12.5,36.6 L0,3 Z";
+
+/* видео основателя: файлом, а не в разметке — грузится только по нажатию */
+const VIDEO = 'media/founder.mp4';
+const POSTER = 'media/founder-poster.webp';
 const TG = 'https://t.me/shark154';
 const VK = 'https://vk.com/appforse';
 const DEV = 'https://t.me/glebbnov';
@@ -717,49 +786,49 @@ const DEV = 'https://t.me/glebbnov';
 const NAV = [['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'], ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'], ['Контакты', '#contacts']];
 const WHY_CARDS = [{
   t: 'Повторные продажи',
-  d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.'
+  d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.'
 }, {
-  t: 'Своя клиентская база',
-  d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.'
+  t: 'Своя клиентская база',
+  d: 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.'
 }, {
-  t: 'Прямой канал с клиентом',
-  d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.'
+  t: 'Прямой канал с клиентом',
+  d: 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.'
 }];
 const AUDIENCE = [{
   ico: 'package',
   t: 'Оптовые продажи',
-  d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.'
+  d: 'Клиенты регулярно запрашивают цены, наличие и остатки. Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.'
 }, {
   ico: 'store',
   t: 'Магазины и доставка',
-  d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.'
+  d: 'Клиент уже знает, что ему нужно. Приложение сокращает путь от открытия каталога до повторного заказа.'
 }, {
   ico: 'bowl',
-  t: 'Рестораны и доставка еды',
-  d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.'
+  t: 'Рестораны и доставка еды',
+  d: 'Возвращайте постоянных гостей через бонусы, push и персональные предложения — без необходимости каждый раз привлекать их заново.'
 }, {
   ico: 'bag',
   t: 'Розница',
   d: 'Каталог, акции, бонусы и новые поступления всегда под рукой у покупателя.'
 }];
 const STEPS = [{
-  t: 'Разбираемся в вашем бизнесе',
-  d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.'
+  t: 'Разбираемся в вашем бизнесе',
+  d: 'Изучаем ассортимент, формат работы и задачи. Сразу говорим, подходит ли готовая платформа под ваш бизнес.'
 }, {
-  t: 'Адаптируем под ваш бренд',
-  d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.'
+  t: 'Адаптируем под ваш бренд',
+  d: 'Переносим логотип, фирменные цвета и материалы в приложение, чтобы оно выглядело как ваш собственный продукт.'
 }, {
   t: 'Собираем приложение',
-  d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.'
+  d: 'Платформа уже готова — адаптируем её под ваш бизнес, подключаем каталог, заказы и нужные функции.'
 }, {
-  t: 'Публикуем в App Store и Google Play',
-  d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.'
+  t: 'Публикуем в App Store и Google Play',
+  d: 'Подготавливаем приложение к публикации, отправляем на проверку и размещаем под вашим брендом.'
 }, {
-  t: 'Передаём готовую систему',
-  d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.'
+  t: 'Передаём готовую систему',
+  d: 'Вы получаете приложение, админ-панель и инструменты для команды. Загружаете каталог — и начинаете работать.'
 }];
-const INCLUDED = ['Клиентское приложение под вашим брендом', 'Публикация в App Store и Google Play', 'Каталог товаров, корзина и онлайн-оплата', 'Доставка и самовывоз', 'Бонусы, промокоды и push-уведомления', 'CRM и клиентская база', 'Админ-панель и аналитика'];
-const FAQ = [['У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?', 'Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки.'], ['Сколько времени занимает запуск?', 'Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения.'], ['Кто делает дизайн приложения?', 'Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить.'], ['Что нужно от меня для запуска?', 'Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя.'], ['Я получаю исходный код?', 'Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно.'], ['Обязательно ли платить за поддержку?', 'Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно.'], ['Что если клиенты не станут пользоваться приложением?', 'До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах.']];
+const INCLUDED = ['Клиентское приложение под вашим брендом', 'Публикация в App Store и Google Play', 'Каталог товаров, корзина и онлайн-оплата', 'Доставка и самовывоз', 'Бонусы, промокоды и push-уведомления', 'CRM и клиентская база', 'Админ-панель и аналитика'];
+const FAQ = [['У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?', 'Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки.'], ['Чем это отличается от разработки приложения с нуля?', 'При разработке с нуля вы оплачиваете целую команду — аналитика, дизайнера, разработчиков под iOS и Android, тестировщика и менеджера проекта. Они заново пишут каталог, корзину, оплату и бонусную систему — это сотни часов и месяцы работы. У нас платформа уже написана, отлажена и работает в действующем бизнесе — мы разворачиваем её под ваш бренд за 7 дней. Индивидуальная разработка оправдана, когда у бизнеса действительно нестандартная задача.'], ['Сколько времени занимает запуск?', 'Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения.'], ['Кто делает дизайн приложения?', 'Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить.'], ['Что нужно от меня для запуска?', 'Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя.'], ['Я получаю исходный код?', 'Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно.'], ['Обязательно ли платить за поддержку?', 'Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно.'], ['Что если клиенты не станут пользоваться приложением?', 'До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах.']];
 
 /* ─────────── мелкие детали ─────────── */
 /* Иконки — набор Lucide (лицензия MIT), встроены как SVG: единый стиль без внешних файлов */
@@ -1151,7 +1220,7 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   now: true
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
   className: "eyebrow"
-}, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C"), /*#__PURE__*/React.createElement("h1", null, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u043B\u044F\xA0\u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430\xA0\u2014 ", /*#__PURE__*/React.createElement("span", {
+}, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C"), /*#__PURE__*/React.createElement("h1", null, "\u0413\u043E\u0442\u043E\u0432\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u043B\u044F\xA0\u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430\xA0\u2014 ", /*#__PURE__*/React.createElement("span", {
   className: "circle"
 }, "\u0437\u0430\xA07\xA0\u0434\u043D\u0435\u0439", /*#__PURE__*/React.createElement("svg", {
   viewBox: "0 0 200 60",
@@ -1171,7 +1240,7 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
   href: "#case"
 }, "\u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C\xA0\u043A\u0435\u0439\u0441\u044B")), /*#__PURE__*/React.createElement("div", {
   className: "facts"
-}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "150 000 \u20BD"), /*#__PURE__*/React.createElement("span", null, "\u0437\u0430\u043F\u0443\u0441\u043A \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "7\xA0\u0434\u043D\u0435\u0439"), /*#__PURE__*/React.createElement("span", null, "\u0438\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u0443\u0436\u0435\xA0\u0432\xA0\u0441\u0442\u043E\u0440\u0430\u0445")))), /*#__PURE__*/React.createElement("div", {
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "150 000 \u20BD"), /*#__PURE__*/React.createElement("span", null, "\u0437\u0430\u043F\u0443\u0441\u043A\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "7\xA0\u0434\u043D\u0435\u0439"), /*#__PURE__*/React.createElement("span", null, "\u0438\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435\xA0\u0443\u0436\u0435\xA0\u0432\xA0\u0441\u0442\u043E\u0440\u0430\u0445")))), /*#__PURE__*/React.createElement("div", {
   className: "shots"
 }, /*#__PURE__*/React.createElement(Shot, {
   src: SHOT1,
@@ -1228,7 +1297,7 @@ const What = () => /*#__PURE__*/React.createElement("section", {
   delay: 140
 }, /*#__PURE__*/React.createElement("h3", null, "\u041A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement(Tags, {
   items: ['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']
-}), /*#__PURE__*/React.createElement("p", null, "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442 \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0441\u043E\u0431\u0438\u0440\u0430\u0435\u0442 \u0437\u0430\u043A\u0430\u0437, \u043F\u043B\u0430\u0442\u0438\u0442 \u0438\xA0\u043A\u043E\u043F\u0438\u0442 \u0431\u043E\u043D\u0443\u0441\u044B\xA0\u2014 \u0432\u0441\u0451\xA0\u0432\xA0\u043E\u0434\u043D\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C. \u041F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0439 \u0437\u0430\u043A\u0430\u0437 \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u0442 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439, \u0431\u0435\u0437\xA0\u0437\u0432\u043E\u043D\u043A\u043E\u0432 \u0438\xA0\u043F\u0435\u0440\u0435\u043F\u0438\u0441\u043A\u0438\xA0\u0441\xA0\u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u043E\u043C."), /*#__PURE__*/React.createElement("div", {
+}), /*#__PURE__*/React.createElement("p", null, "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442 \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0441\u043E\u0431\u0438\u0440\u0430\u0435\u0442 \u0437\u0430\u043A\u0430\u0437, \u043F\u043B\u0430\u0442\u0438\u0442 \u0438\xA0\u043A\u043E\u043F\u0438\u0442 \u0431\u043E\u043D\u0443\u0441\u044B\xA0\u2014 \u0432\u0441\u0451\xA0\u0432\xA0\u043E\u0434\u043D\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C. \u041F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0439 \u0437\u0430\u043A\u0430\u0437 \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u0442 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439, \u0431\u0435\u0437\xA0\u0437\u0432\u043E\u043D\u043A\u043E\u0432\xA0\u0438\xA0\u043F\u0435\u0440\u0435\u043F\u0438\u0441\u043A\u0438\xA0\u0441\xA0\u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u043E\u043C."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement("img", {
   src: SHOT1,
@@ -1240,7 +1309,7 @@ const What = () => /*#__PURE__*/React.createElement("section", {
   delay: 220
 }, /*#__PURE__*/React.createElement("h3", null, "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435\xA0\u0431\u0438\u0437\u043D\u0435\u0441\u043E\u043C"), /*#__PURE__*/React.createElement(Tags, {
   items: ['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']
-}), /*#__PURE__*/React.createElement("p", null, "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0432\u0435\u0434\u0451\u0442 \u0437\u0430\u043A\u0430\u0437\u044B \u0438\xA0\u0432\u0438\u0434\u0438\u0442 \u043E\u0441\u0442\u0430\u0442\u043A\u0438, \u0432\u044B\xA0\u2014 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0443\u044E \u0431\u0430\u0437\u0443 \u0438\xA0\u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0443. Push-\u0440\u0430\u0441\u0441\u044B\u043B\u043A\u0438, \u0440\u043E\u043B\u0438 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u0438\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0442\u043E\u0447\u0435\u043A \u043D\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u044E\u0442\u0441\u044F \u0432\xA0\u0442\u043E\u0439 \u0436\u0435 \u043F\u0430\u043D\u0435\u043B\u0438, \u0431\u0435\u0437\xA0\u0441\u0442\u043E\u0440\u043E\u043D\u043D\u0438\u0445\xA0\u0441\u0435\u0440\u0432\u0438\u0441\u043E\u0432."), /*#__PURE__*/React.createElement("div", {
+}), /*#__PURE__*/React.createElement("p", null, "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0432\u0435\u0434\u0451\u0442 \u0437\u0430\u043A\u0430\u0437\u044B \u0438\xA0\u0432\u0438\u0434\u0438\u0442 \u043E\u0441\u0442\u0430\u0442\u043A\u0438, \u0432\u044B\xA0\u2014 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0443\u044E \u0431\u0430\u0437\u0443 \u0438\xA0\u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0443. Push-\u0440\u0430\u0441\u0441\u044B\u043B\u043A\u0438, \u0440\u043E\u043B\u0438 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u0438\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0442\u043E\u0447\u0435\u043A \u043D\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u044E\u0442\u0441\u044F \u0432\xA0\u0442\u043E\u0439 \u0436\u0435 \u043F\u0430\u043D\u0435\u043B\u0438,\xA0\u0431\u0435\u0437\xA0\u0441\u0442\u043E\u0440\u043E\u043D\u043D\u0438\u0445\xA0\u0441\u0435\u0440\u0432\u0438\u0441\u043E\u0432."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement("img", {
   src: SHOT2,
@@ -1258,7 +1327,7 @@ const Magnet = () => {
   return /*#__PURE__*/React.createElement(Rise, {
     className: "magnet",
     id: "magnet"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "\u0420\u0430\u0437\u0431\u0435\u0440\u0451\u043C \u0432\u0430\u0448 \u0431\u0438\u0437\u043D\u0435\u0441 \u0438\xA0\u043F\u043E\u043A\u0430\u0436\u0435\u043C", ' ', /*#__PURE__*/React.createElement("br", null), "\u0442\u043E\u0447\u043A\u0438 \u0440\u043E\u0441\u0442\u0430 \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436"), /*#__PURE__*/React.createElement("p", null, "\u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438\u043C, \u043A\u0430\u043A \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u043E\u0436\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C \u0441\xA0\u0432\u0430\u0448\u0435\u0439 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0431\u0430\u0437\u043E\u0439, \u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0442\u044C \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0435\u0439 \u0438\xA0\u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0435 \u0437\u0430\u043A\u0430\u0437\u044B.")), /*#__PURE__*/React.createElement("form", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "\u0420\u0430\u0437\u0431\u0435\u0440\u0451\u043C \u0432\u0430\u0448 \u0431\u0438\u0437\u043D\u0435\u0441 \u0438\xA0\u043F\u043E\u043A\u0430\u0436\u0435\u043C", ' ', /*#__PURE__*/React.createElement("br", null), "\u0442\u043E\u0447\u043A\u0438 \u0440\u043E\u0441\u0442\u0430 \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445\xA0\u043F\u0440\u043E\u0434\u0430\u0436"), /*#__PURE__*/React.createElement("p", null, "\u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438\u043C, \u043A\u0430\u043A\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u043E\u0436\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C \u0441\xA0\u0432\u0430\u0448\u0435\u0439 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0431\u0430\u0437\u043E\u0439, \u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0442\u044C \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0435\u0439 \u0438\xA0\u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0435 \u0437\u0430\u043A\u0430\u0437\u044B.")), /*#__PURE__*/React.createElement("form", {
     className: "form",
     noValidate: true,
     onSubmit: submit
@@ -1279,15 +1348,15 @@ const Magnet = () => {
     type: "checkbox",
     name: "agree",
     onChange: () => clear('agree')
-  }), /*#__PURE__*/React.createElement("span", null, "\u0421\u043E\u0433\u043B\u0430\u0441\u0435\u043D \u043D\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0443 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445 \u0438 \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E ", /*#__PURE__*/React.createElement("a", {
+  }), /*#__PURE__*/React.createElement("span", null, "\u0421\u043E\u0433\u043B\u0430\u0441\u0435\u043D \u043D\u0430\xA0\u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0443 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445 \u0438\xA0\u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E ", /*#__PURE__*/React.createElement("a", {
     href: "privacy.html",
     target: "_blank",
     rel: "noopener"
-  }, "\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443 \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438"), ".")), err.agree && /*#__PURE__*/React.createElement("span", {
+  }, "\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443\xA0\u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438"), ".")), err.agree && /*#__PURE__*/React.createElement("span", {
     className: "err"
   }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
     className: "note"
-  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E \u0434\u043D\u044F.")));
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F.")));
 };
 const Who = () => /*#__PURE__*/React.createElement("section", {
   className: "dark",
@@ -1369,7 +1438,7 @@ const Case = () => /*#__PURE__*/React.createElement("section", {
   delay: 140
 }, /*#__PURE__*/React.createElement("span", {
   className: "kind"
-}, "\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430 /\xA0\u0440\u043E\u0437\u043D\u0438\u0446\u0430"), /*#__PURE__*/React.createElement("h3", null, "\xAB\u0421\u0438\u043D\u0438\u0446\u0430\xBB"), /*#__PURE__*/React.createElement("p", null, "\u041A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435: \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0437\u0430\u043A\u0430\u0437, \u0431\u043E\u043D\u0443\u0441\u044B, \u043F\u0440\u043E\u0444\u0438\u043B\u044C, \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0435 \u043F\u043E\u043A\u0443\u043F\u043A\u0438. \u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0432\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445\xA0\u0433\u043E\u0440\u043E\u0434\u0430\u0445."), /*#__PURE__*/React.createElement("div", {
+}, "\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430\xA0/\xA0\u0440\u043E\u0437\u043D\u0438\u0446\u0430"), /*#__PURE__*/React.createElement("h3", null, "\xAB\u0421\u0438\u043D\u0438\u0446\u0430\xBB"), /*#__PURE__*/React.createElement("p", null, "\u041A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435: \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0437\u0430\u043A\u0430\u0437, \u0431\u043E\u043D\u0443\u0441\u044B, \u043F\u0440\u043E\u0444\u0438\u043B\u044C, \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0435 \u043F\u043E\u043A\u0443\u043F\u043A\u0438. \u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0442\xA0\u0432\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445\xA0\u0433\u043E\u0440\u043E\u0434\u0430\u0445."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement("img", {
   src: SHOT1,
@@ -1381,7 +1450,7 @@ const Case = () => /*#__PURE__*/React.createElement("section", {
   delay: 220
 }, /*#__PURE__*/React.createElement("span", {
   className: "kind"
-}, "\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u043E\u043D\u043A\u0430"), /*#__PURE__*/React.createElement("h3", null, "\u041C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0441\u043A\u043E\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement("p", null, "\u0417\u0430\u043A\u0430\u0437\u044B, \u043A\u043B\u0438\u0435\u043D\u0442\u044B, \u0441\u0442\u0430\u0442\u0443\u0441\u044B \u0438\xA0\u0438\u0441\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435\xA0\u2014 \u0432\xA0\u043E\u0434\u043D\u043E\u043C\xA0\u043E\u043A\u043D\u0435."), /*#__PURE__*/React.createElement("div", {
+}, "\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u043E\u043D\u043A\u0430"), /*#__PURE__*/React.createElement("h3", null, "\u041C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0441\u043A\u043E\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement("p", null, "\u0417\u0430\u043A\u0430\u0437\u044B, \u043A\u043B\u0438\u0435\u043D\u0442\u044B, \u0441\u0442\u0430\u0442\u0443\u0441\u044B \u0438\xA0\u0438\u0441\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435\xA0\u2014\xA0\u0432\xA0\u043E\u0434\u043D\u043E\u043C\xA0\u043E\u043A\u043D\u0435."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement("img", {
   src: SHOT2,
@@ -1389,6 +1458,76 @@ const Case = () => /*#__PURE__*/React.createElement("section", {
   loading: "lazy",
   decoding: "async"
 }))))));
+
+/* Видео основателя: до нажатия на странице только обложка (22 КБ).
+   Сам файл подключается в разметку лишь после клика — иначе браузер
+   начинает тянуть его фоном и мешает загрузке остального. */
+const Founder = () => {
+  const [on, setOn] = useState(false);
+  return /*#__PURE__*/React.createElement("section", {
+    className: "dark",
+    id: "founder"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "shell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "fv"
+  }, /*#__PURE__*/React.createElement(Rise, {
+    className: "fv-media"
+  }, on ? /*#__PURE__*/React.createElement("video", {
+    className: "fv-vid",
+    src: VIDEO,
+    poster: POSTER,
+    controls: true,
+    autoPlay: true,
+    playsInline: true,
+    preload: "auto"
+  }) : /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "fv-open",
+    onClick: () => setOn(true),
+    "aria-label": "\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0432\u0438\u0434\u0435\u043E \u043E\u0441\u043D\u043E\u0432\u0430\u0442\u0435\u043B\u044F, 1 \u043C\u0438\u043D\u0443\u0442\u0430 18 \u0441\u0435\u043A\u0443\u043D\u0434"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: POSTER,
+    alt: "",
+    width: "720",
+    height: "1280",
+    loading: "lazy",
+    decoding: "async"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "fv-play"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "26",
+    height: "26",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M8 5.5v13l11-6.5z",
+    fill: "currentColor"
+  })))), /*#__PURE__*/React.createElement("span", {
+    className: "fv-time"
+  }, "1:18"))), /*#__PURE__*/React.createElement("div", {
+    className: "fv-head"
+  }, /*#__PURE__*/React.createElement(Rise, {
+    as: "span",
+    className: "kicker"
+  }, "\u0421\u043B\u043E\u0432\u043E\xA0\u043E\u0441\u043D\u043E\u0432\u0430\u0442\u0435\u043B\u044F"), /*#__PURE__*/React.createElement(Rise, {
+    as: "h2",
+    delay: 60
+  }, "\u041F\u043E\u0447\u0435\u043C\u0443 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", ' ', /*#__PURE__*/React.createElement("br", null), "\u043D\u0435\xA0\u0441\u0442\u043E\u0438\u0442\xA0\u043C\u0438\u043B\u043B\u0438\u043E\u043D\u043E\u0432")), /*#__PURE__*/React.createElement("div", {
+    className: "fv-body"
+  }, /*#__PURE__*/React.createElement(Rise, {
+    as: "p",
+    className: "lead",
+    delay: 120
+  }, "\u041A\u0430\u0442\u0430\u043B\u043E\u0433, \u043A\u043E\u0440\u0437\u0438\u043D\u0430, \u043E\u043F\u043B\u0430\u0442\u0430, \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430, \u0431\u043E\u043D\u0443\u0441\u044B, push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F\xA0\u2014 \u0440\u043E\u0437\u043D\u0438\u0447\u043D\u044B\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u043F\u0440\u0438\u043C\u0435\u0440\u043D\u043E \u043E\u0434\u043D\u043E \u0438\xA0\u0442\u043E\xA0\u0436\u0435. \u041C\u044B \u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043F\u043E\u0441\u0442\u0440\u043E\u0438\u043B\u0438 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0443, \u043E\u0442\u043B\u0430\u0434\u0438\u043B\u0438 \u0435\u0451\xA0\u043D\u0430\xA0\u0440\u0430\u0431\u043E\u0442\u0430\u044E\u0449\u0435\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0435 \u0438\xA0\u0442\u0435\u043F\u0435\u0440\u044C \u0440\u0430\u0437\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043C \u043F\u043E\u0434\xA0\u0432\u0430\u0448 \u0431\u0440\u0435\u043D\u0434, \u0430\xA0\u043D\u0435\xA0\u043F\u0438\u0448\u0435\u043C \u043A\u043E\u0440\u0437\u0438\u043D\u0443 \u0437\u0430\u043D\u043E\u0432\u043E."), /*#__PURE__*/React.createElement(Rise, {
+    className: "fv-cmp",
+    delay: 180
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "fv-col"
+  }, /*#__PURE__*/React.createElement("b", null, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\xA0\u043D\u0443\u043B\u044F"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0438\u0437\xA0\u0441\u0435\u043C\u0438\xA0\u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u043E\u0432"), /*#__PURE__*/React.createElement("li", null, "\u0421\u043E\u0442\u043D\u0438 \u0447\u0430\u0441\u043E\u0432 \u043D\u0430\xA0\u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u043A\u043E\u0440\u0437\u0438\u043D\u0443\xA0\u0438\xA0\u0431\u043E\u043D\u0443\u0441\u044B"), /*#__PURE__*/React.createElement("li", null, "\u041C\u0435\u0441\u044F\u0446\u044B \u0434\u043E\xA0\u0437\u0430\u043F\u0443\u0441\u043A\u0430, \u0441\u0447\u0451\u0442\xA0\u043D\u0430\xA0\u043C\u0438\u043B\u043B\u0438\u043E\u043D\u044B"))), /*#__PURE__*/React.createElement("div", {
+    className: "fv-col on"
+  }, /*#__PURE__*/React.createElement("b", null, "\u0413\u043E\u0442\u043E\u0432\u0430\u044F\xA0\u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u0430 \u0438\xA0\u043E\u0442\u043B\u0430\u0436\u0435\u043D\u0430 \u043E\u0434\u0438\u043D\xA0\u0440\u0430\u0437"), /*#__PURE__*/React.createElement("li", null, "\u0420\u0430\u0437\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043C \u0435\u0451\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448\xA0\u0431\u0440\u0435\u043D\u0434"), /*#__PURE__*/React.createElement("li", null, "7\xA0\u0434\u043D\u0435\u0439 \u0434\u043E\xA0\u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438, 150\xA0000\xA0\u20BD"))))))));
+};
 const Price = () => /*#__PURE__*/React.createElement("section", {
   id: "price"
 }, /*#__PURE__*/React.createElement(Torn, {
@@ -1439,11 +1578,11 @@ const Price = () => /*#__PURE__*/React.createElement("section", {
   delay: 220
 }, /*#__PURE__*/React.createElement("div", {
   className: "item"
-}, /*#__PURE__*/React.createElement("b", null, "\u0422\u0435\u0445\u043D\u0438\u0447\u0435\u0441\u043A\u0430\u044F\xA0\u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0430"), /*#__PURE__*/React.createElement("p", null, "\u041E\u0442\xA025\xA0000\xA0\u20BD/\u043C\u0435\u0441. \u041F\u043E\xA0\u0436\u0435\u043B\u0430\u043D\u0438\u044E, \u0435\u0441\u043B\u0438\xA0\u0445\u043E\u0442\u0438\u0442\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u0442\u044C \u043D\u0430\u043C \u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u0435\xA0\u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u044B.")), /*#__PURE__*/React.createElement("div", {
+}, /*#__PURE__*/React.createElement("b", null, "\u0422\u0435\u0445\u043D\u0438\u0447\u0435\u0441\u043A\u0430\u044F\xA0\u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0430"), /*#__PURE__*/React.createElement("p", null, "\u041E\u0442\xA025\xA0000\xA0\u20BD/\u043C\u0435\u0441. \u041F\u043E\xA0\u0436\u0435\u043B\u0430\u043D\u0438\u044E, \u0435\u0441\u043B\u0438\xA0\u0445\u043E\u0442\u0438\u0442\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u0442\u044C \u043D\u0430\u043C\xA0\u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u0435\xA0\u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u044B.")), /*#__PURE__*/React.createElement("div", {
   className: "item"
-}, /*#__PURE__*/React.createElement("b", null, "\u0418\u043D\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043B\u044C\u043D\u044B\u0435\xA0\u0434\u043E\u0440\u0430\u0431\u043E\u0442\u043A\u0438"), /*#__PURE__*/React.createElement("p", null, "\u0424\u0443\u043D\u043A\u0446\u0438\u0438 \u0438\xA0\u0438\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u043F\u043E\u0434\xA0\u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u0430\u0448\u0435\u0433\u043E \u0431\u0438\u0437\u043D\u0435\u0441\u0430. \u0421\u0447\u0438\u0442\u0430\u0435\u043C\xA0\u043E\u0442\u0434\u0435\u043B\u044C\u043D\u043E.")), /*#__PURE__*/React.createElement("div", {
+}, /*#__PURE__*/React.createElement("b", null, "\u0418\u043D\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043B\u044C\u043D\u044B\u0435\xA0\u0434\u043E\u0440\u0430\u0431\u043E\u0442\u043A\u0438"), /*#__PURE__*/React.createElement("p", null, "\u0424\u0443\u043D\u043A\u0446\u0438\u0438 \u0438\xA0\u0438\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u043F\u043E\u0434\xA0\u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u0430\u0448\u0435\u0433\u043E \u0431\u0438\u0437\u043D\u0435\u0441\u0430.\xA0\u0421\u0447\u0438\u0442\u0430\u0435\u043C\xA0\u043E\u0442\u0434\u0435\u043B\u044C\u043D\u043E.")), /*#__PURE__*/React.createElement("div", {
   className: "item"
-}, /*#__PURE__*/React.createElement("b", null, "\u0414\u0435\u043C\u043E-\u0432\u0435\u0440\u0441\u0438\u044F"), /*#__PURE__*/React.createElement("p", null, "\u0421\u043A\u0430\u0447\u0430\u0439\u0442\u0435 \u0434\u0435\u043C\u043E \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0433\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F \u0438\xA0\u043F\u043E\u0441\u043C\u043E\u0442\u0440\u0438\u0442\u0435, \u043A\u0430\u043A\xA0\u044D\u0442\u043E\xA0\u0432\u044B\u0433\u043B\u044F\u0434\u0438\u0442 \u0434\u043B\u044F\xA0\u043A\u043E\u043D\u0435\u0447\u043D\u043E\u0433\u043E\xA0\u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F."), /*#__PURE__*/React.createElement("a", {
+}, /*#__PURE__*/React.createElement("b", null, "\u0414\u0435\u043C\u043E-\u0432\u0435\u0440\u0441\u0438\u044F"), /*#__PURE__*/React.createElement("p", null, "\u0421\u043A\u0430\u0447\u0430\u0439\u0442\u0435 \u0434\u0435\u043C\u043E \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0433\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F \u0438\xA0\u043F\u043E\u0441\u043C\u043E\u0442\u0440\u0438\u0442\u0435, \u043A\u0430\u043A\xA0\u044D\u0442\u043E\xA0\u0432\u044B\u0433\u043B\u044F\u0434\u0438\u0442 \xA0\u0434\u043B\u044F\xA0\u043A\u043E\u043D\u0435\u0447\u043D\u043E\u0433\u043E\xA0\u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F."), /*#__PURE__*/React.createElement("a", {
   className: "btn ghost",
   href: TG,
   style: {
@@ -1462,7 +1601,7 @@ const Faq = () => {
     className: "shell"
   }, /*#__PURE__*/React.createElement(Rise, {
     as: "h2"
-  }, "\u041E\u0442\u0432\u0435\u0447\u0430\u0435\u043C \u043D\u0430\xA0\u0447\u0430\u0441\u0442\u044B\u0435\xA0\u0432\u043E\u043F\u0440\u043E\u0441\u044B"), /*#__PURE__*/React.createElement("div", {
+  }, "\u041E\u0442\u0432\u0435\u0447\u0430\u0435\u043C\xA0\u043D\u0430\xA0\u0447\u0430\u0441\u0442\u044B\u0435\xA0\u0432\u043E\u043F\u0440\u043E\u0441\u044B"), /*#__PURE__*/React.createElement("div", {
     className: "faq"
   }, FAQ.map(([q, a], i) => /*#__PURE__*/React.createElement(Rise, {
     className: "q",
@@ -1498,7 +1637,7 @@ const Contact = () => {
     className: "shell"
   }, /*#__PURE__*/React.createElement(Rise, {
     as: "h2"
-  }, "\u0423\u0437\u043D\u0430\u0439\u0442\u0435, \u043A\u0430\u043A\u0438\u043C \u0431\u0443\u0434\u0435\u0442 \u0432\u0430\u0448\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u0423\u0437\u043D\u0430\u0439\u0442\u0435, \u043A\u0430\u043A\u0438\u043C \u0431\u0443\u0434\u0435\u0442 \u0432\u0430\u0448\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement(Rise, {
     as: "p",
     className: "lead",
     delay: 80
@@ -1528,18 +1667,18 @@ const Contact = () => {
     type: "checkbox",
     name: "agree",
     onChange: () => clear('agree')
-  }), /*#__PURE__*/React.createElement("span", null, "\u0421\u043E\u0433\u043B\u0430\u0441\u0435\u043D \u043D\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0443 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445 \u0438 \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E ", /*#__PURE__*/React.createElement("a", {
+  }), /*#__PURE__*/React.createElement("span", null, "\u0421\u043E\u0433\u043B\u0430\u0441\u0435\u043D \u043D\u0430\xA0\u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0443 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445 \u0438\xA0\u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E ", /*#__PURE__*/React.createElement("a", {
     href: "privacy.html",
     target: "_blank",
     rel: "noopener"
-  }, "\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443 \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438"), ".")), err.agree && /*#__PURE__*/React.createElement("span", {
+  }, "\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443\xA0\u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438"), ".")), err.agree && /*#__PURE__*/React.createElement("span", {
     className: "err"
   }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
     className: "note"
-  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E \u0434\u043D\u044F."))), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."))), /*#__PURE__*/React.createElement(Rise, {
     className: "box aside",
     delay: 220
-  }, /*#__PURE__*/React.createElement("h3", null, "\u0418\u043B\u0438\xA0\u0441\u0440\u0430\u0437\u0443\xA0\u0432\xA0Telegram"), /*#__PURE__*/React.createElement("p", null, "\u0415\u0441\u043B\u0438\xA0\u0443\u0434\u043E\u0431\u043D\u0435\u0435 \u0441\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E\xA0\u2014\xA0\u0431\u0435\u0437\xA0\u0444\u043E\u0440\u043C\u044B."), /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("h3", null, "\u0418\u043B\u0438\xA0\u0441\u0440\u0430\u0437\u0443\xA0\u0432\xA0Telegram"), /*#__PURE__*/React.createElement("p", null, "\u0415\u0441\u043B\u0438\xA0\u0443\u0434\u043E\u0431\u043D\u0435\u0435 \u0441\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F\xA0\u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E\xA0\u2014\xA0\u0431\u0435\u0437\xA0\u0444\u043E\u0440\u043C\u044B."), /*#__PURE__*/React.createElement("a", {
     className: "btn",
     href: TG,
     target: "_blank",
@@ -1562,25 +1701,25 @@ const Foot = () => /*#__PURE__*/React.createElement("footer", {
   alt: "AppForse"
 })), /*#__PURE__*/React.createElement("p", {
   className: "tag"
-}, "\u041C\u043E\u0431\u0438\u043B\u044C\u043D\u0430\u044F \u0442\u043E\u0440\u0433\u043E\u0432\u043B\u044F \u043F\u043E\u0434 \u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, "\u041D\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u044F"), /*#__PURE__*/React.createElement("ul", null, NAV.filter(([, h]) => h !== '#contacts').map(([t, h]) => /*#__PURE__*/React.createElement("li", {
+}, "\u041C\u043E\u0431\u0438\u043B\u044C\u043D\u0430\u044F \u0442\u043E\u0440\u0433\u043E\u0432\u043B\u044F \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C\xA0\u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, "\u041D\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u044F"), /*#__PURE__*/React.createElement("ul", null, NAV.filter(([, h]) => h !== '#contacts').map(([t, h]) => /*#__PURE__*/React.createElement("li", {
   key: h
 }, /*#__PURE__*/React.createElement("a", {
   href: h
 }, t))))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B"), /*#__PURE__*/React.createElement(Social, null), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
   href: "#contact"
-}, "\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0443"))))), /*#__PURE__*/React.createElement("div", {
+}, "\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C\xA0\u0437\u0430\u044F\u0432\u043A\u0443"))))), /*#__PURE__*/React.createElement("div", {
   className: "rule"
 }, /*#__PURE__*/React.createElement("div", {
   className: "shell"
 }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 AppForse"), /*#__PURE__*/React.createElement("a", {
   href: "privacy.html"
-}, "\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445"), /*#__PURE__*/React.createElement("a", {
+}, "\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445\xA0\u0434\u0430\u043D\u043D\u044B\u0445"), /*#__PURE__*/React.createElement("a", {
   className: "by",
   href: DEV,
   target: "_blank",
   rel: "noopener"
-}, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u0441\u0430\u0439\u0442\u0430"))));
-const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
+}, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\u0430\u0439\u0442\u0430"))));
+const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 </script>
 

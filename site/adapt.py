@@ -34,7 +34,8 @@ CHECK = """() => {
     }
     // содержимое не помещается в свой блок
     if (el.scrollWidth > el.clientWidth + 2 && cs.overflowX === 'visible'
-        && el.clientWidth > 0 && !el.closest('.circle') && !el.querySelector('.circle')) {
+        && el.clientWidth > 0 && !el.closest('.circle') && !el.querySelector('.circle')
+        && !el.closest('.fv-play') && !el.querySelector('.fv-play')) {
       const key = 'c' + tag;
       if (!seen.has(key)) { seen.add(key);
         out.clipped.push(tag + ' (' + el.scrollWidth + ' в ' + el.clientWidth + ')'); }
