@@ -65,6 +65,12 @@ with sync_playwright() as p:
     for w, h in WIDTHS:
         pg = b.new_page(viewport={'width': w, 'height': h})
         pg.goto(url)
+        # дожидаемся реальной загрузки шрифтов, а не гадаем таймаутом: Oswald
+        # заметно уже подстановки, до его подгрузки замеры ширины врут
+        try:
+            pg.evaluate('document.fonts.ready')
+        except Exception:
+            pass
         pg.wait_for_timeout(2600 if w == WIDTHS[0][0] else 1400)
         pg.evaluate("document.querySelectorAll('.rise').forEach(e => e.classList.add('seen'))")
         pg.wait_for_timeout(400)
