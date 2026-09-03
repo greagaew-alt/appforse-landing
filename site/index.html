@@ -425,7 +425,8 @@ p, li, .lead { text-wrap: pretty; }
   font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); }
 .fv-col.on b { color: var(--red-lt); }
-.fv-col ul { display: grid; gap: clamp(7px, .63vw, 12px); margin-top: clamp(11px, 1vw, 18px); }
+.fv-col ul { list-style: none; margin: clamp(11px, 1vw, 18px) 0 0; padding: 0;
+  display: grid; gap: clamp(7px, .63vw, 12px); }
 .fv-col li { position: relative; padding-left: 16px; font-size: var(--fs-body);
   line-height: var(--lh-text); color: var(--muted-lo); }
 .fv-col li::before { content: ''; position: absolute; left: 0; top: .68em;
@@ -502,14 +503,15 @@ p, li, .lead { text-wrap: pretty; }
 .qz-back { margin-top: 4px; background: none; border: 0; padding: 6px 0; font: inherit;
   font-size: var(--fs-cap); letter-spacing: .04em; color: var(--muted-hi); cursor: pointer; }
 .qz-back:hover { color: var(--paper); }
-.qz-result .lead { max-width: 54ch; }
+.qz-result h3 + .lead { margin-top: clamp(10px, .94vw, 18px); max-width: 54ch; }
 .qz-recap { background: var(--ink-lift); border: 1px solid var(--red);
   padding: clamp(16px, 1.5vw, 26px);
   margin: clamp(18px, 1.6vw, 28px) 0 clamp(20px, 1.8vw, 30px); }
 .qz-recap b { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   letter-spacing: .1em; text-transform: uppercase; color: var(--red-lt); margin-bottom: 8px; }
 .qz-recap p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.qz-actions { display: flex; align-items: center; gap: clamp(18px, 1.6vw, 28px); flex-wrap: wrap; }
+.qz-form { max-width: 380px; }
+.qz-form .btn { width: 100%; }
 
 /* ── 09. Вопросы ── */
 .faq { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
@@ -830,7 +832,7 @@ const VK = 'https://vk.com/appforse';
 const DEV = 'https://t.me/glebbnov';
 
 /* ─────────── содержание ─────────── */
-const NAV = [['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'], ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Тест', '#quiz'], ['Вопросы', '#faq'], ['Контакты', '#contacts']];
+const NAV = [['Зачем приложение', '#why'], ['Возможности', '#what'], ['Тест', '#quiz'], ['Для кого', '#who'], ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'], ['Контакты', '#contacts']];
 const WHY_CARDS = [{
   t: 'Повторные продажи',
   d: 'Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.'
@@ -1559,21 +1561,22 @@ const Founder = () => {
     className: "kicker"
   }, "\u0421\u043B\u043E\u0432\u043E\xA0\u043E\u0441\u043D\u043E\u0432\u0430\u0442\u0435\u043B\u044F"), /*#__PURE__*/React.createElement(Rise, {
     as: "h2",
+    className: "wide",
     delay: 60
-  }, "\u041F\u043E\u0447\u0435\u043C\u0443 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", ' ', /*#__PURE__*/React.createElement("br", null), "\u043D\u0435\xA0\u0441\u0442\u043E\u0438\u0442 \u043C\u0438\u043B\u043B\u0438\u043E\u043D\u043E\u0432")), /*#__PURE__*/React.createElement("div", {
+  }, "\u041F\u043E\u0447\u0435\u043C\u0443 \u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", ' ', /*#__PURE__*/React.createElement("br", null), "\u043D\u0435\xA0\u043E\u0431\u044F\u0437\u0430\u043D\u043E \u0441\u0442\u043E\u0438\u0442\u044C\xA0\u043C\u0438\u043B\u043B\u0438\u043E\u043D\u044B")), /*#__PURE__*/React.createElement("div", {
     className: "fv-body"
   }, /*#__PURE__*/React.createElement(Rise, {
     as: "p",
     className: "lead",
     delay: 120
-  }, "\u041A\u0430\u0442\u0430\u043B\u043E\u0433, \u043A\u043E\u0440\u0437\u0438\u043D\u0430, \u043E\u043F\u043B\u0430\u0442\u0430, \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430, \u0431\u043E\u043D\u0443\u0441\u044B, push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F\xA0\u2014 \u0440\u043E\u0437\u043D\u0438\u0447\u043D\u044B\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u043F\u0440\u0438\u043C\u0435\u0440\u043D\u043E \u043E\u0434\u043D\u043E \u0438\xA0\u0442\u043E\xA0\u0436\u0435. \u041C\u044B \u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043F\u043E\u0441\u0442\u0440\u043E\u0438\u043B\u0438 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0443, \u043E\u0442\u043B\u0430\u0434\u0438\u043B\u0438 \u0435\u0451\xA0\u043D\u0430\xA0\u0440\u0430\u0431\u043E\u0442\u0430\u044E\u0449\u0435\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0435 \u0438\xA0\u0442\u0435\u043F\u0435\u0440\u044C \u0440\u0430\u0437\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043C \u043F\u043E\u0434\xA0\u0432\u0430\u0448 \u0431\u0440\u0435\u043D\u0434, \u0430\xA0\u043D\u0435\xA0\u043F\u0438\u0448\u0435\u043C \u043A\u043E\u0440\u0437\u0438\u043D\u0443 \u0437\u0430\u043D\u043E\u0432\u043E."), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u041A\u0430\u0442\u0430\u043B\u043E\u0433, \u043A\u043E\u0440\u0437\u0438\u043D\u0430, \u043E\u043F\u043B\u0430\u0442\u0430, \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430, \u0431\u043E\u043D\u0443\u0441\u044B, push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F\xA0\u2014 \u0431\u043E\u043B\u044C\u0448\u0438\u043D\u0441\u0442\u0432\u0443 \u0440\u043E\u0437\u043D\u0438\u0447\u043D\u044B\u0445 \u0431\u0438\u0437\u043D\u0435\u0441\u043E\u0432 \u043D\u0443\u0436\u0435\u043D \u043E\u0434\u0438\u043D \u0438\xA0\u0442\u043E\u0442 \u0436\u0435\xA0\u0431\u0430\u0437\u043E\u0432\u044B\u0439 \u043D\u0430\u0431\u043E\u0440. \u041C\u044B \u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043F\u043E\u0441\u0442\u0440\u043E\u0438\u043B\u0438 \u0438\xA0\u043E\u0442\u043B\u0430\u0434\u0438\u043B\u0438 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0443, \u0430\xA0\u0442\u0435\u043F\u0435\u0440\u044C \u0440\u0430\u0437\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043C \u0435\u0451\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448 \u0431\u0440\u0435\u043D\u0434 \u0432\u043C\u0435\u0441\u0442\u043E \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u0441\xA0\u043D\u0443\u043B\u044F."), /*#__PURE__*/React.createElement(Rise, {
     className: "fv-cmp",
     delay: 180
   }, /*#__PURE__*/React.createElement("div", {
     className: "fv-col"
-  }, /*#__PURE__*/React.createElement("b", null, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\xA0\u043D\u0443\u043B\u044F"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0438\u0437\xA0\u0441\u0435\u043C\u0438 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u043E\u0432"), /*#__PURE__*/React.createElement("li", null, "\u0421\u043E\u0442\u043D\u0438 \u0447\u0430\u0441\u043E\u0432 \u043D\u0430\xA0\u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u043A\u043E\u0440\u0437\u0438\u043D\u0443\xA0\u0438\xA0\u0431\u043E\u043D\u0443\u0441\u044B"), /*#__PURE__*/React.createElement("li", null, "\u041C\u0435\u0441\u044F\u0446\u044B \u0434\u043E\xA0\u0437\u0430\u043F\u0443\u0441\u043A\u0430, \u0441\u0447\u0451\u0442\xA0\u043D\u0430\xA0\u043C\u0438\u043B\u043B\u0438\u043E\u043D\u044B"))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("b", null, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\xA0\u043D\u0443\u043B\u044F"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A, \u0434\u0438\u0437\u0430\u0439\u043D\u0435\u0440, \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0438, \u0442\u0435\u0441\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A,\xA0\u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440"), /*#__PURE__*/React.createElement("li", null, "\u0421\u043E\u0442\u043D\u0438 \u0438\xA0\u0442\u044B\u0441\u044F\u0447\u0438 \u0447\u0430\u0441\u043E\u0432\xA0\u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0438"), /*#__PURE__*/React.createElement("li", null, "\u041C\u0435\u0441\u044F\u0446\u044B \u0440\u0430\u0431\u043E\u0442\u044B \u0438\xA0\u0431\u044E\u0434\u0436\u0435\u0442 \u0432\xA0\u043C\u0438\u043B\u043B\u0438\u043E\u043D\u044B"))), /*#__PURE__*/React.createElement("div", {
     className: "fv-col on"
-  }, /*#__PURE__*/React.createElement("b", null, "\u0413\u043E\u0442\u043E\u0432\u0430\u044F\xA0\u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u0430 \u0438\xA0\u043E\u0442\u043B\u0430\u0436\u0435\u043D\u0430 \u043E\u0434\u0438\u043D\xA0\u0440\u0430\u0437"), /*#__PURE__*/React.createElement("li", null, "\u0420\u0430\u0437\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043C \u0435\u0451\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448 \u0431\u0440\u0435\u043D\u0434"), /*#__PURE__*/React.createElement("li", null, "7\xA0\u0434\u043D\u0435\u0439 \u0434\u043E\xA0\u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438, 150\xA0000\xA0\u20BD"))))))));
+  }, /*#__PURE__*/React.createElement("b", null, "\u0413\u043E\u0442\u043E\u0432\u0430\u044F\xA0\u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "\u041F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430 \u0443\u0436\u0435\xA0\u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0430\u043D\u0430 \u0438\xA0\u043E\u0442\u043B\u0430\u0436\u0435\u043D\u0430"), /*#__PURE__*/React.createElement("li", null, "\u0410\u0434\u0430\u043F\u0442\u0438\u0440\u0443\u0435\u043C \u0435\u0451\xA0\u043F\u043E\u0434\xA0\u0432\u0430\u0448 \u0431\u0440\u0435\u043D\u0434\xA0\u0438\xA0\u0431\u0438\u0437\u043D\u0435\u0441"), /*#__PURE__*/React.createElement("li", null, "\u041E\u0442\xA0150\xA0000\xA0\u20BD \xB7 \u0441\u0431\u043E\u0440\u043A\u0430 \u0437\u0430\xA07\xA0\u0440\u0430\u0431\u043E\u0447\u0438\u0445\xA0\u0434\u043D\u0435\u0439"))))))));
 };
 const Price = () => /*#__PURE__*/React.createElement("section", {
   id: "price"
@@ -1662,6 +1665,47 @@ const QUIZ_Q = [{
 /* короткая расшифровка под финальным ответом — по последнему вопросу,
    текстом уже проверенным на сайте (Zачем приложение / Для кого) */
 const QUIZ_NOTE = ['Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.', 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.', 'Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.', 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.'];
+
+/* та же форма и валидация, что в Contact/Magnet — только компактнее и без
+   лид-магнитного заголовка, потому что результат теста уже всё объяснил */
+const QuizForm = () => {
+  const {
+    err,
+    sent,
+    submit,
+    clear
+  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']]);
+  return /*#__PURE__*/React.createElement("form", {
+    className: "form qz-form",
+    noValidate: true,
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement(Field, {
+    name: "name",
+    placeholder: "\u0412\u0430\u0448\u0435 \u0438\u043C\u044F",
+    err: err.name,
+    onInput: () => clear('name')
+  }), /*#__PURE__*/React.createElement(PhoneField, {
+    err: err.phone,
+    onFix: () => clear('phone')
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn",
+    type: "submit"
+  }, sent ? 'Заявка отправлена' : 'Обсудить запуск'), /*#__PURE__*/React.createElement("label", {
+    className: "agree"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    name: "agree",
+    onChange: () => clear('agree')
+  }), /*#__PURE__*/React.createElement("span", null, "\u0421\u043E\u0433\u043B\u0430\u0441\u0435\u043D \u043D\u0430\xA0\u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0443 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445 \u0438\xA0\u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E ", /*#__PURE__*/React.createElement("a", {
+    href: "privacy.html",
+    target: "_blank",
+    rel: "noopener"
+  }, "\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443\xA0\u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438"), ".")), err.agree && /*#__PURE__*/React.createElement("span", {
+    className: "err"
+  }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
+    className: "note"
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."));
+};
 const Quiz = () => {
   const total = QUIZ_Q.length;
   const [step, setStep] = useState(0); // 0 — интро, 1..total — вопросы, total+1 — результат
@@ -1760,16 +1804,11 @@ const Quiz = () => {
     className: "lead"
   }, "\u041F\u043E\xA0\u0432\u0430\u0448\u0438\u043C \u043E\u0442\u0432\u0435\u0442\u0430\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u043E\u043B\u0435\u0437\u043D\u044B\u043C \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u043C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u0439 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0431\u0430\u0437\u043E\u0439."), /*#__PURE__*/React.createElement("div", {
     className: "qz-recap"
-  }, /*#__PURE__*/React.createElement("b", null, lastAns || 'Ваш приоритет'), /*#__PURE__*/React.createElement("p", null, QUIZ_NOTE[noteIdx])), /*#__PURE__*/React.createElement("div", {
-    className: "qz-actions"
-  }, /*#__PURE__*/React.createElement("a", {
-    className: "btn",
-    href: "#contact"
-  }, "\u041E\u0431\u0441\u0443\u0434\u0438\u0442\u044C\xA0\u0437\u0430\u043F\u0443\u0441\u043A"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("b", null, lastAns || 'Ваш приоритет'), /*#__PURE__*/React.createElement("p", null, QUIZ_NOTE[noteIdx])), /*#__PURE__*/React.createElement(QuizForm, null), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "qz-back",
     onClick: restart
-  }, "\u041F\u0440\u043E\u0439\u0442\u0438\xA0\u0435\u0449\u0451\xA0\u0440\u0430\u0437"))))));
+  }, "\u041F\u0440\u043E\u0439\u0442\u0438\xA0\u0435\u0449\u0451\xA0\u0440\u0430\u0437")))));
 };
 const Faq = () => {
   const [open, setOpen] = useState(0);
@@ -1898,7 +1937,7 @@ const Foot = () => /*#__PURE__*/React.createElement("footer", {
   target: "_blank",
   rel: "noopener"
 }, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\u0430\u0439\u0442\u0430"))));
-const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Quiz, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
+const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Quiz, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 </script>
 

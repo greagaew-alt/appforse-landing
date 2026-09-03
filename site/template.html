@@ -425,7 +425,8 @@ p, li, .lead { text-wrap: pretty; }
   font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); }
 .fv-col.on b { color: var(--red-lt); }
-.fv-col ul { display: grid; gap: clamp(7px, .63vw, 12px); margin-top: clamp(11px, 1vw, 18px); }
+.fv-col ul { list-style: none; margin: clamp(11px, 1vw, 18px) 0 0; padding: 0;
+  display: grid; gap: clamp(7px, .63vw, 12px); }
 .fv-col li { position: relative; padding-left: 16px; font-size: var(--fs-body);
   line-height: var(--lh-text); color: var(--muted-lo); }
 .fv-col li::before { content: ''; position: absolute; left: 0; top: .68em;
@@ -502,14 +503,15 @@ p, li, .lead { text-wrap: pretty; }
 .qz-back { margin-top: 4px; background: none; border: 0; padding: 6px 0; font: inherit;
   font-size: var(--fs-cap); letter-spacing: .04em; color: var(--muted-hi); cursor: pointer; }
 .qz-back:hover { color: var(--paper); }
-.qz-result .lead { max-width: 54ch; }
+.qz-result h3 + .lead { margin-top: clamp(10px, .94vw, 18px); max-width: 54ch; }
 .qz-recap { background: var(--ink-lift); border: 1px solid var(--red);
   padding: clamp(16px, 1.5vw, 26px);
   margin: clamp(18px, 1.6vw, 28px) 0 clamp(20px, 1.8vw, 30px); }
 .qz-recap b { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   letter-spacing: .1em; text-transform: uppercase; color: var(--red-lt); margin-bottom: 8px; }
 .qz-recap p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.qz-actions { display: flex; align-items: center; gap: clamp(18px, 1.6vw, 28px); flex-wrap: wrap; }
+.qz-form { max-width: 380px; }
+.qz-form .btn { width: 100%; }
 
 /* ── 09. Вопросы ── */
 .faq { margin-top: clamp(28px, 2.4vw, 46px); border-top: 1px solid #1F1D24; }
@@ -829,8 +831,8 @@ const DEV = 'https://t.me/glebbnov';
 
 /* ─────────── содержание ─────────── */
 const NAV = [
-  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Для кого', '#who'],
-  ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Тест', '#quiz'], ['Вопросы', '#faq'],
+  ['Зачем приложение', '#why'], ['Возможности', '#what'], ['Тест', '#quiz'], ['Для кого', '#who'],
+  ['Как запустим', '#how'], ['Кейс', '#case'], ['Цена', '#price'], ['Вопросы', '#faq'],
   ['Контакты', '#contacts'],
 ];
 
@@ -1405,30 +1407,30 @@ const Founder = () => {
           </Rise>
           <div className="fv-head">
             <Rise as="span" className="kicker">Слово основателя</Rise>
-            <Rise as="h2" delay={60}>Почему приложение{' '}<br />не стоит миллионов</Rise>
+            <Rise as="h2" className="wide" delay={60}>Почему собственное приложение{' '}<br />не обязано стоить миллионы</Rise>
           </div>
           <div className="fv-body">
             <Rise as="p" className="lead" delay={120}>
-              Каталог, корзина, оплата, доставка, бонусы, push-уведомления — розничным
-              бизнесам нужно примерно одно и то же. Мы один раз построили платформу,
-              отладили её на работающем бизнесе и теперь разворачиваем под ваш бренд,
-              а не пишем корзину заново.
+              Каталог, корзина, оплата, доставка, бонусы, push-уведомления —
+              большинству розничных бизнесов нужен один и тот же базовый набор.
+              Мы один раз построили и отладили платформу, а теперь разворачиваем
+              её под ваш бренд вместо разработки с нуля.
             </Rise>
             <Rise className="fv-cmp" delay={180}>
               <div className="fv-col">
                 <b>Разработка с нуля</b>
                 <ul>
-                  <li>Команда из семи специалистов</li>
-                  <li>Сотни часов на каталог, корзину и бонусы</li>
-                  <li>Месяцы до запуска, счёт на миллионы</li>
+                  <li>Аналитик, дизайнер, разработчики, тестировщик, менеджер</li>
+                  <li>Сотни и тысячи часов разработки</li>
+                  <li>Месяцы работы и бюджет в миллионы</li>
                 </ul>
               </div>
               <div className="fv-col on">
                 <b>Готовая платформа</b>
                 <ul>
-                  <li>Система написана и отлажена один раз</li>
-                  <li>Разворачиваем её под ваш бренд</li>
-                  <li>7 дней до публикации, 150 000 ₽</li>
+                  <li>Платформа уже разработана и отлажена</li>
+                  <li>Адаптируем её под ваш бренд и бизнес</li>
+                  <li>От 150 000 ₽ · сборка за 7 рабочих дней</li>
                 </ul>
               </div>
             </Rise>
@@ -1512,6 +1514,33 @@ const QUIZ_NOTE = [
   'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.',
 ];
 
+/* та же форма и валидация, что в Contact/Magnet — только компактнее и без
+   лид-магнитного заголовка, потому что результат теста уже всё объяснил */
+const QuizForm = () => {
+  const { err, sent, submit, clear } = useForm([
+    ['name', filled, 'Как к вам обращаться?'],
+    ['phone', phoneOk, 'Оставьте номер телефона целиком'],
+    ['agree', checked, 'Нужно согласие на обработку данных'],
+  ]);
+  return (
+    <form className="form qz-form" noValidate onSubmit={submit}>
+      <Field name="name" placeholder="Ваше имя" err={err.name} onInput={() => clear('name')} />
+      <PhoneField err={err.phone} onFix={() => clear('phone')} />
+      <button className="btn" type="submit">
+        {sent ? 'Заявка отправлена' : 'Обсудить запуск'}
+      </button>
+      <label className="agree">
+        <input type="checkbox" name="agree" onChange={() => clear('agree')} />
+        <span>Согласен на обработку персональных данных
+          и принимаю <a href="privacy.html" target="_blank"
+          rel="noopener">политику конфиденциальности</a>.</span>
+      </label>
+      {err.agree && <span className="err">{err.agree}</span>}
+      {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
+    </form>
+  );
+};
+
 const Quiz = () => {
   const total = QUIZ_Q.length;
   const [step, setStep] = useState(0);        // 0 — интро, 1..total — вопросы, total+1 — результат
@@ -1594,10 +1623,8 @@ const Quiz = () => {
                 <b>{lastAns || 'Ваш приоритет'}</b>
                 <p>{QUIZ_NOTE[noteIdx]}</p>
               </div>
-              <div className="qz-actions">
-                <a className="btn" href="#contact">Обсудить запуск</a>
-                <button type="button" className="qz-back" onClick={restart}>Пройти ещё раз</button>
-              </div>
+              <QuizForm />
+              <button type="button" className="qz-back" onClick={restart}>Пройти ещё раз</button>
             </div>
           )}
         </Rise>
@@ -1709,8 +1736,8 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
-    <Top /><Hero /><Why /><What /><Who /><How /><Case /><Founder />
-    <Price /><Quiz /><Faq /><Contact /><Foot />
+    <Top /><Hero /><Why /><What /><Quiz /><Who /><How /><Case /><Founder />
+    <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
 );
 
