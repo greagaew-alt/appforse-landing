@@ -1555,6 +1555,27 @@ const Quiz = () => {
     }
   }, [step]);
 
+  /* карточка с 5 вариантами выше, чем интро с одной кнопкой — без этого
+     после «Начать тест» вопрос обрывался внизу экрана, а докрутить
+     самому не всегда очевидно. Подводим верх карточки под шапку на
+     каждом шаге, кроме сброса на интро. */
+  useEffect(() => {
+    if (step === 0) return;
+    const el = document.getElementById('qz-box');
+    if (!el) return;
+    const raf = requestAnimationFrame(() => {
+      const header = document.querySelector('.top');
+      const off = (header ? header.offsetHeight : 0) + 16;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - off;
+      const reduce = window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (Math.abs(window.pageYOffset - y) > 24) {
+        window.scrollTo({ top: y < 0 ? 0 : y, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [step]);
+
   const choose = i => {
     if (picked !== -1) return;
     setPicked(i);
@@ -1578,7 +1599,7 @@ const Quiz = () => {
           Самый универсальный способ понять это — не гадать, а проверить за минуту.
         </Rise>
 
-        <Rise className="qz" delay={140}>
+        <Rise className="qz" delay={140} id="qz-box">
           <div className="qz-rail-wrap"><span className="qz-rail"
                style={{ transform: 'scaleX(' + pct + ')' }} /></div>
 
