@@ -515,19 +515,22 @@ p, li, .lead { text-wrap: pretty; }
   border-radius: 50%; background: var(--paper); }
 
 /* сетка с иконками — «чем занимаетесь / как покупают / что важнее» */
-.qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+.qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
   gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
 .qz-card { position: relative; display: flex; flex-direction: column; align-items: flex-start;
   min-width: 0; gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap);
   color: var(--paper); background: #131117; border: 1px solid #2A2830;
-  padding: clamp(14px, 1.25vw, 20px); cursor: pointer; overflow-wrap: break-word;
+  padding: clamp(14px, 1.25vw, 20px); cursor: pointer;
   transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
 .qz-card:hover { background: #1B1920; border-color: #3A3742; }
 .qz-card.on { border-color: var(--red); background: #1B1119; transform: translateY(-2px); }
 .qz-ico { display: grid; place-items: center; width: 30px; height: 30px; color: var(--muted-hi);
   transition: color .25s var(--ease); }
 .qz-ico .lu { width: 22px; height: 22px; }
-.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: break-word; }
+/* без break-word: браузер иначе режет слово на границе строки, даже когда
+   оно целиком спокойно помещается на следующей — резалось «продажи» на
+   «прод» + «ажи», хотя слово короче, чем уже влезавшее «Производство» */
+.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: normal; }
 .qz-card.on .qz-ico { color: var(--red-lt); }
 .qz-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
   border-radius: 50%; background: var(--red); color: var(--paper); display: grid; place-items: center; }
@@ -549,7 +552,12 @@ p, li, .lead { text-wrap: pretty; }
 .qz-recap b { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   letter-spacing: .1em; text-transform: uppercase; color: var(--red-lt); margin-bottom: 8px; }
 .qz-recap p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.qz-form { max-width: 420px; }
+.qz-cta-h { font-size: var(--fs-h4); line-height: var(--lh-head);
+  margin-top: clamp(22px, 2vw, 34px); padding-top: clamp(18px, 1.6vw, 28px);
+  border-top: 1px solid #232128; }
+.qz-cta-p { margin-top: 8px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); max-width: 48ch; }
+.qz-form { max-width: 420px; margin-top: clamp(16px, 1.5vw, 26px); }
 .qz-form .btn { width: 100%; }
 
 /* ── 09. Вопросы ── */
@@ -932,7 +940,7 @@ const FAQ = [
 const QUIZ_Q = [
   { t: 'Чем занимается ваш бизнес?',
     h: 'Это поможет подобрать подходящий сценарий приложения.',
-    a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство и продажи', 'Другое'],
+    a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство', 'Другое'],
     ic: ['bag', 'bike', 'laptop', 'factory', 'more-horizontal'] },
   { t: 'Как клиенты обычно покупают?',
     h: 'Так мы поймём, какие функции продаж вам нужны в первую очередь.',
@@ -946,7 +954,7 @@ const QUIZ_Q = [
     a: ['Да, большая', 'Есть, но небольшая', 'Нет, не собираем'] },
   { t: 'Что сейчас важнее всего?',
     h: 'Определит, какую пользу приложения показать вам в первую очередь.',
-    a: ['Увеличить повторные продажи', 'Вернуть клиентов', 'Снизить нагрузку на менеджеров', 'Создать собственный канал продаж'],
+    a: ['Повторные продажи', 'Вернуть клиентов', 'Разгрузить менеджеров', 'Свой канал продаж'],
     ic: ['trending-up', 'user-check', 'headphones', 'smartphone'] },
 ];
 /* короткая расшифровка под финальным ответом — по последнему вопросу,
@@ -956,6 +964,14 @@ const QUIZ_NOTE = [
   'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.',
   'Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.',
   'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.',
+];
+/* верхний абзац результата — тоже по последнему вопросу, тот же порядок,
+   что в QUIZ_NOTE выше */
+const QUIZ_SUMMARY = [
+  'По вашим ответам видим несколько задач, которые AppForse может закрыть: бонусы и push для повторных покупок, удобный повторный заказ и своя клиентская база.',
+  'По вашим ответам видим несколько задач, которые AppForse может закрыть: работа с клиентской базой, повторные продажи и удобный канал для оформления заказов.',
+  'По вашим ответам видим несколько задач, которые AppForse может закрыть: каталог и повторный заказ без переписки с менеджером, меньше рутинных обращений в директ.',
+  'По вашим ответам видим несколько задач, которые AppForse может закрыть: свой канал продаж без комиссий маркетплейсов, прямая связь с клиентами и своя база.',
 ];
 
 /* ─────────── мелкие детали ─────────── */
@@ -1610,7 +1626,7 @@ const QuizForm = () => {
       <Field name="name" placeholder="Ваше имя" err={err.name} onInput={() => clear('name')} />
       <PhoneField err={err.phone} onFix={() => clear('phone')} />
       <button className="btn" type="submit">
-        {sent ? 'Заявка отправлена' : 'Обсудить запуск'}
+        {sent ? 'Заявка отправлена' : 'Обсудить мой бизнес'}
       </button>
       <label className="agree">
         <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -1744,15 +1760,18 @@ const Quiz = () => {
 
             {step === total + 1 && (
               <div className={'qz-panel qz-result' + (dir < 0 ? ' back' : '')} key="result">
-                <h3>Похоже, это ваш случай</h3>
-                <p className="lead">
-                  По вашим ответам приложение может быть полезным инструментом для повторных
-                  продаж и работы с существующей клиентской базой.
-                </p>
+                <h3>Вот что можно сделать в вашем бизнесе</h3>
+                <p className="lead">{QUIZ_SUMMARY[noteIdx]}</p>
                 <div className="qz-recap">
                   <b>{lastAns || 'Ваш приоритет'}</b>
                   <p>{QUIZ_NOTE[noteIdx]}</p>
                 </div>
+                <h4 className="qz-cta-h display">Готовы показать, как это будет работать у вас</h4>
+                <p className="qz-cta-p">
+                  Оставьте контакты — уточним задачи вашего бизнеса и покажем, какие
+                  возможности AppForse можно использовать для повторных продаж и работы
+                  с клиентами.
+                </p>
                 <QuizForm />
                 <button type="button" className="qz-back" onClick={restart}>Пройти ещё раз</button>
               </div>

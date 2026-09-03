@@ -515,19 +515,22 @@ p, li, .lead { text-wrap: pretty; }
   border-radius: 50%; background: var(--paper); }
 
 /* сетка с иконками — «чем занимаетесь / как покупают / что важнее» */
-.qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+.qz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
   gap: 10px; margin: clamp(18px, 1.6vw, 28px) 0 clamp(14px, 1.3vw, 22px); }
 .qz-card { position: relative; display: flex; flex-direction: column; align-items: flex-start;
   min-width: 0; gap: 10px; text-align: left; font: inherit; font-size: var(--fs-cap);
   color: var(--paper); background: #131117; border: 1px solid #2A2830;
-  padding: clamp(14px, 1.25vw, 20px); cursor: pointer; overflow-wrap: break-word;
+  padding: clamp(14px, 1.25vw, 20px); cursor: pointer;
   transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
 .qz-card:hover { background: #1B1920; border-color: #3A3742; }
 .qz-card.on { border-color: var(--red); background: #1B1119; transform: translateY(-2px); }
 .qz-ico { display: grid; place-items: center; width: 30px; height: 30px; color: var(--muted-hi);
   transition: color .25s var(--ease); }
 .qz-ico .lu { width: 22px; height: 22px; }
-.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: break-word; }
+/* без break-word: браузер иначе режет слово на границе строки, даже когда
+   оно целиком спокойно помещается на следующей — резалось «продажи» на
+   «прод» + «ажи», хотя слово короче, чем уже влезавшее «Производство» */
+.qz-label { display: block; width: 100%; min-width: 0; overflow-wrap: normal; }
 .qz-card.on .qz-ico { color: var(--red-lt); }
 .qz-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
   border-radius: 50%; background: var(--red); color: var(--paper); display: grid; place-items: center; }
@@ -549,7 +552,12 @@ p, li, .lead { text-wrap: pretty; }
 .qz-recap b { display: block; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
   letter-spacing: .1em; text-transform: uppercase; color: var(--red-lt); margin-bottom: 8px; }
 .qz-recap p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.qz-form { max-width: 420px; }
+.qz-cta-h { font-size: var(--fs-h4); line-height: var(--lh-head);
+  margin-top: clamp(22px, 2vw, 34px); padding-top: clamp(18px, 1.6vw, 28px);
+  border-top: 1px solid #232128; }
+.qz-cta-p { margin-top: 8px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); max-width: 48ch; }
+.qz-form { max-width: 420px; margin-top: clamp(16px, 1.5vw, 26px); }
 .qz-form .btn { width: 100%; }
 
 /* ── 09. Вопросы ── */
@@ -925,7 +933,7 @@ const FAQ = [['У меня уже есть сайт и другие кана
 const QUIZ_Q = [{
   t: 'Чем занимается ваш бизнес?',
   h: 'Это поможет подобрать подходящий сценарий приложения.',
-  a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство и продажи', 'Другое'],
+  a: ['Розничная торговля', 'Доставка', 'Интернет-магазин', 'Производство', 'Другое'],
   ic: ['bag', 'bike', 'laptop', 'factory', 'more-horizontal']
 }, {
   t: 'Как клиенты обычно покупают?',
@@ -943,12 +951,15 @@ const QUIZ_Q = [{
 }, {
   t: 'Что сейчас важнее всего?',
   h: 'Определит, какую пользу приложения показать вам в первую очередь.',
-  a: ['Увеличить повторные продажи', 'Вернуть клиентов', 'Снизить нагрузку на менеджеров', 'Создать собственный канал продаж'],
+  a: ['Повторные продажи', 'Вернуть клиентов', 'Разгрузить менеджеров', 'Свой канал продаж'],
   ic: ['trending-up', 'user-check', 'headphones', 'smartphone']
 }];
 /* короткая расшифровка под финальным ответом — по последнему вопросу,
    текстом уже проверенным на сайте (Zачем приложение / Для кого) */
 const QUIZ_NOTE = ['Возвращайте клиентов на новые покупки через бонусы, push и персональные предложения.', 'Общайтесь с покупателями напрямую и возвращайте их без нового привлечения.', 'Приложение показывает актуальный каталог и позволяет повторить заказ без переписки с менеджером.', 'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.'];
+/* верхний абзац результата — тоже по последнему вопросу, тот же порядок,
+   что в QUIZ_NOTE выше */
+const QUIZ_SUMMARY = ['По вашим ответам видим несколько задач, которые AppForse может закрыть: бонусы и push для повторных покупок, удобный повторный заказ и своя клиентская база.', 'По вашим ответам видим несколько задач, которые AppForse может закрыть: работа с клиентской базой, повторные продажи и удобный канал для оформления заказов.', 'По вашим ответам видим несколько задач, которые AppForse может закрыть: каталог и повторный заказ без переписки с менеджером, меньше рутинных обращений в директ.', 'По вашим ответам видим несколько задач, которые AppForse может закрыть: свой канал продаж без комиссий маркетплейсов, прямая связь с клиентами и своя база.'];
 
 /* ─────────── мелкие детали ─────────── */
 /* Иконки — набор Lucide (лицензия MIT), встроены как SVG: единый стиль без внешних файлов */
@@ -1832,7 +1843,7 @@ const QuizForm = () => {
   }), /*#__PURE__*/React.createElement("button", {
     className: "btn",
     type: "submit"
-  }, sent ? 'Заявка отправлена' : 'Обсудить запуск'), /*#__PURE__*/React.createElement("label", {
+  }, sent ? 'Заявка отправлена' : 'Обсудить мой бизнес'), /*#__PURE__*/React.createElement("label", {
     className: "agree"
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
@@ -1993,11 +2004,15 @@ const Quiz = () => {
   }, step === total ? 'Показать результат →' : 'Далее →'))), step === total + 1 && /*#__PURE__*/React.createElement("div", {
     className: 'qz-panel qz-result' + (dir < 0 ? ' back' : ''),
     key: "result"
-  }, /*#__PURE__*/React.createElement("h3", null, "\u041F\u043E\u0445\u043E\u0436\u0435, \u044D\u0442\u043E\xA0\u0432\u0430\u0448 \u0441\u043B\u0443\u0447\u0430\u0439"), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("h3", null, "\u0412\u043E\u0442 \u0447\u0442\u043E\xA0\u043C\u043E\u0436\u043D\u043E \u0441\u0434\u0435\u043B\u0430\u0442\u044C \u0432\xA0\u0432\u0430\u0448\u0435\u043C \u0431\u0438\u0437\u043D\u0435\u0441\u0435"), /*#__PURE__*/React.createElement("p", {
     className: "lead"
-  }, "\u041F\u043E\xA0\u0432\u0430\u0448\u0438\u043C \u043E\u0442\u0432\u0435\u0442\u0430\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C \u043F\u043E\u043B\u0435\u0437\u043D\u044B\u043C \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u043C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u0439 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0431\u0430\u0437\u043E\u0439."), /*#__PURE__*/React.createElement("div", {
+  }, QUIZ_SUMMARY[noteIdx]), /*#__PURE__*/React.createElement("div", {
     className: "qz-recap"
-  }, /*#__PURE__*/React.createElement("b", null, lastAns || 'Ваш приоритет'), /*#__PURE__*/React.createElement("p", null, QUIZ_NOTE[noteIdx])), /*#__PURE__*/React.createElement(QuizForm, null), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("b", null, lastAns || 'Ваш приоритет'), /*#__PURE__*/React.createElement("p", null, QUIZ_NOTE[noteIdx])), /*#__PURE__*/React.createElement("h4", {
+    className: "qz-cta-h display"
+  }, "\u0413\u043E\u0442\u043E\u0432\u044B \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u044C, \u043A\u0430\u043A\xA0\u044D\u0442\u043E\xA0\u0431\u0443\u0434\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C\xA0\u0443\xA0\u0432\u0430\u0441"), /*#__PURE__*/React.createElement("p", {
+    className: "qz-cta-p"
+  }, "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043A\u043E\u043D\u0442\u0430\u043A\u0442\u044B\xA0\u2014 \u0443\u0442\u043E\u0447\u043D\u0438\u043C \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u0430\u0448\u0435\u0433\u043E \u0431\u0438\u0437\u043D\u0435\u0441\u0430 \u0438\xA0\u043F\u043E\u043A\u0430\u0436\u0435\u043C, \u043A\u0430\u043A\u0438\u0435 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u0438 AppForse \u043C\u043E\u0436\u043D\u043E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u043A\u043B\u0438\u0435\u043D\u0442\u0430\u043C\u0438."), /*#__PURE__*/React.createElement(QuizForm, null), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "qz-back",
     onClick: restart
