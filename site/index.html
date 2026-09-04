@@ -82,7 +82,7 @@
 
   /* ── сетка ── */
   --shell: 1505px;
-  --shot-w: clamp(164.37px, 15.64vw, 300.24px);   /* ширина снимка с рамкой */
+  --shot-w: clamp(150px, 14.27vw, 274px);   /* ширина снимка с рамкой */
   --shot-gap: clamp(14px, 1.82vw, 35px);
 
   --ease: cubic-bezier(.22,.61,.36,1);
@@ -332,7 +332,7 @@ section, .foot { position: relative; z-index: 1; }
 .panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
   border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
-.panel .pic { align-self: flex-start; width: clamp(153.41px, 14.25vw, 273.94px); }
+.panel .pic { align-self: flex-start; width: clamp(140px, 13vw, 250px); }
 .panel .pic .shot, .case .pic .shot { width: 100%; }
 
 /* ── 04. Для кого ── */
@@ -376,7 +376,7 @@ section, .foot { position: relative; z-index: 1; }
   text-transform: uppercase; color: var(--red-lt); }
 .case h3 { margin: 14px 0 10px; }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.case .pic { width: clamp(153.41px, 14.25vw, 273.94px); }
+.case .pic { width: clamp(140px, 13vw, 250px); }
 
 /* ── Слово основателя ── */
 .fv { display: grid; grid-template-columns: clamp(240px, 24vw, 380px) minmax(0, 1fr);
@@ -448,8 +448,10 @@ section, .foot { position: relative; z-index: 1; }
     margin-left: 10px;
     width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
   .price .collage .shot { position: absolute; }
-  .price .collage .shot.a { left: 0; top: 0; width: clamp(101.91px, 8.96vw, 172.04px); }
-  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(119.44px, 10.56vw, 202.72px); }
+  .price .collage .shot.a, .price .collage .shot.b {
+    width: clamp(92px, 8.17vw, 157px); }
+  .price .collage .shot.a { left: 0; top: 0; }
+  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
@@ -701,7 +703,12 @@ section, .foot { position: relative; z-index: 1; }
 .magnet .form input:focus { border-color: var(--paper); }
 .magnet .form .note { color: rgba(255,255,255,.72); }
 @media (max-width: 900px) { .magnet { grid-template-columns: 1fr; } }
-@media (max-width: 900px) { .qz-layout { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .qz-layout { grid-template-columns: 1fr; gap: clamp(21px, 2.4vw, 46px); }
+  /* отступ до карточки задаёт только сетка — иначе он удваивался */
+  .qz { margin-top: 0; }
+  .qz-side { padding-top: 0; }
+}
 
 /* ── согласие на обработку данных ── */
 .agree { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
@@ -761,7 +768,7 @@ section, .foot { position: relative; z-index: 1; }
   .fv-media { max-width: 300px; width: 100%; margin: 0 auto; }
   .fv-body { padding-top: 0; }
   .fv-cmp { grid-template-columns: 1fr; }
-  /* relative, а не static: иначе скотч теряет опору и уезжает на карточку */
+  /* relative, а не static: absolute здесь ломает ряд */
   .price .collage .shot.a, .price .collage .shot.b {
     position: relative; left: auto; right: auto; top: auto;
     width: calc((100% - 12px) / 2); margin-top: 14px; }
@@ -850,7 +857,7 @@ section, .foot { position: relative; z-index: 1; }
   .demo { grid-template-columns: 1fr; }
 }
 </style>
-<script type="application/ld+json">__JSONLD__</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://greagaew-alt.github.io/appforse-landing/site/#org","name":"AppForse","url":"https://greagaew-alt.github.io/appforse-landing/site/","logo":"https://greagaew-alt.github.io/appforse-landing/site/icon-192.png","image":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg","description":"Готовая платформа мобильных приложений для торговли под брендом заказчика","sameAs":["https://vk.com/appforse","https://t.me/shark154"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/shark154","availableLanguage":"Russian"}]},{"@type":"WebSite","@id":"https://greagaew-alt.github.io/appforse-landing/site/#site","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"AppForse","inLanguage":"ru-RU","publisher":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"}},{"@type":"WebPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#page","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"Мобильное приложение под вашим брендом за 7 дней — AppForse","isPartOf":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#site"},"about":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"inLanguage":"ru-RU","primaryImageOfPage":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg"},{"@type":"Service","@id":"https://greagaew-alt.github.io/appforse-landing/site/#service","name":"Запуск мобильного приложения под брендом заказчика","serviceType":"Разработка мобильного приложения на готовой платформе","provider":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"areaServed":{"@type":"Country","name":"Россия"},"audience":[{"@type":"BusinessAudience","name":"Оптовые продажи"},{"@type":"BusinessAudience","name":"Магазины и доставка"},{"@type":"BusinessAudience","name":"Рестораны и доставка еды"},{"@type":"BusinessAudience","name":"Розница"}],"description":"Клиентское приложение и админ-панель под брендом заказчика: каталог, заказы, доставка, оплата, бонусы, push-уведомления и CRM. Публикация в App Store и Google Play за 7 рабочих дней.","offers":{"@type":"Offer","price":"150000","priceCurrency":"RUB","availability":"https://schema.org/InStock","url":"https://greagaew-alt.github.io/appforse-landing/site/#price","itemOffered":{"@type":"Service","name":"Запуск платформы под вашим брендом"}},"hasOfferCatalog":{"@type":"OfferCatalog","name":"В стоимость входит","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Клиентское приложение под вашим брендом"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Публикация в App Store и Google Play"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Каталог товаров, корзина и онлайн-оплата"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Доставка и самовывоз"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Бонусы, промокоды и push-уведомления"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM и клиентская база"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Админ-панель и аналитика"}}]}},{"@type":"FAQPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#faq","mainEntity":[{"@type":"Question","name":"У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?","acceptedAnswer":{"@type":"Answer","text":"Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки."}},{"@type":"Question","name":"Чем это отличается от разработки приложения с нуля?","acceptedAnswer":{"@type":"Answer","text":"При разработке с нуля вы оплачиваете целую команду — аналитика, дизайнера, разработчиков под iOS и Android, тестировщика и менеджера проекта. Они заново пишут каталог, корзину, оплату и бонусную систему — это сотни часов и месяцы работы. У нас платформа уже написана, отлажена и работает в действующем бизнесе — мы разворачиваем её под ваш бренд за 7 дней. Индивидуальная разработка оправдана, когда у бизнеса действительно нестандартная задача."}},{"@type":"Question","name":"Сколько времени занимает запуск?","acceptedAnswer":{"@type":"Answer","text":"Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения."}},{"@type":"Question","name":"Кто делает дизайн приложения?","acceptedAnswer":{"@type":"Answer","text":"Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить."}},{"@type":"Question","name":"Что нужно от меня для запуска?","acceptedAnswer":{"@type":"Answer","text":"Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя."}},{"@type":"Question","name":"Я получаю исходный код?","acceptedAnswer":{"@type":"Answer","text":"Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно."}},{"@type":"Question","name":"Обязательно ли платить за поддержку?","acceptedAnswer":{"@type":"Answer","text":"Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно."}},{"@type":"Question","name":"Что если клиенты не станут пользоваться приложением?","acceptedAnswer":{"@type":"Answer","text":"До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах."}}]}]}</script>
 </head>
 <body>
 <div id="root"></div>
@@ -1481,9 +1488,11 @@ const ParticleField = () => {
     };
     const seed = () => {
       /* связи ищем перебором пар, поэтому число знаков держим скромным:
-         80 точек это около 3200 сравнений за кадр, 42 — примерно 860 */
+         80 точек это около 3200 сравнений за кадр, 42 — примерно 860.
+         Лучей держим минимум: они самые заметные, а фон не должен
+         перетягивать внимание на себя */
       const nCount = w < 760 ? 42 : 80;
-      const bCount = w < 760 ? 13 : 23;
+      const bCount = w < 760 ? 4 : 7;
       nodes = [];
       for (let i = 0; i < nCount; i++) {
         nodes.push({
@@ -1499,8 +1508,8 @@ const ParticleField = () => {
           x: Math.random() * w,
           y: Math.random() * h,
           len: Math.random() * 90 + 46,
-          sp: Math.random() * 1.15 + 0.65,
-          a: Math.random() * 0.4 + 0.3
+          sp: Math.random() * 0.38 + 0.22,
+          a: Math.random() * 0.14 + 0.1
         });
       }
     };
@@ -1517,8 +1526,8 @@ const ParticleField = () => {
           b.x = Math.random() * w;
         }
         const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.len);
-        g.addColorStop(0, 'rgba(232, 36, 60, ' + b.a + ')');
-        g.addColorStop(1, 'rgba(232, 36, 60, 0)');
+        g.addColorStop(0, 'rgba(168, 30, 46, ' + b.a + ')');
+        g.addColorStop(1, 'rgba(168, 30, 46, 0)');
         ctx.strokeStyle = g;
         ctx.lineWidth = 1.6;
         ctx.beginPath();
@@ -1535,7 +1544,7 @@ const ParticleField = () => {
             dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            ctx.strokeStyle = 'rgba(110, 110, 122, ' + 0.22 * (1 - d / LINK) + ')';
+            ctx.strokeStyle = 'rgba(110, 110, 122, ' + 0.12 * (1 - d / LINK) + ')';
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -1561,13 +1570,13 @@ const ParticleField = () => {
           n.ch = GLYPHS[Math.random() * GLYPHS.length | 0];
         }
         if (near) {
-          ctx.strokeStyle = 'rgba(232, 36, 60, ' + 0.45 * (1 - d / REACH) + ')';
+          ctx.strokeStyle = 'rgba(198, 34, 54, ' + 0.22 * (1 - d / REACH) + ')';
           ctx.beginPath();
           ctx.moveTo(n.x, n.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-        ctx.fillStyle = near ? '#FF5468' : 'rgba(126, 126, 140, 0.52)';
+        ctx.fillStyle = near ? 'rgba(226, 62, 84, .7)' : 'rgba(120, 120, 134, 0.28)';
         ctx.fillText(n.ch, n.x, n.y);
       }
       raf = requestAnimationFrame(draw);
