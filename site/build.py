@@ -16,7 +16,7 @@ out = (tpl
        .replace('__LOGO__', img['logo'])
        .replace('__SHOT1__', img['shot1'])
        .replace('__SHOT2__', img['shot2'])
-       .replace('__TAPE__', img['tape'])
+       .replace('__PHONE__', img['phone'])
        .replace('__TORN_A__', a['tornA'])
        .replace('__TORN_B__', a['tornB'])
        .replace('__TORN_C__', a['tornC'])

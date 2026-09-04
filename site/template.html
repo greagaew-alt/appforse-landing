@@ -82,9 +82,8 @@
 
   /* ── сетка ── */
   --shell: 1505px;
-  --shot-w: clamp(150px, 14.27vw, 274px);   /* ширина снимка с рамкой */
+  --shot-w: clamp(164.37px, 15.64vw, 300.24px);   /* ширина снимка с рамкой */
   --shot-gap: clamp(14px, 1.82vw, 35px);
-  --tape-w: clamp(34px, 3.13vw, 60px);
 
   --ease: cubic-bezier(.22,.61,.36,1);
 }
@@ -181,11 +180,15 @@ p, li, .lead { text-wrap: pretty; }
 
 /* ═══════════ ШАПКА ═══════════ */
 .top {
-  position: sticky; top: 0; z-index: 60; background: rgba(14,12,16,.86);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid transparent; transition: border-color .3s var(--ease);
+  position: sticky; top: 0; z-index: 60; background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease), background-color .3s var(--ease);
 }
-.top.stuck { border-bottom-color: #1F1D24; }
+/* пока стоим на первом экране, шапка прозрачная и фон виден во весь экран;
+   как только страницу тронули — закрываем её плотным цветом, чтобы знаки
+   не мельтешили под меню */
+.top.stuck, .top.open { border-bottom-color: #1F1D24; background: var(--ink);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .top .shell { display: flex; align-items: center; gap: var(--s6);
   padding-top: var(--s6); padding-bottom: var(--s6); }
 .top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
@@ -236,18 +239,15 @@ p, li, .lead { text-wrap: pretty; }
 }
 
 /* ═══════════ 01. ПЕРВЫЙ ЭКРАН ═══════════ */
-/* Фон первого экрана: дрейфующие знаки и вертикальные лучи по канвасу.
-   Канвас лежит под содержимым, клики сквозь него проходят. */
-.hero { position: relative; overflow: hidden; }
-.hero > .shell { position: relative; z-index: 1; }
-.pf { position: absolute; inset: 0; width: 100%; height: 100%;
+/* Живой фон всей страницы: знаки и лучи по канвасу.
+   Канвас прибит к экрану под содержимым — секции своего фона не задают,
+   поэтому он просвечивает везде, кроме красных блоков и плотных карточек. */
+.pf { position: fixed; inset: 0; width: 100%; height: 100%;
   display: block; z-index: 0; pointer-events: none;
   opacity: 0; transition: opacity 1.2s var(--ease); }
 .pf.on { opacity: 1; }
-/* низ первого экрана растворяем в фоне, чтобы стык со следующим блоком не резал */
-.hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-  height: clamp(60px, 9vw, 150px); z-index: 0; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(14, 12, 16, 0), var(--ink)); }
+/* содержимое поверх канваса */
+section, .foot { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .pf { display: none; } }
 
 .hero .shell {
@@ -276,20 +276,14 @@ p, li, .lead { text-wrap: pretty; }
 /* снимки */
 .shots { display: flex; gap: var(--shot-gap); justify-content: flex-end; align-items: flex-start;
   margin-top: clamp(-8px, -0.42vw, 0px); }
-.shot { position: relative; width: var(--shot-w); border: 4px solid var(--paper);
-  background: var(--ink-lift); box-shadow: 0 22px 54px rgba(0,0,0,.6); }
-.shot.b { border-color: var(--red); margin-top: 10px; }
-.shot img { width: 100%; height: auto; }
-.tape {
-  position: absolute; z-index: 3; width: var(--tape-w); height: auto;
-  left: 50%; top: -13px; transform: translateX(-50%) rotate(-1.5deg);
-  opacity: .9; filter: drop-shadow(0 3px 6px rgba(0,0,0,.5)); pointer-events: none;
-  transition: transform .4s var(--ease);
-}
-.shot img.tape { width: var(--tape-w); }
-.shot.b .tape { transform: translateX(-50%) rotate(2deg); }
-.shot:hover .tape { transform: translateX(-50%) rotate(-4deg); }
-.shot.b:hover .tape { transform: translateX(-50%) rotate(5deg); }
+/* корпус телефона задаёт габарит, снимок лежит в его окне */
+.shot { position: relative; width: var(--shot-w); line-height: 0; }
+.shot .frame { position: relative; z-index: 1; display: block; width: 100%; height: auto;
+  pointer-events: none; background: none; }
+.shot .ui { position: absolute; z-index: 0; left: 4.37%; top: 2.13%;
+  width: 91.26%; height: 95.87%; object-fit: cover; object-position: top center;
+  border-radius: 4.4%/2.1%; }
+.shot.b { margin-top: 10px; }
 
 /* рваный край между секциями */
 /* рваный край: SVG прозрачный, красная фигура на нём одна.
@@ -338,10 +332,8 @@ p, li, .lead { text-wrap: pretty; }
 .panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
   border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
-.panel .pic { border: 3px solid var(--paper); background: var(--ink); align-self: flex-start;
-  width: clamp(140px, 13vw, 250px); }
-.panel:nth-child(2) .pic { border-color: var(--red); }
-.panel .pic img { width: 100%; }
+.panel .pic { align-self: flex-start; width: clamp(153.41px, 14.25vw, 273.94px); }
+.panel .pic .shot, .case .pic .shot { width: 100%; }
 
 /* ── 04. Для кого ── */
 .quad { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 1.04vw, 20px);
@@ -384,9 +376,7 @@ p, li, .lead { text-wrap: pretty; }
   text-transform: uppercase; color: var(--red-lt); }
 .case h3 { margin: 14px 0 10px; }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.case .pic { border: 3px solid var(--paper); width: clamp(140px, 13vw, 250px); }
-.case .pic img { width: 100%; }
-.case:nth-child(2) .pic { border-color: var(--red); }
+.case .pic { width: clamp(153.41px, 14.25vw, 273.94px); }
 
 /* ── Слово основателя ── */
 .fv { display: grid; grid-template-columns: clamp(240px, 24vw, 380px) minmax(0, 1fr);
@@ -458,8 +448,8 @@ p, li, .lead { text-wrap: pretty; }
     margin-left: 10px;
     width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
   .price .collage .shot { position: absolute; }
-  .price .collage .shot.a { left: 0; top: 0; width: clamp(93px, 8.18vw, 157px); }
-  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(109px, 9.64vw, 185px); }
+  .price .collage .shot.a { left: 0; top: 0; width: clamp(101.91px, 8.96vw, 172.04px); }
+  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); width: clamp(119.44px, 10.56vw, 202.72px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
@@ -761,7 +751,6 @@ p, li, .lead { text-wrap: pretty; }
   .shots { justify-content: center; width: 100%; align-items: flex-start; }
   /* сдвиг второго снимка на узких делал его рамку короче первой */
   .shot, .shot.b { width: calc((100% - var(--shot-gap)) / 2); margin-top: 0; }
-  .shot img { width: 100%; height: auto; }
   /* на узких снимки встают в ряд: наложение здесь только мельчит их
      и норовит вылезти за карточку */
   .price .collage { position: static; display: flex; gap: 12px; align-items: flex-start;
@@ -876,7 +865,7 @@ const { useState, useEffect, useRef } = React;
 const LOGO   = "__LOGO__";
 const SHOT1  = "__SHOT1__";
 const SHOT2  = "__SHOT2__";
-const TAPE   = "__TAPE__";
+const PHONE  = "__PHONE__";
 const TORN_A = "__TORN_A__";
 const TORN_B = "__TORN_B__";
 const TORN_C = "__TORN_C__";
@@ -1121,11 +1110,14 @@ function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, 
   );
 }
 
+/* Снимок экрана в корпусе телефона: сам снимок лежит в окне мокапа,
+   а прозрачный PNG с корпусом накрывает его сверху. Проценты окна сняты
+   с картинки мокапа (389x800): по бокам 4.37%, сверху 2.13%, снизу 2%. */
 const Shot = ({ src, alt, cls, lazy }) => (
-  <div className={'shot ' + cls}>
-    <img className="tape" src={TAPE} alt="" loading="lazy" decoding="async" />
-    <img src={src} alt={alt} decoding="async"
+  <div className={'shot ' + (cls || '')}>
+    <img className="ui" src={src} alt={alt} decoding="async"
          {...(lazy ? { loading: 'lazy' } : { fetchPriority: 'high' })} />
+    <img className="frame" src={PHONE} alt="" loading="lazy" decoding="async" />
   </div>
 );
 
@@ -1294,12 +1286,12 @@ const Top = () => {
   );
 };
 
-/* Знаки и лучи на канвасе за первым экраном.
+/* Знаки и лучи на канвасе за всей страницей.
    Взято с эффекта Particle Drift, но переписано под наш стек: оригинал поднимал
    iframe с Tailwind, GSAP и Iconify (около двух мегабайт сторонних скриптов) —
    здесь только канвас, синий заменён фирменным красным.
-   Анимация замирает, когда экран прокручен мимо, и не стартует при
-   отключённой анимации в системе. */
+   Анимация замирает на скрытой вкладке и не стартует при отключённой
+   анимации в системе. */
 const GLYPHS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*()'.split('');
 
 const ParticleField = () => {
@@ -1315,7 +1307,7 @@ const ParticleField = () => {
     const ctx = cv.getContext && cv.getContext('2d');
     if (!ctx) return;
 
-    let w = 0, h = 0, nodes = [], beams = [], raf = 0, visible = true;
+    let w = 0, h = 0, nodes = [], beams = [], raf = 0;
     const mouse = { x: -1e4, y: -1e4 };
     const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
 
@@ -1348,7 +1340,7 @@ const ParticleField = () => {
         beams.push({
           x: Math.random() * w, y: Math.random() * h,
           len: Math.random() * 90 + 46,
-          sp: Math.random() * 4 + 2.2,
+          sp: Math.random() * 1.15 + 0.65,
           a: Math.random() * 0.4 + 0.3,
         });
       }
@@ -1445,16 +1437,9 @@ const ParticleField = () => {
       window.addEventListener('mouseout', onLeave, { passive: true });
     }
 
-    /* прокрутили мимо первого экрана — гасим цикл, чтобы не жечь батарею */
-    let io = null;
-    if ('IntersectionObserver' in window) {
-      io = new IntersectionObserver(([e]) => {
-        visible = e.isIntersecting;
-        if (visible) start(); else stop();
-      }, { rootMargin: '120px' });
-      io.observe(cv);
-    }
-    const onHide = () => { if (document.hidden) stop(); else if (visible) start(); };
+    /* канвас теперь виден на всей странице, поэтому цикл гасим только
+       на скрытой вкладке */
+    const onHide = () => { if (document.hidden) stop(); else start(); };
     document.addEventListener('visibilitychange', onHide);
 
     return () => {
@@ -1464,7 +1449,6 @@ const ParticleField = () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseout', onLeave);
       document.removeEventListener('visibilitychange', onHide);
-      if (io) io.disconnect();
     };
   }, []);
 
@@ -1473,7 +1457,6 @@ const ParticleField = () => {
 
 const Hero = () => (
   <section className="hero" id="top">
-    <ParticleField />
     <Rise as="div" className="shell" now>
       <div>
         <div className="eyebrow">Готовое приложение под вашим брендом</div>
@@ -1549,7 +1532,7 @@ const What = () => (
           <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
              касаний, без звонков и переписки с менеджером.</p>
-          <div className="pic"><img src={SHOT1} alt="Каталог с товарами" loading="lazy" decoding="async" /></div>
+          <div className="pic"><Shot src={SHOT1} alt="Каталог с товарами" lazy /></div>
         </Rise>
         <Rise className="panel" delay={220}>
           <h3>Управление бизнесом</h3>
@@ -1557,7 +1540,7 @@ const What = () => (
           <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
              панели, без сторонних сервисов.</p>
-          <div className="pic"><img src={SHOT2} alt="Админ-панель со списком заказов" loading="lazy" decoding="async" /></div>
+          <div className="pic"><Shot src={SHOT2} alt="Админ-панель со списком заказов" lazy /></div>
         </Rise>
       </div>
       <Magnet />
@@ -1671,13 +1654,13 @@ const Case = () => (
           <h3>«Синица»</h3>
           <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
              Работает в нескольких городах.</p>
-          <div className="pic"><img src={SHOT1} alt="Каталог продуктов" loading="lazy" decoding="async" /></div>
+          <div className="pic"><Shot src={SHOT1} alt="Каталог продуктов" lazy /></div>
         </Rise>
         <Rise className="case" delay={220}>
           <span className="kind">Операционка</span>
           <h3>Менеджерское приложение</h3>
           <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
-          <div className="pic"><img src={SHOT2} alt="Админ-панель" loading="lazy" decoding="async" /></div>
+          <div className="pic"><Shot src={SHOT2} alt="Админ-панель" lazy /></div>
         </Rise>
       </div>
     </div>
@@ -2067,6 +2050,7 @@ const Foot = () => (
 
 const App = () => (
   <React.Fragment>
+    <ParticleField />
     <Top /><Hero /><Why /><What /><Founder /><Who /><Quiz /><How /><Case />
     <Price /><Faq /><Contact /><Foot />
   </React.Fragment>
