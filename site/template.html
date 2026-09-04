@@ -1340,7 +1340,7 @@ const ParticleField = () => {
       for (let i = 0; i < nCount; i++) {
         nodes.push({
           x: Math.random() * w, y: Math.random() * h,
-          vy: Math.random() * 0.3 + 0.08,
+          vy: Math.random() * 0.1 + 0.03,
           ch: GLYPHS[(Math.random() * GLYPHS.length) | 0],
         });
       }
@@ -1384,7 +1384,7 @@ const ParticleField = () => {
           const dx = a.x - b.x, dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            ctx.strokeStyle = 'rgba(110, 110, 122, ' + (0.12 * (1 - d / LINK)) + ')';
+            ctx.strokeStyle = 'rgba(96, 96, 110, ' + (0.075 * (1 - d / LINK)) + ')';
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -1403,7 +1403,7 @@ const ParticleField = () => {
         const dx = mouse.x - n.x, dy = mouse.y - n.y;
         const d = Math.sqrt(dx * dx + dy * dy);
         const near = d < REACH;
-        if (near || Math.random() > 0.985) {
+        if (near || Math.random() > 0.997) {
           n.ch = GLYPHS[(Math.random() * GLYPHS.length) | 0];
         }
         if (near) {
@@ -1413,7 +1413,7 @@ const ParticleField = () => {
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-        ctx.fillStyle = near ? 'rgba(226, 62, 84, .7)' : 'rgba(120, 120, 134, 0.28)';
+        ctx.fillStyle = near ? 'rgba(198, 52, 72, .55)' : 'rgba(96, 96, 110, 0.17)';
         ctx.fillText(n.ch, n.x, n.y);
       }
 
