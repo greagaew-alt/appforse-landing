@@ -280,9 +280,17 @@ section, .foot { position: relative; z-index: 1; }
 .shot { position: relative; width: var(--shot-w); line-height: 0; }
 .shot .frame { position: relative; z-index: 1; display: block; width: 100%; height: auto;
   pointer-events: none; background: none; }
-.shot .ui { position: absolute; z-index: 0; left: 4.37%; top: 2.13%;
-  width: 91.26%; height: 95.87%; object-fit: cover; object-position: top center;
-  border-radius: 4.4%/2.1%; }
+/* окно снято с картинки мокапа по альфа-каналу: по бокам 4.37%,
+   сверху 1.75%, высота 96.5%. Скругление там круговое, радиусом 13.9%
+   ширины корпуса — в процентах его не задать (по осям выйдет эллипс),
+   поэтому берём единицы контейнера, а процентами оставляем запасной вариант */
+.shot { container-type: inline-size; }
+.shot .ui { position: absolute; z-index: 0; left: 4.3%; top: 1.68%;
+  width: 91.4%; height: 96.64%; object-fit: cover; object-position: top center;
+  border-radius: 15.2% / 6.9%; }
+@supports (border-radius: 1cqw) {
+  .shot .ui { border-radius: 13.9cqw; }
+}
 .shot.b { margin-top: 10px; }
 
 /* рваный край между секциями */
@@ -442,14 +450,14 @@ section, .foot { position: relative; z-index: 1; }
   gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
 .price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
     padding: clamp(20px, 1.67vw, 32px) clamp(22px, 2.5vw, 48px);
-    display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 20.6vw, 395px); gap: 0; }
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 24vw, 400px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
   .price .collage { position: relative; justify-self: start; margin-top: 10px;
     margin-left: 10px;
-    width: clamp(190px, 16.8vw, 323px); min-height: clamp(270px, 23.4vw, 450px); }
+    width: clamp(190px, 22.7vw, 380px); min-height: clamp(270px, 27vw, 470px); }
   .price .collage .shot { position: absolute; }
   .price .collage .shot.a, .price .collage .shot.b {
-    width: clamp(92px, 8.17vw, 157px); }
+    width: clamp(92px, 11vw, 185px); }
   .price .collage .shot.a { left: 0; top: 0; }
   .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
@@ -608,7 +616,8 @@ section, .foot { position: relative; z-index: 1; }
 .contact .aside .btn { margin-top: clamp(18px, 1.46vw, 28px); }
 
 /* ── подвал ── */
-.foot { border-top: 1px solid #1F1D24; }
+/* подвал держим сплошным чёрным: знаки на фоне здесь лишние */
+.foot { border-top: 1px solid #1F1D24; background: var(--ink); }
 .foot .shell { display: grid; grid-template-columns: minmax(0, 1fr) auto auto;
   gap: clamp(28px, 5.2vw, 100px);
   padding-top: clamp(32px, 2.9vw, 56px); padding-bottom: clamp(24px, 2vw, 38px); }
