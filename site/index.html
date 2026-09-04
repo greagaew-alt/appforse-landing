@@ -236,6 +236,20 @@ p, li, .lead { text-wrap: pretty; }
 }
 
 /* ═══════════ 01. ПЕРВЫЙ ЭКРАН ═══════════ */
+/* Фон первого экрана: дрейфующие знаки и вертикальные лучи по канвасу.
+   Канвас лежит под содержимым, клики сквозь него проходят. */
+.hero { position: relative; overflow: hidden; }
+.hero > .shell { position: relative; z-index: 1; }
+.pf { position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; z-index: 0; pointer-events: none;
+  opacity: 0; transition: opacity 1.2s var(--ease); }
+.pf.on { opacity: 1; }
+/* низ первого экрана растворяем в фоне, чтобы стык со следующим блоком не резал */
+.hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: clamp(60px, 9vw, 150px); z-index: 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(14, 12, 16, 0), var(--ink)); }
+@media (prefers-reduced-motion: reduce) { .pf { display: none; } }
+
 .hero .shell {
   display: grid; grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(32px, 4vw, 76px); align-items: start;
@@ -1432,10 +1446,214 @@ const Top = () => {
     onClick: () => setOpen(false)
   }, t))))));
 };
+
+/* Знаки и лучи на канвасе за первым экраном.
+   Взято с эффекта Particle Drift, но переписано под наш стек: оригинал поднимал
+   iframe с Tailwind, GSAP и Iconify (около двух мегабайт сторонних скриптов) —
+   здесь только канвас, синий заменён фирменным красным.
+   Анимация замирает, когда экран прокручен мимо, и не стартует при
+   отключённой анимации в системе. */
+const GLYPHS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*()'.split('');
+const ParticleField = () => {
+  const ref = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const cv = ref.current;
+    if (!cv) return;
+    const slow = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (slow) return;
+    const ctx = cv.getContext && cv.getContext('2d');
+    if (!ctx) return;
+    let w = 0,
+      h = 0,
+      nodes = [],
+      beams = [],
+      raf = 0,
+      visible = true;
+    const mouse = {
+      x: -1e4,
+      y: -1e4
+    };
+    const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const measure = () => {
+      const r = cv.getBoundingClientRect();
+      w = r.width;
+      h = r.height;
+      /* на экранах с плотностью 3 полный буфер даёт девятикратную заливку —
+         держим потолок, разницы на глаз нет */
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    const seed = () => {
+      /* связи ищем перебором пар, поэтому число знаков держим скромным:
+         80 точек это около 3200 сравнений за кадр, 42 — примерно 860 */
+      const nCount = w < 760 ? 42 : 80;
+      const bCount = w < 760 ? 13 : 23;
+      nodes = [];
+      for (let i = 0; i < nCount; i++) {
+        nodes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vy: Math.random() * 0.3 + 0.08,
+          ch: GLYPHS[Math.random() * GLYPHS.length | 0]
+        });
+      }
+      beams = [];
+      for (let i = 0; i < bCount; i++) {
+        beams.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          len: Math.random() * 90 + 46,
+          sp: Math.random() * 4 + 2.2,
+          a: Math.random() * 0.4 + 0.3
+        });
+      }
+    };
+    const LINK = 118; // на каком расстоянии знаки соединяются
+    const REACH = 170; // на каком расстоянии тянутся к курсору
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = 0; i < beams.length; i++) {
+        const b = beams[i];
+        b.y -= b.sp;
+        if (b.y + b.len < 0) {
+          b.y = h + 80;
+          b.x = Math.random() * w;
+        }
+        const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.len);
+        g.addColorStop(0, 'rgba(232, 36, 60, ' + b.a + ')');
+        g.addColorStop(1, 'rgba(232, 36, 60, 0)');
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(b.x, b.y);
+        ctx.lineTo(b.x, b.y + b.len);
+        ctx.stroke();
+      }
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x,
+            dy = a.y - b.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK) {
+            ctx.strokeStyle = 'rgba(110, 110, 122, ' + 0.22 * (1 - d / LINK) + ')';
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.font = '12px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.y += n.vy;
+        if (n.y > h + 18) {
+          n.y = -18;
+          n.x = Math.random() * w;
+        }
+        const dx = mouse.x - n.x,
+          dy = mouse.y - n.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const near = d < REACH;
+        if (near || Math.random() > 0.985) {
+          n.ch = GLYPHS[Math.random() * GLYPHS.length | 0];
+        }
+        if (near) {
+          ctx.strokeStyle = 'rgba(232, 36, 60, ' + 0.45 * (1 - d / REACH) + ')';
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+        ctx.fillStyle = near ? '#FF5468' : 'rgba(126, 126, 140, 0.52)';
+        ctx.fillText(n.ch, n.x, n.y);
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    const start = () => {
+      if (!raf) raf = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
+    measure();
+    seed();
+    start();
+    setOn(true);
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        measure();
+        seed();
+      }, 150);
+    };
+    const onMove = e => {
+      const r = cv.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    };
+    const onLeave = () => {
+      mouse.x = -1e4;
+      mouse.y = -1e4;
+    };
+    window.addEventListener('resize', onResize);
+    if (fine) {
+      window.addEventListener('mousemove', onMove, {
+        passive: true
+      });
+      window.addEventListener('mouseout', onLeave, {
+        passive: true
+      });
+    }
+
+    /* прокрутили мимо первого экрана — гасим цикл, чтобы не жечь батарею */
+    let io = null;
+    if ('IntersectionObserver' in window) {
+      io = new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        if (visible) start();else stop();
+      }, {
+        rootMargin: '120px'
+      });
+      io.observe(cv);
+    }
+    const onHide = () => {
+      if (document.hidden) stop();else if (visible) start();
+    };
+    document.addEventListener('visibilitychange', onHide);
+    return () => {
+      stop();
+      window.clearTimeout(resizeTimer);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseout', onLeave);
+      document.removeEventListener('visibilitychange', onHide);
+      if (io) io.disconnect();
+    };
+  }, []);
+  return /*#__PURE__*/React.createElement("canvas", {
+    className: 'pf' + (on ? ' on' : ''),
+    ref: ref,
+    "aria-hidden": "true"
+  });
+};
 const Hero = () => /*#__PURE__*/React.createElement("section", {
   className: "hero",
   id: "top"
-}, /*#__PURE__*/React.createElement(Rise, {
+}, /*#__PURE__*/React.createElement(ParticleField, null), /*#__PURE__*/React.createElement(Rise, {
   as: "div",
   className: "shell",
   now: true
