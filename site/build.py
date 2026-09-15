@@ -8,6 +8,15 @@ ASSETS = r"C:\Users\greag\AppData\Local\Temp\claude\c--Users-greag-Desktop------
 a = json.load(open(ASSETS, encoding='utf-8'))
 tpl = io.open(os.path.join(BASE, 'template.html'), encoding='utf-8').read()
 
+# @font-face вставляем прямо в страницу: браузер узнаёт о шрифтах сразу,
+# без отдельного запроса за fonts.css
+FONTS_CSS = io.open(os.path.join(BASE, 'fonts.css'), encoding='utf-8').read().strip()
+
+
+def inline_fonts(html):
+    return html.replace('<link rel="stylesheet" href="fonts.css">',
+                        '<style>' + FONTS_CSS + '</style>')
+
 # картинки лежат отдельными файлами: страница перестаёт весить почти мегабайт
 # и рисуется, не дожидаясь их загрузки
 img = json.load(io.open(os.path.join(BASE, 'img', 'paths.json'), encoding='utf-8'))
@@ -27,19 +36,19 @@ out = (tpl
        .replace('__TORN_C__', a['tornC'])
        .replace('__TORN_D__', a['tornD']))
 
-io.open(os.path.join(BASE, 'index.html'), 'w', encoding='utf-8').write(out)
+io.open(os.path.join(BASE, 'index.html'), 'w', encoding='utf-8').write(inline_fonts(out))
 print('index.html собран:', len(out) // 1024, 'KB')
 
 # страница политики: подставляем только логотип
 priv = io.open(os.path.join(BASE, 'privacy_template.html'), encoding='utf-8').read()
 priv = priv.replace('__LOGO__', a['logo'])
-io.open(os.path.join(BASE, 'privacy.html'), 'w', encoding='utf-8').write(priv)
+io.open(os.path.join(BASE, 'privacy.html'), 'w', encoding='utf-8').write(inline_fonts(priv))
 print('privacy.html собран:', len(priv) // 1024, 'KB')
 
 # страница 404: две сборки — рядом с сайтом и в корне репозитория,
 # чтобы Pages подхватывал её на любом несуществующем адресе
 e404 = io.open(os.path.join(BASE, '404_template.html'), encoding='utf-8').read()
-e404 = e404.replace('__LOGO__', a['logo']).replace('__TORN__', a['tornB'])
+e404 = inline_fonts(e404.replace('__LOGO__', a['logo']).replace('__TORN__', a['tornB']))
 io.open(os.path.join(BASE, '404.html'), 'w', encoding='utf-8').write(
     e404.replace('__HOME__', 'index.html'))
 io.open(os.path.join(BASE, '..', '404.html'), 'w', encoding='utf-8').write(

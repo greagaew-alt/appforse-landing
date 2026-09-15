@@ -24,13 +24,48 @@
 <meta name="twitter:title" content="Мобильное приложение под вашим брендом за 7 дней">
 <meta name="twitter:description" content="Готовая платформа: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, 7 дней.">
 <meta name="twitter:image" content="https://greagaew-alt.github.io/appforse-landing/site/og.jpg">
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="fonts/oswald-700-cyrillic.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="fonts/manrope-400-cyrillic.woff2">
-<link rel="stylesheet" href="fonts.css">
-<link rel="preload" as="image" href="img/catalog.jpg" fetchpriority="high">
-<link rel="preload" as="image" href="img/orders.jpg" fetchpriority="high">
+<!-- все начертания, которые есть на сайте: качаем сразу, параллельно с React -->
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin-ext.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin-ext.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin-ext.woff2">
+<style>@font-face{font-family:'Manrope';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/manrope-400-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/manrope-400-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/manrope-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/manrope-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/manrope-500-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/manrope-500-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/manrope-500-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/manrope-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/manrope-600-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/manrope-600-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/manrope-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/manrope-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/manrope-800-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/manrope-800-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/manrope-800-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/manrope-800-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/oswald-500-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/oswald-500-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/oswald-500-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/oswald-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/oswald-600-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/oswald-600-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/oswald-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/oswald-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/oswald-700-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/oswald-700-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/oswald-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/oswald-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}</style>
+<link rel="preload" as="image" type="image/webp" href="img/shot-catalog.webp" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="img/shot-order.webp" fetchpriority="high">
 <style>
 /* ═══════════════════════════════════════════════════════════
    ДИЗАЙН-СИСТЕМА APPFORSE
@@ -873,8 +908,8 @@ section, .foot { position: relative; z-index: 1; }
 <body>
 <div id="root"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
 
 <script>
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -2361,7 +2396,14 @@ const Foot = () => /*#__PURE__*/React.createElement("footer", {
   rel: "noopener"
 }, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\xA0\u0441\u0430\u0439\u0442\u0430"))));
 const App = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(ParticleField, null), /*#__PURE__*/React.createElement(Top, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(Why, null), /*#__PURE__*/React.createElement(What, null), /*#__PURE__*/React.createElement(Founder, null), /*#__PURE__*/React.createElement(Who, null), /*#__PURE__*/React.createElement(Quiz, null), /*#__PURE__*/React.createElement(How, null), /*#__PURE__*/React.createElement(Case, null), /*#__PURE__*/React.createElement(Price, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Foot, null));
-ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+
+/* Страницу рисуем, когда шрифты уже скачаны. Иначе текст на долю секунды
+   появляется запасным шрифтом и потом «прыгает» на Oswald/Manrope.
+   На сайте ровно эти начертания; дольше 2 с не ждём — на плохом интернете
+   лучше показать текст запасным шрифтом, чем пустой экран. */
+const SITE_FONTS = [['400 16px Manrope', 'Ая Az ₽'], ['500 16px Oswald', 'Ая Az'], ['600 16px Oswald', 'Ая Az ₽'], ['700 16px Oswald', 'Ая Az ₽']];
+const fontsReady = document.fonts && document.fonts.load ? Promise.all(SITE_FONTS.map(([f, s]) => document.fonts.load(f, s))).catch(() => {}) : Promise.resolve();
+Promise.race([fontsReady, new Promise(r => setTimeout(r, 2000))]).then(() => ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null)));
 </script>
 
 <script>

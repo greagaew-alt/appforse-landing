@@ -24,13 +24,21 @@
 <meta name="twitter:title" content="Мобильное приложение под вашим брендом за 7 дней">
 <meta name="twitter:description" content="Готовая платформа: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, 7 дней.">
 <meta name="twitter:image" content="https://greagaew-alt.github.io/appforse-landing/site/og.jpg">
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="fonts/oswald-700-cyrillic.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="fonts/manrope-400-cyrillic.woff2">
+<!-- все начертания, которые есть на сайте: качаем сразу, параллельно с React -->
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin-ext.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin-ext.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin-ext.woff2">
 <link rel="stylesheet" href="fonts.css">
-<link rel="preload" as="image" href="img/catalog.jpg" fetchpriority="high">
-<link rel="preload" as="image" href="img/orders.jpg" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_A__" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_B__" fetchpriority="high">
 <style>
 /* ═══════════════════════════════════════════════════════════
    ДИЗАЙН-СИСТЕМА APPFORSE
@@ -873,8 +881,8 @@ section, .foot { position: relative; z-index: 1; }
 <body>
 <div id="root"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
 
 <script type="text/babel">
@@ -2086,7 +2094,21 @@ const App = () => (
   </React.Fragment>
 );
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+/* Страницу рисуем, когда шрифты уже скачаны. Иначе текст на долю секунды
+   появляется запасным шрифтом и потом «прыгает» на Oswald/Manrope.
+   На сайте ровно эти начертания; дольше 2 с не ждём — на плохом интернете
+   лучше показать текст запасным шрифтом, чем пустой экран. */
+const SITE_FONTS = [
+  ['400 16px Manrope', 'Ая Az ₽'],
+  ['500 16px Oswald',  'Ая Az'],
+  ['600 16px Oswald',  'Ая Az ₽'],
+  ['700 16px Oswald',  'Ая Az ₽'],
+];
+const fontsReady = document.fonts && document.fonts.load
+  ? Promise.all(SITE_FONTS.map(([f, s]) => document.fonts.load(f, s))).catch(() => {})
+  : Promise.resolve();
+Promise.race([fontsReady, new Promise(r => setTimeout(r, 2000))]).then(() =>
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />));
 </script>
 
 <script>
