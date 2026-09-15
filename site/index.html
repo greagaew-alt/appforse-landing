@@ -83,7 +83,7 @@
   /* ── сетка ── */
   --shell: 1505px;
   --shot-w: clamp(160px, 19.5vw, 380px);    /* высота держится через aspect-ratio самой картинки */
-  --shot-gap: clamp(14px, 1.82vw, 35px);
+  --shot-gap: clamp(14px, 1.04vw, 20px);
 
   --ease: cubic-bezier(.22,.61,.36,1);
 }
@@ -265,7 +265,8 @@ section, .foot { position: relative; z-index: 1; }
   animation: draw 1.1s var(--ease) .5s forwards;
 }
 @keyframes draw { to { stroke-dashoffset: 0; } }
-.hero .lead { max-width: var(--w-lead); margin-top: clamp(12px, 1.15vw, 22px); }
+.hero .lead { max-width: clamp(462px, 27vw, 520px);
+  margin-top: clamp(12px, 1.15vw, 22px); }
 .hero .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 1.25vw, 24px); }
 .hero .facts { display: flex; flex-wrap: wrap; gap: clamp(18px, 2.08vw, 40px);
   margin-top: clamp(18px, 1.15vw, 22px); }
@@ -280,7 +281,7 @@ section, .foot { position: relative; z-index: 1; }
    картинку по ширине, высоту она держит сама через свои пропорции */
 .shot { width: var(--shot-w); line-height: 0; }
 .shot img { display: block; width: 100%; height: auto; }
-.shot.b { margin-top: 10px; }
+.shot.b { margin-top: 0; }
 
 /* рваный край между секциями */
 /* рваный край: SVG прозрачный, красная фигура на нём одна.
@@ -329,7 +330,7 @@ section, .foot { position: relative; z-index: 1; }
 .panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
   border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
-.panel .pic { align-self: flex-start; width: clamp(180px, 19vw, 340px); }
+.panel .pic { align-self: flex-start; width: clamp(180px, 19vw, 310px); }
 .panel .pic .shot, .case .pic .shot { width: 100%; }
 
 /* ── 04. Для кого ── */
@@ -373,7 +374,7 @@ section, .foot { position: relative; z-index: 1; }
   text-transform: uppercase; color: var(--red-lt); }
 .case h3 { margin: 14px 0 10px; }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.case .pic { width: clamp(180px, 19vw, 340px); }
+.case .pic { width: clamp(180px, 19vw, 310px); }
 
 /* ── Слово основателя ── */
 .fv { display: grid; grid-template-columns: clamp(240px, 24vw, 380px) minmax(0, 1fr);
@@ -757,6 +758,9 @@ section, .foot { position: relative; z-index: 1; }
   .price .collage { justify-self: center; margin-top: 0; }
 }
 @media (max-width: 760px) {
+  /* на мобилке отступ между hero-снимками меньше, чем на десктопе —
+     чуть теснее ряд и сами снимки чуть шире (гэп вычитается из их ширины) */
+  :root { --shot-gap: 10px; }
   /* ручные переносы рассчитаны на широкую колонку: на узкой они дробят
      заголовок на короткие строки, поэтому текст раскладывается сам */
   h2 br { display: none; }
