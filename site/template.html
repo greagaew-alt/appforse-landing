@@ -415,7 +415,7 @@ section, .foot { position: relative; z-index: 1; }
 .fv-play { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; }
 .fv-play > span { position: relative; display: grid; place-items: center;
   width: clamp(54px, 4.7vw, 86px); aspect-ratio: 1; border-radius: 50%;
-  background: var(--red); color: var(--paper); padding-left: 4px;
+  background: var(--red); color: var(--paper);
   transition: transform .35s var(--ease), background .35s var(--ease); }
 .fv-play > span::before { content: ''; position: absolute; inset: -2px; border-radius: 50%;
   border: 2px solid var(--red); animation: fv-pulse 2.6s var(--ease) infinite; }
@@ -1717,7 +1717,7 @@ const Founder = () => {
                      loading="lazy" decoding="async" />
                 <span className="fv-play">
                   <span><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-                    <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
+                    <path d="M7.5 5.5v13l11-6.5z" fill="currentColor" />
                   </svg></span>
                 </span>
                 <span className="fv-time">1:18</span>
