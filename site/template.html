@@ -82,7 +82,7 @@
 
   /* ── сетка ── */
   --shell: 1505px;
-  --shot-w: clamp(150px, 14.27vw, 274px);   /* ширина снимка с рамкой */
+  --shot-w: clamp(160px, 19.5vw, 380px);    /* высота держится через aspect-ratio самой картинки */
   --shot-gap: clamp(14px, 1.82vw, 35px);
 
   --ease: cubic-bezier(.22,.61,.36,1);
@@ -329,7 +329,7 @@ section, .foot { position: relative; z-index: 1; }
 .panel .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel .tag { font-size: var(--fs-cap); color: var(--muted-lo);
   border: 1px solid #2A2830; padding: 7px 12px; border-radius: 999px; }
-.panel .pic { align-self: flex-start; width: clamp(140px, 13vw, 250px); }
+.panel .pic { align-self: flex-start; width: clamp(180px, 19vw, 340px); }
 .panel .pic .shot, .case .pic .shot { width: 100%; }
 
 /* ── 04. Для кого ── */
@@ -373,7 +373,7 @@ section, .foot { position: relative; z-index: 1; }
   text-transform: uppercase; color: var(--red-lt); }
 .case h3 { margin: 14px 0 10px; }
 .case p { font-size: var(--fs-body); line-height: var(--lh-text); color: var(--muted-lo); }
-.case .pic { width: clamp(140px, 13vw, 250px); }
+.case .pic { width: clamp(180px, 19vw, 340px); }
 
 /* ── Слово основателя ── */
 .fv { display: grid; grid-template-columns: clamp(240px, 24vw, 380px) minmax(0, 1fr);
@@ -448,16 +448,18 @@ section, .foot { position: relative; z-index: 1; }
   gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
 .price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
     padding: clamp(20px, 1.67vw, 32px) clamp(22px, 2.5vw, 48px);
-    display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 24vw, 400px); gap: 0; }
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(230px, 27vw, 440px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
   .price .collage { position: relative; justify-self: start; margin-top: 10px;
     margin-left: 10px;
-    width: clamp(190px, 22.7vw, 380px); min-height: clamp(270px, 27vw, 470px); }
+    width: clamp(210px, 27vw, 420px); min-height: clamp(300px, 29vw, 490px); }
   .price .collage .shot { position: absolute; }
   .price .collage .shot.a, .price .collage .shot.b {
-    width: clamp(92px, 11vw, 185px); }
+    width: clamp(130px, 16vw, 270px); }
   .price .collage .shot.a { left: 0; top: 0; }
-  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); }
+  /* второй снимок прижат к низу коллажа, а не висит на глаз в середине —
+     вместе они держат всю высоту карточки, от текста до кнопки */
+  .price .collage .shot.b { right: 0; bottom: 0; }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
@@ -857,7 +859,7 @@ section, .foot { position: relative; z-index: 1; }
   .panel, .case { grid-template-columns: 1fr; grid-template-areas: none; }
   .panel h3, .panel .tags, .panel .pic, .panel > p,
   .case .kind, .case h3, .case p, .case .pic { grid-area: auto; }
-  .panel .pic, .case .pic { width: min(100%, 260px); }
+  .panel .pic, .case .pic { width: min(100%, 300px); }
   .case .pic { margin-top: 20px; }
   .step { grid-template-columns: 44px 1fr; }
   .step p { grid-column: 2; }
@@ -1680,13 +1682,13 @@ const Case = () => (
           <h3>«Синица»</h3>
           <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
              Работает в нескольких городах.</p>
-          <div className="pic"><Shot src={SHOT_CASE_A} alt="Push-уведомление клиенту «Синицы»" lazy /></div>
+          <div className="pic"><Shot src={SHOT_CASE_A} alt="Корзина в клиентском приложении «Синицы»" lazy /></div>
         </Rise>
         <Rise className="case" delay={220}>
           <span className="kind">Операционка</span>
           <h3>Менеджерское приложение</h3>
           <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
-          <div className="pic"><Shot src={SHOT_CASE_B} alt="Дашборд менеджерского приложения" lazy /></div>
+          <div className="pic"><Shot src={SHOT_CASE_B} alt="График продаж в менеджерском приложении" lazy /></div>
         </Rise>
       </div>
     </div>
@@ -1778,8 +1780,8 @@ const Price = () => (
             <a className="btn" href="#contact">Обсудить запуск</a>
             </div>
             <div className="collage">
-              <Shot src={SHOT_PRICE_A} alt="Корзина в клиентском приложении" cls="a" lazy />
-              <Shot src={SHOT_PRICE_B} alt="График продаж в панели управления" cls="b" lazy />
+              <Shot src={SHOT_PRICE_A} alt="Push-уведомление клиенту" cls="a" lazy />
+              <Shot src={SHOT_PRICE_B} alt="Дашборд с заказами и статистикой" cls="b" lazy />
             </div>
           </Rise>
           <Rise className="extra" delay={220}>
