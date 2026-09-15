@@ -276,21 +276,10 @@ section, .foot { position: relative; z-index: 1; }
 /* снимки */
 .shots { display: flex; gap: var(--shot-gap); justify-content: flex-end; align-items: flex-start;
   margin-top: clamp(-8px, -0.42vw, 0px); }
-/* корпус телефона задаёт габарит, снимок лежит в его окне */
-.shot { position: relative; width: var(--shot-w); line-height: 0; }
-.shot .frame { position: relative; z-index: 1; display: block; width: 100%; height: auto;
-  pointer-events: none; background: none; }
-/* окно снято с картинки мокапа по альфа-каналу: по бокам 4.37%,
-   сверху 1.75%, высота 96.5%. Скругление там круговое, радиусом 13.9%
-   ширины корпуса — в процентах его не задать (по осям выйдет эллипс),
-   поэтому берём единицы контейнера, а процентами оставляем запасной вариант */
-.shot { container-type: inline-size; }
-.shot .ui { position: absolute; z-index: 0; left: 4.3%; top: 1.68%;
-  width: 91.4%; height: 96.64%; object-fit: cover; object-position: top center;
-  border-radius: 15.2% / 6.9%; }
-@supports (border-radius: 1cqw) {
-  .shot .ui { border-radius: 13.9cqw; }
-}
+/* дизайнерские мокапы уже со своим наклоном и тенью — просто вписываем
+   картинку по ширине, высоту она держит сама через свои пропорции */
+.shot { width: var(--shot-w); line-height: 0; }
+.shot img { display: block; width: 100%; height: auto; }
 .shot.b { margin-top: 10px; }
 
 /* рваный край между секциями */
@@ -888,9 +877,17 @@ section, .foot { position: relative; z-index: 1; }
 const { useState, useEffect, useRef } = React;
 
 const LOGO   = "__LOGO__";
-const SHOT1  = "__SHOT1__";
-const SHOT2  = "__SHOT2__";
-const PHONE  = "__PHONE__";
+/* дизайнерские мокапы под каждый блок свои — клиентское приложение
+   и внутренняя часть (менеджер/CRM), без нашей рамки iPhone поверх:
+   у них уже свой наклон, тень и подсветка */
+const SHOT_HERO_A  = "__SHOT_HERO_A__";
+const SHOT_HERO_B  = "__SHOT_HERO_B__";
+const SHOT_WHAT_A  = "__SHOT_WHAT_A__";
+const SHOT_WHAT_B  = "__SHOT_WHAT_B__";
+const SHOT_CASE_A  = "__SHOT_CASE_A__";
+const SHOT_CASE_B  = "__SHOT_CASE_B__";
+const SHOT_PRICE_A = "__SHOT_PRICE_A__";
+const SHOT_PRICE_B = "__SHOT_PRICE_B__";
 const TORN_A = "__TORN_A__";
 const TORN_B = "__TORN_B__";
 const TORN_C = "__TORN_C__";
@@ -1138,11 +1135,13 @@ function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, 
 /* Снимок экрана в корпусе телефона: сам снимок лежит в окне мокапа,
    а прозрачный PNG с корпусом накрывает его сверху. Проценты окна сняты
    с картинки мокапа (389x800): по бокам 4.37%, сверху 2.13%, снизу 2%. */
+/* дизайнерские мокапы приходят уже готовым изображением: свой наклон,
+   тень, подсветка и прозрачные поля вокруг — просто вписываем целиком,
+   без рамки и без обрезки по площади */
 const Shot = ({ src, alt, cls, lazy }) => (
   <div className={'shot ' + (cls || '')}>
-    <img className="ui" src={src} alt={alt} decoding="async"
+    <img src={src} alt={alt} decoding="async"
          {...(lazy ? { loading: 'lazy' } : { fetchPriority: 'high' })} />
-    <img className="frame" src={PHONE} alt="" loading="lazy" decoding="async" />
   </div>
 );
 
@@ -1508,8 +1507,8 @@ const Hero = () => (
         </div>
       </div>
       <div className="shots">
-        <Shot src={SHOT1} alt="Каталог в клиентском приложении" cls="a" />
-        <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" />
+        <Shot src={SHOT_HERO_A} alt="Каталог в клиентском приложении" cls="a" />
+        <Shot src={SHOT_HERO_B} alt="Обработка заказа в приложении менеджера" cls="b" />
       </div>
     </Rise>
   </section>
@@ -1559,7 +1558,7 @@ const What = () => (
           <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
              касаний, без звонков и переписки с менеджером.</p>
-          <div className="pic"><Shot src={SHOT1} alt="Каталог с товарами" lazy /></div>
+          <div className="pic"><Shot src={SHOT_WHAT_A} alt="Бонусная программа в клиентском приложении" lazy /></div>
         </Rise>
         <Rise className="panel" delay={220}>
           <h3>Управление бизнесом</h3>
@@ -1567,7 +1566,7 @@ const What = () => (
           <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
              панели, без сторонних сервисов.</p>
-          <div className="pic"><Shot src={SHOT2} alt="Админ-панель со списком заказов" lazy /></div>
+          <div className="pic"><Shot src={SHOT_WHAT_B} alt="Аналитика клиентов в панели управления" lazy /></div>
         </Rise>
       </div>
       <Magnet />
@@ -1681,13 +1680,13 @@ const Case = () => (
           <h3>«Синица»</h3>
           <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
              Работает в нескольких городах.</p>
-          <div className="pic"><Shot src={SHOT1} alt="Каталог продуктов" lazy /></div>
+          <div className="pic"><Shot src={SHOT_CASE_A} alt="Push-уведомление клиенту «Синицы»" lazy /></div>
         </Rise>
         <Rise className="case" delay={220}>
           <span className="kind">Операционка</span>
           <h3>Менеджерское приложение</h3>
           <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
-          <div className="pic"><Shot src={SHOT2} alt="Админ-панель" lazy /></div>
+          <div className="pic"><Shot src={SHOT_CASE_B} alt="Дашборд менеджерского приложения" lazy /></div>
         </Rise>
       </div>
     </div>
@@ -1779,8 +1778,8 @@ const Price = () => (
             <a className="btn" href="#contact">Обсудить запуск</a>
             </div>
             <div className="collage">
-              <Shot src={SHOT1} alt="Каталог в приложении" cls="a" lazy />
-              <Shot src={SHOT2} alt="Заказы в админ-панели" cls="b" lazy />
+              <Shot src={SHOT_PRICE_A} alt="Корзина в клиентском приложении" cls="a" lazy />
+              <Shot src={SHOT_PRICE_B} alt="График продаж в панели управления" cls="b" lazy />
             </div>
           </Rise>
           <Rise className="extra" delay={220}>

@@ -14,9 +14,14 @@ img = json.load(io.open(os.path.join(BASE, 'img', 'paths.json'), encoding='utf-8
 
 out = (tpl
        .replace('__LOGO__', img['logo'])
-       .replace('__SHOT1__', img['shot1'])
-       .replace('__SHOT2__', img['shot2'])
-       .replace('__PHONE__', img['phone'])
+       .replace('__SHOT_HERO_A__', img['heroA'])
+       .replace('__SHOT_HERO_B__', img['heroB'])
+       .replace('__SHOT_WHAT_A__', img['whatA'])
+       .replace('__SHOT_WHAT_B__', img['whatB'])
+       .replace('__SHOT_CASE_A__', img['caseA'])
+       .replace('__SHOT_CASE_B__', img['caseB'])
+       .replace('__SHOT_PRICE_A__', img['priceA'])
+       .replace('__SHOT_PRICE_B__', img['priceB'])
        .replace('__TORN_A__', a['tornA'])
        .replace('__TORN_B__', a['tornB'])
        .replace('__TORN_C__', a['tornC'])

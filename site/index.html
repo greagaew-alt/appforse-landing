@@ -276,21 +276,10 @@ section, .foot { position: relative; z-index: 1; }
 /* снимки */
 .shots { display: flex; gap: var(--shot-gap); justify-content: flex-end; align-items: flex-start;
   margin-top: clamp(-8px, -0.42vw, 0px); }
-/* корпус телефона задаёт габарит, снимок лежит в его окне */
-.shot { position: relative; width: var(--shot-w); line-height: 0; }
-.shot .frame { position: relative; z-index: 1; display: block; width: 100%; height: auto;
-  pointer-events: none; background: none; }
-/* окно снято с картинки мокапа по альфа-каналу: по бокам 4.37%,
-   сверху 1.75%, высота 96.5%. Скругление там круговое, радиусом 13.9%
-   ширины корпуса — в процентах его не задать (по осям выйдет эллипс),
-   поэтому берём единицы контейнера, а процентами оставляем запасной вариант */
-.shot { container-type: inline-size; }
-.shot .ui { position: absolute; z-index: 0; left: 4.3%; top: 1.68%;
-  width: 91.4%; height: 96.64%; object-fit: cover; object-position: top center;
-  border-radius: 15.2% / 6.9%; }
-@supports (border-radius: 1cqw) {
-  .shot .ui { border-radius: 13.9cqw; }
-}
+/* дизайнерские мокапы уже со своим наклоном и тенью — просто вписываем
+   картинку по ширине, высоту она держит сама через свои пропорции */
+.shot { width: var(--shot-w); line-height: 0; }
+.shot img { display: block; width: 100%; height: auto; }
 .shot.b { margin-top: 10px; }
 
 /* рваный край между секциями */
@@ -875,7 +864,7 @@ section, .foot { position: relative; z-index: 1; }
   .demo { grid-template-columns: 1fr; }
 }
 </style>
-<script type="application/ld+json">__JSONLD__</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://greagaew-alt.github.io/appforse-landing/site/#org","name":"AppForse","url":"https://greagaew-alt.github.io/appforse-landing/site/","logo":"https://greagaew-alt.github.io/appforse-landing/site/icon-192.png","image":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg","description":"Готовая платформа мобильных приложений для торговли под брендом заказчика","sameAs":["https://vk.com/appforse","https://t.me/shark154"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/shark154","availableLanguage":"Russian"}]},{"@type":"WebSite","@id":"https://greagaew-alt.github.io/appforse-landing/site/#site","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"AppForse","inLanguage":"ru-RU","publisher":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"}},{"@type":"WebPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#page","url":"https://greagaew-alt.github.io/appforse-landing/site/","name":"Мобильное приложение под вашим брендом за 7 дней — AppForse","isPartOf":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#site"},"about":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"inLanguage":"ru-RU","primaryImageOfPage":"https://greagaew-alt.github.io/appforse-landing/site/og.jpg"},{"@type":"Service","@id":"https://greagaew-alt.github.io/appforse-landing/site/#service","name":"Запуск мобильного приложения под брендом заказчика","serviceType":"Разработка мобильного приложения на готовой платформе","provider":{"@id":"https://greagaew-alt.github.io/appforse-landing/site/#org"},"areaServed":{"@type":"Country","name":"Россия"},"audience":[{"@type":"BusinessAudience","name":"Оптовые продажи"},{"@type":"BusinessAudience","name":"Магазины и доставка"},{"@type":"BusinessAudience","name":"Рестораны и доставка еды"},{"@type":"BusinessAudience","name":"Розница"}],"description":"Клиентское приложение и админ-панель под брендом заказчика: каталог, заказы, доставка, оплата, бонусы, push-уведомления и CRM. Публикация в App Store и Google Play за 7 рабочих дней.","offers":{"@type":"Offer","price":"150000","priceCurrency":"RUB","availability":"https://schema.org/InStock","url":"https://greagaew-alt.github.io/appforse-landing/site/#price","itemOffered":{"@type":"Service","name":"Запуск платформы под вашим брендом"}},"hasOfferCatalog":{"@type":"OfferCatalog","name":"В стоимость входит","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Клиентское приложение под вашим брендом"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Публикация в App Store и Google Play"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Каталог товаров, корзина и онлайн-оплата"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Доставка и самовывоз"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Бонусы, промокоды и push-уведомления"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM и клиентская база"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Админ-панель и аналитика"}}]}},{"@type":"FAQPage","@id":"https://greagaew-alt.github.io/appforse-landing/site/#faq","mainEntity":[{"@type":"Question","name":"У меня уже есть сайт и другие каналы продаж — зачем ещё приложение?","acceptedAnswer":{"@type":"Answer","text":"Каждый канал выполняет свою задачу. Реклама помогает привлекать новых клиентов, а приложение — возвращать тех, кто уже покупал. Через push-уведомления, бонусы и персональные предложения вы можете напрямую работать с клиентской базой и стимулировать повторные покупки."}},{"@type":"Question","name":"Чем это отличается от разработки приложения с нуля?","acceptedAnswer":{"@type":"Answer","text":"При разработке с нуля вы оплачиваете целую команду — аналитика, дизайнера, разработчиков под iOS и Android, тестировщика и менеджера проекта. Они заново пишут каталог, корзину, оплату и бонусную систему — это сотни часов и месяцы работы. У нас платформа уже написана, отлажена и работает в действующем бизнесе — мы разворачиваем её под ваш бренд за 7 дней. Индивидуальная разработка оправдана, когда у бизнеса действительно нестандартная задача."}},{"@type":"Question","name":"Сколько времени занимает запуск?","acceptedAnswer":{"@type":"Answer","text":"Само приложение собираем и подготавливаем к публикации за 7 рабочих дней после получения готового дизайна. Дизайн и фирменный стиль предоставляет клиент — мы адаптируем их под платформу и занимаемся сборкой приложения."}},{"@type":"Question","name":"Кто делает дизайн приложения?","acceptedAnswer":{"@type":"Answer","text":"Дизайн и фирменный стиль предоставляет клиент. Мы адаптируем готовый дизайн под платформу и собираем на его основе приложение. Если нужно, подскажем, какие материалы подготовить."}},{"@type":"Question","name":"Что нужно от меня для запуска?","acceptedAnswer":{"@type":"Answer","text":"Нужны информация о бизнесе, каталог товаров, логотип и фирменный стиль. После получения материалов мы берём сборку и подготовку приложения на себя."}},{"@type":"Question","name":"Я получаю исходный код?","acceptedAnswer":{"@type":"Answer","text":"Нет. Вы получаете готовое приложение под своим брендом, админ-панель и необходимые доступы для работы с платформой. Исходный код платформы в стоимость запуска не входит. Если потребуется его выкуп или передача — условия обсуждаются отдельно."}},{"@type":"Question","name":"Обязательно ли платить за поддержку?","acceptedAnswer":{"@type":"Answer","text":"Нет. После запуска вы получаете готовое приложение и необходимые доступы и можете управлять платформой самостоятельно. Техническая поддержка подключается по желанию — от 25 000 ₽/мес. в зависимости от объёма задач. Дополнительные функции и доработки рассчитываются отдельно."}},{"@type":"Question","name":"Что если клиенты не станут пользоваться приложением?","acceptedAnswer":{"@type":"Answer","text":"До запуска вы можете посмотреть демо и понять, как приложение выглядит для вашего клиента. После запуска привлекать пользователей можно через бонусы, push-уведомления, рекламу и собственные каналы коммуникации. Платформа уже работает в действующем бизнесе в нескольких городах."}}]}]}</script>
 </head>
 <body>
 <div id="root"></div>
@@ -891,9 +880,17 @@ const {
   useRef
 } = React;
 const LOGO = "img/logo.jpg";
-const SHOT1 = "img/catalog.jpg";
-const SHOT2 = "img/orders.jpg";
-const PHONE = "img/phone.png";
+/* дизайнерские мокапы под каждый блок свои — клиентское приложение
+   и внутренняя часть (менеджер/CRM), без нашей рамки iPhone поверх:
+   у них уже свой наклон, тень и подсветка */
+const SHOT_HERO_A = "img/shot-catalog.webp";
+const SHOT_HERO_B = "img/shot-order.webp";
+const SHOT_WHAT_A = "img/shot-bonuses.webp";
+const SHOT_WHAT_B = "img/shot-crm.webp";
+const SHOT_CASE_A = "img/shot-push.webp";
+const SHOT_CASE_B = "img/shot-dashboard.webp";
+const SHOT_PRICE_A = "img/shot-basket.webp";
+const SHOT_PRICE_B = "img/shot-sells.webp";
 const TORN_A = "M0,70 L1600,70 L1600,25.2 L1585.2,37.1 L1576.1,29.9 L1566.6,36.6 L1539.5,42.3 L1520.2,50.6 L1506.6,4.2 L1492.9,22.3 L1465.2,57 L1445.8,24 L1420.6,38.8 L1394.1,18.5 L1380.6,23.9 L1352.3,12.7 L1325,57 L1305,27.9 L1275.9,18.5 L1248.2,36.6 L1231.2,47 L1214.9,52.5 L1205.2,38.2 L1195,34.2 L1184.8,57 L1156.8,57 L1138.7,47.4 L1119,39.4 L1099.9,38.4 L1072.3,25.6 L1052.1,12 L1028,23.6 L1000,57 L983.6,25.5 L973.3,45.9 L943.6,18.7 L925.3,57 L905.8,28.6 L888.7,43.7 L863.1,20.8 L837.3,26.6 L818.1,3 L803.3,57 L775.6,6.7 L758.7,44.2 L748.6,41.4 L735.5,15.8 L721.9,34.8 L712.2,39.2 L684.3,13.4 L659.5,7.6 L630.8,3 L601.8,8.5 L586.9,8.2 L567.7,14.2 L553.7,10.9 L531.1,22.4 L511.7,11.1 L491.8,14.7 L470.4,57 L445.6,57 L435.3,9.6 L418.7,21.5 L401.9,3 L392.6,31.5 L374.4,15.6 L358,11.9 L330.9,19.9 L319.2,20.5 L300.2,26.2 L286.4,8.5 L272.1,48.3 L258.4,8.4 L237.2,3.4 L227.4,10.5 L209.7,12.4 L183.8,3 L169.8,18.1 L152.1,18 L122.1,22.7 L102.1,21.5 L85.9,5 L63.7,41.2 L35.9,40.6 L22,27.8 L0,20.6 Z";
 const TORN_B = "M0,-10 L1600,-10 L1600,34.8 L1599.1,28 L1583.6,13 L1559.2,3 L1538.4,50.2 L1517.2,27.1 L1489.6,30.8 L1469.8,12.5 L1458.4,41.5 L1431.1,5.6 L1408,34.1 L1385.1,45.8 L1359,46.1 L1344.9,17.4 L1318.8,11.1 L1290.5,3 L1261.7,27.1 L1237.3,32.6 L1213,3 L1195.6,25.6 L1168.8,3 L1154.1,14.6 L1128.8,3.1 L1113.1,23.7 L1094.6,22 L1077.8,3 L1063.4,29.1 L1033.7,35.7 L1014.5,20.2 L985,57 L974.8,33.8 L953.2,40.2 L929.3,16.9 L907.1,57 L886.4,19.6 L864.3,15.1 L842.3,28.6 L823.8,20.9 L811,49.4 L784.3,39.4 L764.3,28 L740,13 L725.1,27.9 L700.8,32.6 L672.6,19 L647.5,29.4 L627.7,49.5 L606.7,48.9 L577.3,57 L557.3,18.8 L533.9,36.6 L514.4,57 L504.7,45.7 L493.5,47.2 L474.7,29.9 L445.5,22.1 L418.4,26.5 L406.7,19.4 L395.3,46.3 L377.5,23.7 L351.2,38.8 L336.1,49.2 L315.1,53.2 L301.8,10.3 L274.3,16.5 L262.6,57 L239.7,57 L213.6,57 L189.3,56.9 L177.8,54.4 L151.4,28.2 L130.7,37 L115.4,16 L90.7,56.8 L67.5,51.1 L38.1,17.3 L15.2,31.2 L0,5.3 Z";
 const TORN_C = "M0,70 L1600,70 L1600,25.2 L1589.7,26 L1574.7,16.3 L1557.6,29.3 L1538,16.1 L1514.2,3 L1485.1,44 L1462.8,3 L1432.8,3 L1422.5,17.1 L1400.1,55.4 L1377.4,3 L1361.8,11.2 L1335.2,55.4 L1305.6,3 L1292.6,28.3 L1266.5,23.6 L1249.1,47.3 L1226.1,8.3 L1206,31 L1194.1,3 L1165,12 L1153.5,3 L1144.4,19.6 L1117,3 L1096.6,3 L1070.2,3 L1052.2,44.3 L1041.3,3 L1031.3,3 L1006.7,3 L982.9,29 L966.9,34.6 L945.9,30.8 L921.9,7.1 L911.6,28.5 L886.7,16.4 L857.1,25.9 L827.7,13 L800.2,31.3 L790.5,29.9 L776.2,10.7 L753,30 L740.9,21.7 L720,30.4 L709.3,11 L680,34.7 L652,37.4 L636.7,21.1 L625,42 L614.8,27.8 L605.1,44.3 L583.9,39.2 L574.3,33.2 L563.8,26.7 L552.9,50.5 L542.7,47.3 L526.1,50.7 L512.4,42.5 L488.5,57 L465.2,57 L443.9,7.5 L426.7,24.4 L401.4,44.4 L391.8,57 L374.2,27.5 L362.7,17.2 L352.2,44 L338.4,17.7 L319,36.3 L307.2,19.4 L297.4,41.7 L274,29.9 L254,19.3 L240.8,36.9 L213.2,29.7 L195.9,8.2 L169.9,33.2 L160.6,18 L146.8,57 L118.3,46.2 L100.1,16.8 L71.9,11.7 L46.1,14.7 L18.2,8.2 L0,17.4 Z";
@@ -1234,6 +1231,9 @@ function Rise({
 /* Снимок экрана в корпусе телефона: сам снимок лежит в окне мокапа,
    а прозрачный PNG с корпусом накрывает его сверху. Проценты окна сняты
    с картинки мокапа (389x800): по бокам 4.37%, сверху 2.13%, снизу 2%. */
+/* дизайнерские мокапы приходят уже готовым изображением: свой наклон,
+   тень, подсветка и прозрачные поля вокруг — просто вписываем целиком,
+   без рамки и без обрезки по площади */
 const Shot = ({
   src,
   alt,
@@ -1242,7 +1242,6 @@ const Shot = ({
 }) => /*#__PURE__*/React.createElement("div", {
   className: 'shot ' + (cls || '')
 }, /*#__PURE__*/React.createElement("img", _extends({
-  className: "ui",
   src: src,
   alt: alt,
   decoding: "async"
@@ -1250,13 +1249,7 @@ const Shot = ({
   loading: 'lazy'
 } : {
   fetchPriority: 'high'
-})), /*#__PURE__*/React.createElement("img", {
-  className: "frame",
-  src: PHONE,
-  alt: "",
-  loading: "lazy",
-  decoding: "async"
-}));
+})));
 
 /* ─────────── блоки ─────────── */
 /* Иконки соцсетей — набор Simple Icons (CC0) */
@@ -1692,12 +1685,12 @@ const Hero = () => /*#__PURE__*/React.createElement("section", {
 }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "150 000 \u20BD"), /*#__PURE__*/React.createElement("span", null, "\u0437\u0430\u043F\u0443\u0441\u043A \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "7\xA0\u0434\u043D\u0435\u0439"), /*#__PURE__*/React.createElement("span", null, "\u0438\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0443\u0436\u0435\xA0\u0432\xA0\u0441\u0442\u043E\u0440\u0430\u0445")))), /*#__PURE__*/React.createElement("div", {
   className: "shots"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT1,
+  src: SHOT_HERO_A,
   alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0432 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
   cls: "a"
 }), /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT2,
-  alt: "\u0417\u0430\u043A\u0430\u0437\u044B \u0432 \u0430\u0434\u043C\u0438\u043D-\u043F\u0430\u043D\u0435\u043B\u0438",
+  src: SHOT_HERO_B,
+  alt: "\u041E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u0437\u0430\u043A\u0430\u0437\u0430 \u0432 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438 \u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0430",
   cls: "b"
 }))));
 const Why = () => /*#__PURE__*/React.createElement("section", {
@@ -1749,8 +1742,8 @@ const What = () => /*#__PURE__*/React.createElement("section", {
 }), /*#__PURE__*/React.createElement("p", null, "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442 \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0441\u043E\u0431\u0438\u0440\u0430\u0435\u0442 \u0437\u0430\u043A\u0430\u0437, \u043F\u043B\u0430\u0442\u0438\u0442 \u0438\xA0\u043A\u043E\u043F\u0438\u0442 \u0431\u043E\u043D\u0443\u0441\u044B\xA0\u2014 \u0432\u0441\u0451\xA0\u0432\xA0\u043E\u0434\u043D\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438 \u043F\u043E\u0434\xA0\u0432\u0430\u0448\u0438\u043C \u0431\u0440\u0435\u043D\u0434\u043E\u043C. \u041F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0439 \u0437\u0430\u043A\u0430\u0437 \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u0442 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439, \u0431\u0435\u0437\xA0\u0437\u0432\u043E\u043D\u043A\u043E\u0432 \u0438\xA0\u043F\u0435\u0440\u0435\u043F\u0438\u0441\u043A\u0438 \u0441\xA0\u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u043E\u043C."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT1,
-  alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0441 \u0442\u043E\u0432\u0430\u0440\u0430\u043C\u0438",
+  src: SHOT_WHAT_A,
+  alt: "\u0411\u043E\u043D\u0443\u0441\u043D\u0430\u044F \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0430 \u0432 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
   lazy: true
 }))), /*#__PURE__*/React.createElement(Rise, {
   className: "panel",
@@ -1760,8 +1753,8 @@ const What = () => /*#__PURE__*/React.createElement("section", {
 }), /*#__PURE__*/React.createElement("p", null, "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0432\u0435\u0434\u0451\u0442 \u0437\u0430\u043A\u0430\u0437\u044B \u0438\xA0\u0432\u0438\u0434\u0438\u0442 \u043E\u0441\u0442\u0430\u0442\u043A\u0438, \u0432\u044B\xA0\u2014 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u0443\u044E \u0431\u0430\u0437\u0443 \u0438\xA0\u0430\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0443. Push-\u0440\u0430\u0441\u0441\u044B\u043B\u043A\u0438, \u0440\u043E\u043B\u0438 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u0438\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0442\u043E\u0447\u0435\u043A \u043D\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u044E\u0442\u0441\u044F \u0432\xA0\u0442\u043E\u0439 \u0436\u0435 \u043F\u0430\u043D\u0435\u043B\u0438, \u0431\u0435\u0437\xA0\u0441\u0442\u043E\u0440\u043E\u043D\u043D\u0438\u0445 \u0441\u0435\u0440\u0432\u0438\u0441\u043E\u0432."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT2,
-  alt: "\u0410\u0434\u043C\u0438\u043D-\u043F\u0430\u043D\u0435\u043B\u044C \u0441\u043E \u0441\u043F\u0438\u0441\u043A\u043E\u043C \u0437\u0430\u043A\u0430\u0437\u043E\u0432",
+  src: SHOT_WHAT_B,
+  alt: "\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432 \u0432 \u043F\u0430\u043D\u0435\u043B\u0438 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F",
   lazy: true
 })))), /*#__PURE__*/React.createElement(Magnet, null)));
 const Magnet = () => {
@@ -1888,8 +1881,8 @@ const Case = () => /*#__PURE__*/React.createElement("section", {
 }, "\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430 /\xA0\u0440\u043E\u0437\u043D\u0438\u0446\u0430"), /*#__PURE__*/React.createElement("h3", null, "\xAB\u0421\u0438\u043D\u0438\u0446\u0430\xBB"), /*#__PURE__*/React.createElement("p", null, "\u041A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435: \u043A\u0430\u0442\u0430\u043B\u043E\u0433, \u0437\u0430\u043A\u0430\u0437, \u0431\u043E\u043D\u0443\u0441\u044B, \u043F\u0440\u043E\u0444\u0438\u043B\u044C, \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0435 \u043F\u043E\u043A\u0443\u043F\u043A\u0438. \u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0432\xA0\u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445 \u0433\u043E\u0440\u043E\u0434\u0430\u0445."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT1,
-  alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u043E\u0432",
+  src: SHOT_CASE_A,
+  alt: "Push-\u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u0435 \u043A\u043B\u0438\u0435\u043D\u0442\u0443 \xAB\u0421\u0438\u043D\u0438\u0446\u044B\xBB",
   lazy: true
 }))), /*#__PURE__*/React.createElement(Rise, {
   className: "case",
@@ -1899,8 +1892,8 @@ const Case = () => /*#__PURE__*/React.createElement("section", {
 }, "\u041E\u043F\u0435\u0440\u0430\u0446\u0438\u043E\u043D\u043A\u0430"), /*#__PURE__*/React.createElement("h3", null, "\u041C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0441\u043A\u043E\u0435\xA0\u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"), /*#__PURE__*/React.createElement("p", null, "\u0417\u0430\u043A\u0430\u0437\u044B, \u043A\u043B\u0438\u0435\u043D\u0442\u044B, \u0441\u0442\u0430\u0442\u0443\u0441\u044B \u0438\xA0\u0438\u0441\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435\xA0\u2014 \u0432\xA0\u043E\u0434\u043D\u043E\u043C \u043E\u043A\u043D\u0435."), /*#__PURE__*/React.createElement("div", {
   className: "pic"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT2,
-  alt: "\u0410\u0434\u043C\u0438\u043D-\u043F\u0430\u043D\u0435\u043B\u044C",
+  src: SHOT_CASE_B,
+  alt: "\u0414\u0430\u0448\u0431\u043E\u0440\u0434 \u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0441\u043A\u043E\u0433\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F",
   lazy: true
 }))))));
 
@@ -2010,13 +2003,13 @@ const Price = () => /*#__PURE__*/React.createElement("section", {
 }, "\u041E\u0431\u0441\u0443\u0434\u0438\u0442\u044C\xA0\u0437\u0430\u043F\u0443\u0441\u043A")), /*#__PURE__*/React.createElement("div", {
   className: "collage"
 }, /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT1,
-  alt: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0432 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
+  src: SHOT_PRICE_A,
+  alt: "\u041A\u043E\u0440\u0437\u0438\u043D\u0430 \u0432 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438",
   cls: "a",
   lazy: true
 }), /*#__PURE__*/React.createElement(Shot, {
-  src: SHOT2,
-  alt: "\u0417\u0430\u043A\u0430\u0437\u044B \u0432 \u0430\u0434\u043C\u0438\u043D-\u043F\u0430\u043D\u0435\u043B\u0438",
+  src: SHOT_PRICE_B,
+  alt: "\u0413\u0440\u0430\u0444\u0438\u043A \u043F\u0440\u043E\u0434\u0430\u0436 \u0432 \u043F\u0430\u043D\u0435\u043B\u0438 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F",
   cls: "b",
   lazy: true
 }))), /*#__PURE__*/React.createElement(Rise, {
