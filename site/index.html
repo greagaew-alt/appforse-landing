@@ -636,6 +636,9 @@ section, .foot { position: relative; z-index: 1; }
 .contact .box { background: var(--ink); padding: clamp(22px, 2.1vw, 40px); }
 
 .form { display: grid; gap: 12px; margin-top: clamp(18px, 1.46vw, 28px); }
+/* поле-ловушка для ботов: человеку не видно, бот заполняет — такие заявки сервер выкидывает */
+form.form input.hp-field { position: absolute; left: 0; top: 0; width: 1px; min-width: 0; height: 0;
+  padding: 0; margin: 0; border: 0; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 .form input {
   font: inherit; font-size: var(--fs-lead); color: var(--paper); background: #131117;
   border: 1px solid #2A2830; padding: 14px 16px; width: 100%;
@@ -1323,11 +1326,20 @@ const Field = ({
 })), err && /*#__PURE__*/React.createElement("span", {
   className: "err"
 }, err));
-function useForm(rules) {
+
+/* Заявка уходит на сервер-посредник на Beget: он пересылает её в Телеграм-бота
+   «Заявки AppForse» и на почту заказчика. Токен бота в код страницы не кладём —
+   он живёт только на сервере. text/plain — чтобы браузер не делал лишний
+   предварительный запрос перед отправкой. */
+const LEAD_URL = 'https://glebslobodchikov.ru/appforse-leads/lead.php';
+function useForm(rules, source, extra) {
   const [err, setErr] = useState({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failed, setFailed] = useState(false);
   const submit = e => {
     e.preventDefault();
+    if (sending || sent) return;
     const f = e.target;
     const next = {};
     rules.forEach(([name, check, msg]) => {
@@ -1335,7 +1347,26 @@ function useForm(rules) {
       if (!check(el)) next[name] = msg;
     });
     setErr(next);
-    if (!Object.keys(next).length) setSent(true);
+    if (Object.keys(next).length) return;
+    const trap = f.elements.namedItem('website');
+    const payload = Object.assign({
+      name: f.elements.namedItem('name').value.trim(),
+      phone: f.elements.namedItem('phone').value.trim(),
+      source: source,
+      hp: trap ? trap.value : ''
+    }, extra ? extra() : {});
+    setSending(true);
+    setFailed(false);
+    fetch(LEAD_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=UTF-8'
+      },
+      body: JSON.stringify(payload)
+    }).then(r => r.json()).then(j => {
+      if (!j || !j.ok) throw new Error('not delivered');
+      setSent(true);
+    }).catch(() => setFailed(true)).then(() => setSending(false));
   };
   const clear = name => setErr(prev => {
     if (!prev[name]) return prev;
@@ -1348,6 +1379,8 @@ function useForm(rules) {
   return {
     err,
     sent,
+    sending,
+    failed,
     submit,
     clear
   };
@@ -1559,7 +1592,7 @@ const ParticleField = () => {
           y: Math.random() * h,
           len: Math.random() * 90 + 46,
           sp: Math.random() * 0.38 + 0.22,
-          a: Math.random() * 0.14 + 0.1
+          a: Math.random() * 0.2 + 0.14
         });
       }
     };
@@ -1594,7 +1627,7 @@ const ParticleField = () => {
             dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            ctx.strokeStyle = 'rgba(96, 96, 110, ' + 0.075 * (1 - d / LINK) + ')';
+            ctx.strokeStyle = 'rgba(96, 96, 110, ' + 0.105 * (1 - d / LINK) + ')';
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -1626,7 +1659,7 @@ const ParticleField = () => {
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-        ctx.fillStyle = near ? 'rgba(198, 52, 72, .55)' : 'rgba(96, 96, 110, 0.17)';
+        ctx.fillStyle = near ? 'rgba(198, 52, 72, .55)' : 'rgba(96, 96, 110, 0.24)';
         ctx.fillText(n.ch, n.x, n.y);
       }
       raf = requestAnimationFrame(draw);
@@ -1800,9 +1833,11 @@ const Magnet = () => {
   const {
     err,
     sent,
+    sending,
+    failed,
     submit,
     clear
-  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']]);
+  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']], 'Разбор бизнеса → Получить разбор');
   return /*#__PURE__*/React.createElement(Rise, {
     className: "magnet",
     id: "magnet"
@@ -1810,7 +1845,13 @@ const Magnet = () => {
     className: "form",
     noValidate: true,
     onSubmit: submit
-  }, /*#__PURE__*/React.createElement(Field, {
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "hp-field",
+    name: "website",
+    tabIndex: "-1",
+    autoComplete: "off",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement(Field, {
     name: "name",
     placeholder: "\u0412\u0430\u0448\u0435 \u0438\u043C\u044F",
     err: err.name,
@@ -1821,7 +1862,7 @@ const Magnet = () => {
   }), /*#__PURE__*/React.createElement("button", {
     className: "btn on-red",
     type: "submit"
-  }, sent ? 'Заявка отправлена' : 'Получить разбор'), /*#__PURE__*/React.createElement("label", {
+  }, sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить разбор'), /*#__PURE__*/React.createElement("label", {
     className: "agree"
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
@@ -1835,7 +1876,13 @@ const Magnet = () => {
     className: "err"
   }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
     className: "note"
-  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F.")));
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."), failed && /*#__PURE__*/React.createElement("p", {
+    className: "note"
+  }, "\u041D\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C. \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432\xA0", /*#__PURE__*/React.createElement("a", {
+    href: TG,
+    target: "_blank",
+    rel: "noopener"
+  }, "Telegram"), ".")));
 };
 const Who = () => /*#__PURE__*/React.createElement("section", {
   className: "dark",
@@ -2073,18 +2120,33 @@ const Price = () => /*#__PURE__*/React.createElement("section", {
 
 /* та же форма и валидация, что в Contact/Magnet — только компактнее и без
    лид-магнитного заголовка, потому что результат теста уже всё объяснил */
-const QuizForm = () => {
+const QuizForm = ({
+  answers
+}) => {
   const {
     err,
     sent,
+    sending,
+    failed,
     submit,
     clear
-  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']]);
+  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']], 'Квиз → Обсудить мой бизнес', () => ({
+    answers: QUIZ_Q.map((q, i) => ({
+      q: q.t,
+      a: answers[i + 1] || '—'
+    }))
+  }));
   return /*#__PURE__*/React.createElement("form", {
     className: "form qz-form",
     noValidate: true,
     onSubmit: submit
-  }, /*#__PURE__*/React.createElement(Field, {
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "hp-field",
+    name: "website",
+    tabIndex: "-1",
+    autoComplete: "off",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement(Field, {
     name: "name",
     placeholder: "\u0412\u0430\u0448\u0435 \u0438\u043C\u044F",
     err: err.name,
@@ -2095,7 +2157,7 @@ const QuizForm = () => {
   }), /*#__PURE__*/React.createElement("button", {
     className: "btn",
     type: "submit"
-  }, sent ? 'Заявка отправлена' : 'Обсудить мой бизнес'), /*#__PURE__*/React.createElement("label", {
+  }, sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Обсудить мой бизнес'), /*#__PURE__*/React.createElement("label", {
     className: "agree"
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
@@ -2109,7 +2171,13 @@ const QuizForm = () => {
     className: "err"
   }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
     className: "note"
-  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."));
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."), failed && /*#__PURE__*/React.createElement("p", {
+    className: "note"
+  }, "\u041D\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C. \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432\xA0", /*#__PURE__*/React.createElement("a", {
+    href: TG,
+    target: "_blank",
+    rel: "noopener"
+  }, "Telegram"), "."));
 };
 const Quiz = () => {
   const total = QUIZ_Q.length;
@@ -2262,7 +2330,9 @@ const Quiz = () => {
     className: "qz-cta-h display"
   }, "\u0413\u043E\u0442\u043E\u0432\u044B \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u044C, \u043A\u0430\u043A\xA0\u044D\u0442\u043E\xA0\u0431\u0443\u0434\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C\xA0\u0443\xA0\u0432\u0430\u0441"), /*#__PURE__*/React.createElement("p", {
     className: "qz-cta-p"
-  }, "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043A\u043E\u043D\u0442\u0430\u043A\u0442\u044B\xA0\u2014 \u0443\u0442\u043E\u0447\u043D\u0438\u043C \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u0430\u0448\u0435\u0433\u043E \u0431\u0438\u0437\u043D\u0435\u0441\u0430 \u0438\xA0\u043F\u043E\u043A\u0430\u0436\u0435\u043C, \u043A\u0430\u043A\u0438\u0435 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u0438 AppForse \u043C\u043E\u0436\u043D\u043E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u043A\u043B\u0438\u0435\u043D\u0442\u0430\u043C\u0438."), /*#__PURE__*/React.createElement(QuizForm, null), /*#__PURE__*/React.createElement("button", {
+  }, "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043A\u043E\u043D\u0442\u0430\u043A\u0442\u044B\xA0\u2014 \u0443\u0442\u043E\u0447\u043D\u0438\u043C \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u0430\u0448\u0435\u0433\u043E \u0431\u0438\u0437\u043D\u0435\u0441\u0430 \u0438\xA0\u043F\u043E\u043A\u0430\u0436\u0435\u043C, \u043A\u0430\u043A\u0438\u0435 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u0438 AppForse \u043C\u043E\u0436\u043D\u043E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0434\u043B\u044F\xA0\u043F\u043E\u0432\u0442\u043E\u0440\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0436 \u0438\xA0\u0440\u0430\u0431\u043E\u0442\u044B \u0441\xA0\u043A\u043B\u0438\u0435\u043D\u0442\u0430\u043C\u0438."), /*#__PURE__*/React.createElement(QuizForm, {
+    answers: answers
+  }), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "qz-back",
     onClick: restart
@@ -2299,9 +2369,11 @@ const Contact = () => {
   const {
     err,
     sent,
+    sending,
+    failed,
     submit,
     clear
-  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']]);
+  } = useForm([['name', filled, 'Как к вам обращаться?'], ['phone', phoneOk, 'Оставьте номер телефона целиком'], ['agree', checked, 'Нужно согласие на обработку данных']], 'Форма внизу страницы → Получить предложение');
   return /*#__PURE__*/React.createElement("section", {
     id: "contact"
   }, /*#__PURE__*/React.createElement(Torn, {
@@ -2326,7 +2398,13 @@ const Contact = () => {
     className: "form",
     noValidate: true,
     onSubmit: submit
-  }, /*#__PURE__*/React.createElement(Field, {
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "hp-field",
+    name: "website",
+    tabIndex: "-1",
+    autoComplete: "off",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement(Field, {
     name: "name",
     placeholder: "\u0412\u0430\u0448\u0435 \u0438\u043C\u044F",
     err: err.name,
@@ -2337,7 +2415,7 @@ const Contact = () => {
   }), /*#__PURE__*/React.createElement("button", {
     className: "btn",
     type: "submit"
-  }, sent ? 'Заявка отправлена' : 'Получить предложение'), /*#__PURE__*/React.createElement("label", {
+  }, sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить предложение'), /*#__PURE__*/React.createElement("label", {
     className: "agree"
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
@@ -2351,7 +2429,13 @@ const Contact = () => {
     className: "err"
   }, err.agree), sent && /*#__PURE__*/React.createElement("p", {
     className: "note"
-  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."))), /*#__PURE__*/React.createElement(Rise, {
+  }, "\u0421\u043F\u0430\u0441\u0438\u0431\u043E, \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0432\xA0\u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u0440\u0430\u0431\u043E\u0447\u0435\u0433\u043E\xA0\u0434\u043D\u044F."), failed && /*#__PURE__*/React.createElement("p", {
+    className: "note"
+  }, "\u041D\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C. \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432\xA0", /*#__PURE__*/React.createElement("a", {
+    href: TG,
+    target: "_blank",
+    rel: "noopener"
+  }, "Telegram"), "."))), /*#__PURE__*/React.createElement(Rise, {
     className: "box aside",
     delay: 220
   }, /*#__PURE__*/React.createElement("h3", null, "\u0418\u043B\u0438\xA0\u0441\u0440\u0430\u0437\u0443 \u0432\xA0Telegram"), /*#__PURE__*/React.createElement("p", null, "\u0415\u0441\u043B\u0438\xA0\u0443\u0434\u043E\u0431\u043D\u0435\u0435 \u0441\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E\xA0\u2014 \u0431\u0435\u0437\xA0\u0444\u043E\u0440\u043C\u044B."), /*#__PURE__*/React.createElement("a", {

@@ -609,6 +609,9 @@ section, .foot { position: relative; z-index: 1; }
 .contact .box { background: var(--ink); padding: clamp(22px, 2.1vw, 40px); }
 
 .form { display: grid; gap: 12px; margin-top: clamp(18px, 1.46vw, 28px); }
+/* поле-ловушка для ботов: человеку не видно, бот заполняет — такие заявки сервер выкидывает */
+form.form input.hp-field { position: absolute; left: 0; top: 0; width: 1px; min-width: 0; height: 0;
+  padding: 0; margin: 0; border: 0; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 .form input {
   font: inherit; font-size: var(--fs-lead); color: var(--paper); background: #131117;
   border: 1px solid #2A2830; padding: 14px 16px; width: 100%;
@@ -1178,11 +1181,20 @@ const Field = ({ err, ...rest }) => (
   </div>
 );
 
-function useForm(rules) {
+/* Заявка уходит на сервер-посредник на Beget: он пересылает её в Телеграм-бота
+   «Заявки AppForse» и на почту заказчика. Токен бота в код страницы не кладём —
+   он живёт только на сервере. text/plain — чтобы браузер не делал лишний
+   предварительный запрос перед отправкой. */
+const LEAD_URL = 'https://glebslobodchikov.ru/appforse-leads/lead.php';
+
+function useForm(rules, source, extra) {
   const [err, setErr] = useState({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failed, setFailed] = useState(false);
   const submit = e => {
     e.preventDefault();
+    if (sending || sent) return;
     const f = e.target;
     const next = {};
     rules.forEach(([name, check, msg]) => {
@@ -1190,13 +1202,31 @@ function useForm(rules) {
       if (!check(el)) next[name] = msg;
     });
     setErr(next);
-    if (!Object.keys(next).length) setSent(true);
+    if (Object.keys(next).length) return;
+    const trap = f.elements.namedItem('website');
+    const payload = Object.assign({
+      name: f.elements.namedItem('name').value.trim(),
+      phone: f.elements.namedItem('phone').value.trim(),
+      source: source,
+      hp: trap ? trap.value : '',
+    }, extra ? extra() : {});
+    setSending(true);
+    setFailed(false);
+    fetch(LEAD_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify(payload),
+    })
+      .then(r => r.json())
+      .then(j => { if (!j || !j.ok) throw new Error('not delivered'); setSent(true); })
+      .catch(() => setFailed(true))
+      .then(() => setSending(false));
   };
   const clear = name => setErr(prev => {
     if (!prev[name]) return prev;
     const next = { ...prev }; delete next[name]; return next;
   });
-  return { err, sent, submit, clear };
+  return { err, sent, sending, failed, submit, clear };
 }
 
 const filled = el => el && el.value.trim().length > 1;
@@ -1379,7 +1409,7 @@ const ParticleField = () => {
           x: Math.random() * w, y: Math.random() * h,
           len: Math.random() * 90 + 46,
           sp: Math.random() * 0.38 + 0.22,
-          a: Math.random() * 0.14 + 0.1,
+          a: Math.random() * 0.2 + 0.14,
         });
       }
     };
@@ -1413,7 +1443,7 @@ const ParticleField = () => {
           const dx = a.x - b.x, dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            ctx.strokeStyle = 'rgba(96, 96, 110, ' + (0.075 * (1 - d / LINK)) + ')';
+            ctx.strokeStyle = 'rgba(96, 96, 110, ' + (0.105 * (1 - d / LINK)) + ')';
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -1442,7 +1472,7 @@ const ParticleField = () => {
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-        ctx.fillStyle = near ? 'rgba(198, 52, 72, .55)' : 'rgba(96, 96, 110, 0.17)';
+        ctx.fillStyle = near ? 'rgba(198, 52, 72, .55)' : 'rgba(96, 96, 110, 0.24)';
         ctx.fillText(n.ch, n.x, n.y);
       }
 
@@ -1587,11 +1617,11 @@ const What = () => (
 );
 
 const Magnet = () => {
-  const { err, sent, submit, clear } = useForm([
+  const { err, sent, sending, failed, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
     ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
-  ]);
+  ], 'Разбор бизнеса → Получить разбор');
   return (
     <Rise className="magnet" id="magnet">
           <div>
@@ -1602,11 +1632,12 @@ const Magnet = () => {
             </p>
           </div>
           <form className="form" noValidate onSubmit={submit}>
+            <input className="hp-field" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
             <Field name="name" placeholder="Ваше имя" err={err.name}
                    onInput={() => clear('name')} />
             <PhoneField err={err.phone} onFix={() => clear('phone')} />
             <button className="btn on-red" type="submit">
-              {sent ? 'Заявка отправлена' : 'Получить разбор'}
+              {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить разбор'}
             </button>
             <label className="agree">
               <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -1616,6 +1647,7 @@ const Magnet = () => {
             </label>
             {err.agree && <span className="err">{err.agree}</span>}
             {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
+            {failed && <p className="note">Не получилось отправить. Напишите нам в <a href={TG} target="_blank" rel="noopener">Telegram</a>.</p>}
           </form>
     </Rise>
   );
@@ -1819,18 +1851,19 @@ const Price = () => (
 
 /* та же форма и валидация, что в Contact/Magnet — только компактнее и без
    лид-магнитного заголовка, потому что результат теста уже всё объяснил */
-const QuizForm = () => {
-  const { err, sent, submit, clear } = useForm([
+const QuizForm = ({ answers }) => {
+  const { err, sent, sending, failed, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
     ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
-  ]);
+  ], 'Квиз → Обсудить мой бизнес', () => ({ answers: QUIZ_Q.map((q, i) => ({ q: q.t, a: answers[i + 1] || '—' })) }));
   return (
     <form className="form qz-form" noValidate onSubmit={submit}>
+      <input className="hp-field" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
       <Field name="name" placeholder="Ваше имя" err={err.name} onInput={() => clear('name')} />
       <PhoneField err={err.phone} onFix={() => clear('phone')} />
       <button className="btn" type="submit">
-        {sent ? 'Заявка отправлена' : 'Обсудить мой бизнес'}
+        {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Обсудить мой бизнес'}
       </button>
       <label className="agree">
         <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -1840,6 +1873,7 @@ const QuizForm = () => {
       </label>
       {err.agree && <span className="err">{err.agree}</span>}
       {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
+      {failed && <p className="note">Не получилось отправить. Напишите нам в <a href={TG} target="_blank" rel="noopener">Telegram</a>.</p>}
     </form>
   );
 };
@@ -1974,7 +2008,7 @@ const Quiz = () => {
                   возможности AppForse можно использовать для повторных продаж и работы
                   с клиентами.
                 </p>
-                <QuizForm />
+                <QuizForm answers={answers} />
                 <button type="button" className="qz-back" onClick={restart}>Пройти ещё раз</button>
               </div>
             )}
@@ -2007,11 +2041,11 @@ const Faq = () => {
 };
 
 const Contact = () => {
-  const { err, sent, submit, clear } = useForm([
+  const { err, sent, sending, failed, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
     ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
-  ]);
+  ], 'Форма внизу страницы → Получить предложение');
   return (
     <section id="contact">
       <Torn d={TORN_C} dir="down" />
@@ -2026,11 +2060,12 @@ const Contact = () => {
             <Rise className="box" delay={140}>
               <h3>Оставить заявку</h3>
               <form className="form" noValidate onSubmit={submit}>
+                <input className="hp-field" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
                 <Field name="name" placeholder="Ваше имя" err={err.name}
                        onInput={() => clear('name')} />
                 <PhoneField err={err.phone} onFix={() => clear('phone')} />
                 <button className="btn" type="submit">
-                  {sent ? 'Заявка отправлена' : 'Получить предложение'}
+                  {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить предложение'}
                 </button>
                 <label className="agree">
                   <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -2040,6 +2075,7 @@ const Contact = () => {
                 </label>
                 {err.agree && <span className="err">{err.agree}</span>}
                 {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
+                {failed && <p className="note">Не получилось отправить. Напишите нам в <a href={TG} target="_blank" rel="noopener">Telegram</a>.</p>}
               </form>
             </Rise>
             <Rise className="box aside" delay={220}>
