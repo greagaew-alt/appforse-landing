@@ -51,7 +51,7 @@
   --on-red:     rgba(255,255,255,.88);
 
   /* ── типографика: опорные значения при 1920, ниже масштабируются ── */
-  --fs-h1:   clamp(32px, 3.54vw, 68px);
+  --fs-h1:   clamp(32px, 3.54vw, 65px);
   --fs-h2:   clamp(24px, 2.29vw, 44px);
   --fs-h3:   clamp(16px, 1.09vw, 21px);   /* подзаголовок — один размер на весь сайт */
   --fs-h4:   clamp(16px, 1.09vw, 21px);
@@ -449,18 +449,16 @@ section, .foot { position: relative; z-index: 1; }
   gap: clamp(20px, 2.4vw, 46px); margin-top: clamp(28px, 2.4vw, 46px); align-items: stretch; }
 .price .box { background: var(--ink-lift); border: 1px solid #1F1D24;
     padding: clamp(20px, 1.67vw, 32px) clamp(22px, 2.5vw, 48px);
-    display: grid; grid-template-columns: minmax(0, 1fr) clamp(230px, 27vw, 440px); gap: 0; }
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(210px, 24vw, 400px); gap: 0; }
   /* коллаж снимков внутри карточки цены — тот же приём, что в первом экране */
   .price .collage { position: relative; justify-self: start; margin-top: 10px;
     margin-left: 10px;
-    width: clamp(210px, 27vw, 420px); min-height: clamp(300px, 29vw, 490px); }
+    width: clamp(190px, 22.7vw, 380px); min-height: clamp(270px, 27vw, 470px); }
   .price .collage .shot { position: absolute; }
   .price .collage .shot.a, .price .collage .shot.b {
-    width: clamp(130px, 16vw, 270px); }
+    width: clamp(92px, 11vw, 185px); }
   .price .collage .shot.a { left: 0; top: 0; }
-  /* второй снимок прижат к низу коллажа, а не висит на глаз в середине —
-     вместе они держат всю высоту карточки, от текста до кнопки */
-  .price .collage .shot.b { right: 0; bottom: 0; }
+  .price .collage .shot.b { right: 0; top: clamp(48px, 4.4vw, 84px); }
 .price .tagline { font-size: var(--fs-cap); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted-hi); font-family: Oswald, sans-serif; }
 .price .sum { font-family: Oswald, sans-serif; font-weight: 700; font-size: clamp(40px, 3.44vw, 66px);
