@@ -37,6 +37,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin-ext.woff2">
 <link rel="stylesheet" href="fonts.css">
+<link rel="preconnect" href="https://glebslobodchikov.ru" crossorigin>
 <link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_A__" fetchpriority="high">
 <link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_B__" fetchpriority="high">
 <style>
@@ -878,7 +879,378 @@ form.form input.hp-field { position: absolute; left: 0; top: 0; width: 1px; min-
   .step p { grid-column: 2; }
   .demo { grid-template-columns: 1fr; }
 }
+
+/* ═══════════ НОВЫЕ БЛОКИ ИЗ АДМИНКИ ═══════════ */
+.x-block .kicker + h2 { margin-top: 0; }
+.x-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.04vw, 20px);
+  margin-top: clamp(28px, 2.4vw, 46px); }
+.x-stat { background: var(--ink-lift); border-top: 3px solid var(--red);
+  padding: clamp(18px, 1.67vw, 32px); }
+.x-stat b { display: block; font-family: Oswald, sans-serif; font-weight: 600; letter-spacing: -.01em;
+  font-size: clamp(28px, 2.5vw, 48px); line-height: 1.06; color: var(--paper); text-transform: uppercase; }
+.x-stat span { display: block; margin-top: 10px; font-size: var(--fs-body); line-height: var(--lh-text);
+  color: var(--muted-lo); }
+
+.x-media { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  gap: clamp(28px, 3.5vw, 68px); }
+.x-media .lead { margin-top: clamp(14px, 1.2vw, 22px); max-width: var(--w-lead-wide); }
+.x-media .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(18px, 1.46vw, 28px); }
+
+.x-quote { background: var(--ink-lift); border-left: 3px solid var(--red);
+  padding: clamp(24px, 2.6vw, 50px); max-width: 1100px; }
+.x-quote blockquote { margin: 0; font-family: Oswald, sans-serif; font-weight: 500; text-transform: uppercase;
+  font-size: clamp(22px, 1.9vw, 36px); line-height: var(--lh-head); letter-spacing: -.01em;
+  color: var(--paper); text-wrap: balance; }
+.x-quote-by { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+  margin-top: clamp(18px, 1.5vw, 28px); }
+.x-quote-by b { font-family: Oswald, sans-serif; font-weight: 600; font-size: var(--fs-h3); color: var(--paper); }
+.x-quote-by span { font-size: var(--fs-body); color: var(--muted-lo); }
+
+.x-cta { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end;
+  gap: clamp(20px, 3vw, 58px); }
+.x-cta .acts { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn.x-ghost { background: transparent; border-color: rgba(255,255,255,.55); color: var(--paper); }
+.btn.x-ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.x-list { list-style: none; margin: clamp(24px, 2vw, 40px) 0 0; padding: 0; display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 2.5vw, 48px);
+  border-top: 1px solid #1F1D24; }
+.x-list li { display: flex; gap: 14px; padding: clamp(14px, 1.15vw, 22px) 0;
+  border-bottom: 1px solid #1F1D24; font-size: var(--fs-lead); line-height: var(--lh-text); color: var(--paper); }
+.x-list li svg { flex: none; width: 20px; height: 20px; margin-top: 3px; color: var(--red); }
+
+@media (max-width: 1180px) {
+  .x-media { grid-template-columns: 1fr; }
+  .x-media .shots { justify-content: flex-start; }
+}
+@media (max-width: 900px) {
+  .x-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .x-cta { grid-template-columns: 1fr; align-items: start; }
+}
+@media (max-width: 760px) {
+  .x-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .x-stats { grid-template-columns: 1fr; }
+  .x-cta .acts .btn { width: 100%; }
+  .x-stat, .x-quote { padding: clamp(18px, 5vw, 24px); }
+}
 </style>
+<!--ADMIN:START-->
+<style>
+/* ═══════════ АДМИНКА ═══════════ */
+.adm-root { --adm-h: 56px; --adm-panel: #131116; --adm-panel-2: #1A181E; --adm-line: #2A2731;
+  --adm-text: #EDEDF2; --adm-mute: #9A98A6; --adm-dim: #6E6C79; --adm-ok: #3DDC84; --adm-warn: #F2B84B; }
+.adm-root.is-page, .adm-root.is-leads { padding-top: var(--adm-h); }
+.adm-root .top { top: var(--adm-h); }
+.adm-i { display: block; width: 17px; height: 17px; flex: none; }
+
+/* ── верхняя панель ── */
+.adm-top { position: fixed; z-index: 1000; top: 0; left: 0; right: 0; height: var(--adm-h);
+  display: flex; align-items: center; gap: 12px; padding: 0 12px 0 16px;
+  background: rgba(14,12,16,.95); border-bottom: 1px solid #25222B;
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  font: 500 13px/1 Manrope, system-ui, sans-serif; color: var(--adm-text); }
+.adm-brand { display: flex; align-items: center; gap: 10px; margin-right: 6px; }
+.adm-brand img { height: 22px; width: auto; }
+.adm-brand span { padding: 4px 7px 3px; border: 1px solid #2E2B35; color: #8F8C9B;
+  font: 500 10px/1 Oswald, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.adm-tabs { display: flex; gap: 2px; height: 100%; }
+.adm-tabs button { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 100%;
+  padding: 0 14px; background: none; border: 0; color: #A7A5B2; font: 600 13px/1 Manrope, system-ui, sans-serif;
+  cursor: pointer; transition: color .15s, background-color .15s; }
+.adm-tabs button:hover { color: #fff; }
+.adm-tabs button.on { color: #fff; }
+.adm-tabs button.on::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px;
+  background: var(--red); }
+.adm-count { min-width: 18px; height: 18px; padding: 0 5px; display: inline-grid; place-items: center;
+  background: var(--red); color: #fff; font: 700 11px/1 Manrope, system-ui, sans-serif; font-style: normal;
+  border-radius: 9px; }
+.adm-tools { margin-left: auto; display: flex; align-items: center; gap: 2px; }
+.adm-divider { width: 1px; height: 22px; margin: 0 6px; background: var(--adm-line); }
+.adm-icon-btn { width: 36px; height: 36px; display: inline-grid; place-items: center; flex: none;
+  background: none; border: 1px solid transparent; color: #C9C7D2; cursor: pointer; text-decoration: none;
+  transition: background-color .15s, border-color .15s, color .15s; }
+.adm-icon-btn:hover:not(:disabled) { background: #1E1C23; border-color: #2E2B35; color: #fff; }
+.adm-icon-btn.on { background: #231F29; border-color: #3A3643; color: #fff; }
+.adm-icon-btn:disabled { opacity: .3; cursor: default; }
+.adm-seg { display: inline-flex; padding: 3px; background: #17151B; border: 1px solid var(--adm-line); }
+.adm-seg button { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 11px;
+  background: none; border: 0; color: #9F9DAA; font: 600 13px/1 Manrope, system-ui, sans-serif; cursor: pointer; }
+.adm-seg button:hover { color: #fff; }
+.adm-seg button.on { background: #2B2831; color: #fff; }
+.adm-seg .adm-i { width: 15px; height: 15px; }
+
+.adm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px;
+  padding: 0 16px; background: #1E1C23; border: 1px solid #34303C; color: #fff; cursor: pointer;
+  font: 600 13px/1 Manrope, system-ui, sans-serif; white-space: nowrap;
+  transition: background-color .2s, border-color .2s, opacity .2s; }
+.adm-btn:hover:not(:disabled) { background: #27242D; border-color: #4A4555; }
+.adm-btn.primary { background: var(--red); border-color: var(--red); }
+.adm-btn.primary:hover:not(:disabled) { background: var(--red-dk); border-color: var(--red-dk); }
+.adm-btn:disabled { opacity: .55; cursor: default; }
+.adm-save { min-width: 128px; margin-left: 10px; }
+.adm-save:not(.is-dirty):disabled { background: transparent; border-color: #2E2B35; color: #8F8C9B; opacity: 1; }
+
+/* ── страница в режиме правки ── */
+.adm-edit .rise, .adm-edit .rise.seen { opacity: 1 !important; transform: none !important; transition: none !important; }
+.adm-edit .hero .shell > .shots { opacity: 1 !important; transform: none !important; }
+.adm-blk { position: relative; }
+.adm-blk::after { content: ''; position: absolute; inset: 0; z-index: 30; pointer-events: none;
+  border: 2px solid transparent; transition: border-color .15s; }
+.adm-blk:hover::after { border-color: rgba(232,36,60,.5); }
+.adm-blk.is-drag::after { border-color: var(--red); background: rgba(14,12,16,.55); }
+.adm-blk.is-hidden > :not([data-adm-ui]) { opacity: .3; filter: grayscale(.7); }
+.adm-blk.drop-before::before, .adm-blk.drop-after::before { content: ''; position: absolute; z-index: 60;
+  left: 0; right: 0; height: 4px; background: var(--red); box-shadow: 0 0 0 5px rgba(232,36,60,.22); }
+.adm-blk.drop-before::before { top: -2px; }
+.adm-blk.drop-after::before { bottom: -2px; }
+
+.adm-bar { position: absolute; z-index: 70; top: 0; left: 16px; display: flex; align-items: center; gap: 1px;
+  padding: 4px; background: rgba(14,12,16,.95); border: 1px solid #2E2B35; box-shadow: 0 12px 32px rgba(0,0,0,.45);
+  font: 600 12px/1 Manrope, system-ui, sans-serif; color: var(--adm-text);
+  opacity: 0; transform: translateY(-50%) translateY(-4px); transition: opacity .15s, transform .15s; }
+/* панель сидит на верхней границе блока, как «+ Блок» на нижней, — и не закрывает текст */
+.adm-blk:hover > .adm-bar, .adm-bar:focus-within { opacity: 1; transform: translateY(-50%); }
+.adm-bar button, .adm-grip { width: 30px; height: 30px; display: grid; place-items: center; flex: none;
+  background: none; border: 0; color: #BDBBC7; cursor: pointer; }
+.adm-bar button:hover:not(:disabled) { background: #28252E; color: #fff; }
+.adm-bar button:disabled { opacity: .28; cursor: default; }
+.adm-bar button.del:hover { background: rgba(232,36,60,.2); color: var(--red-lt); }
+.adm-bar .adm-i { width: 16px; height: 16px; }
+.adm-grip { cursor: grab; color: #8F8C9B; }
+.adm-grip:active { cursor: grabbing; }
+.adm-bar-name { padding: 0 8px 0 2px; white-space: nowrap; }
+.adm-bar-sep { width: 1px; height: 18px; margin: 0 4px; background: #2E2B35; }
+.adm-badge { margin-right: 4px; padding: 4px 6px 3px; background: #2B2831; color: #C9C7D2;
+  font: 600 10px/1 Manrope, system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.adm-ins { position: absolute; z-index: 55; left: 50%; bottom: -15px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 13px 0 10px;
+  background: var(--red); border: 0; color: #fff; font: 700 12px/1 Manrope, system-ui, sans-serif; cursor: pointer;
+  box-shadow: 0 8px 20px rgba(232,36,60,.35); opacity: 0; transition: opacity .15s, background-color .15s; }
+.adm-ins:hover { background: var(--red-dk); }
+.adm-blk:hover > .adm-ins { opacity: 1; }
+.adm-ins .adm-i { width: 14px; height: 14px; }
+.adm-end { position: relative; z-index: 2; display: flex; justify-content: center; padding: 40px 20px 52px; }
+
+/* текстовые поля */
+.adm-edit .adm-t { cursor: text; outline: 1px dashed transparent; outline-offset: 4px;
+  transition: outline-color .15s, background-color .15s; }
+.adm-edit .adm-t:hover { outline-color: rgba(255,255,255,.5); }
+.adm-edit .adm-t:focus { outline: 2px solid #fff; background: rgba(255,255,255,.07); }
+.adm-edit [contenteditable] { caret-color: var(--red-lt); }
+.adm-edit .red [contenteditable], .adm-edit .magnet [contenteditable] { caret-color: #fff; }
+.adm-edit .red .adm-t:focus, .adm-edit .magnet .adm-t:focus { background: rgba(0,0,0,.14); }
+.adm-edit .adm-t-pop { cursor: pointer; }
+
+/* пункты списков */
+.adm-edit .card, .adm-edit .who, .adm-edit .q, .adm-edit .price li, .adm-edit .x-stat, .adm-edit .x-list li { position: relative; }
+.adm-item { position: absolute; z-index: 40; top: 8px; right: 8px; display: flex; gap: 1px; padding: 3px;
+  line-height: 1; background: rgba(14,12,16,.94); border: 1px solid #2E2B35; opacity: 0; transition: opacity .15s; }
+:hover > .adm-item, .adm-item:focus-within { opacity: 1; }
+.adm-item button { width: 24px; height: 24px; display: grid; place-items: center; background: none; border: 0;
+  color: #C9C7D2; cursor: pointer; }
+.adm-item button:hover { background: #28252E; color: #fff; }
+.adm-item button.del:hover { background: rgba(232,36,60,.22); color: var(--red-lt); }
+.adm-item .adm-i { width: 14px; height: 14px; }
+.adm-edit .q > .adm-item { top: 14px; right: 44px; }
+.adm-edit .price li > .adm-item, .adm-edit .fv-col li > .adm-item, .adm-edit .x-list li > .adm-item,
+.adm-edit .step > .adm-item { top: 50%; right: 0; transform: translateY(-50%); }
+.adm-add-item { display: flex; list-style: none; }
+.adm-add-item button { flex: 1; min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px; background: rgba(255,255,255,.02); border: 1px dashed rgba(255,255,255,.3);
+  color: rgba(255,255,255,.75); font: 600 13px/1.2 Manrope, system-ui, sans-serif; cursor: pointer;
+  transition: border-color .2s, color .2s, background-color .2s; }
+.adm-add-item button:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,.06); }
+.adm-add-item .adm-i { width: 15px; height: 15px; }
+.red .adm-add-item button, .magnet .adm-add-item button { background: rgba(0,0,0,.1); border-color: rgba(255,255,255,.55); }
+.deck > .adm-add-item button, .quad > .adm-add-item button, .x-stats > .adm-add-item button { min-height: 120px; }
+.steps > .adm-add-item, .faq > .adm-add-item { margin: 14px 0 6px; }
+.fv-col li.adm-add-item { padding-left: 0; }
+.fv-col li.adm-add-item::before { display: none; }
+.price ul > .adm-add-item, .fv-col ul > .adm-add-item { margin-top: 4px; }
+.x-list > .adm-add-item { padding: 12px 0; border-bottom: 0; }
+
+/* картинки */
+.adm-edit .shots .shot, .adm-edit .pic .shot { position: relative; }
+.adm-img { position: absolute; z-index: 40; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; gap: 4px; line-height: 1; opacity: 0; transition: opacity .15s; }
+.shot:hover > .adm-img, .adm-img:focus-within { opacity: 1; }
+.adm-img button { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 12px;
+  background: rgba(14,12,16,.94); border: 1px solid #3A3643; color: #fff; cursor: pointer; white-space: nowrap;
+  font: 600 12px/1 Manrope, system-ui, sans-serif; box-shadow: 0 8px 22px rgba(0,0,0,.4); }
+.adm-img button:hover { border-color: #fff; }
+.adm-img .adm-i { width: 15px; height: 15px; }
+
+/* плашка ссылки/текста кнопки */
+.adm-float { position: absolute; z-index: 1100; width: 372px; display: grid; grid-template-columns: auto 1fr;
+  align-items: center; gap: 8px 10px; padding: 12px 14px 12px 12px; background: #16141A; border: 1px solid #34303C;
+  box-shadow: 0 20px 48px rgba(0,0,0,.55); font: 500 12px/1.35 Manrope, system-ui, sans-serif; color: var(--adm-mute); }
+.adm-float-ico { grid-row: span 2; align-self: start; margin-top: 2px; color: var(--red-lt); }
+.adm-float-label { color: #fff; font-weight: 600; }
+.adm-float .adm-input { grid-column: 2; }
+.adm-float-hint { grid-column: 2; color: var(--adm-dim); }
+.adm-input { width: 100%; height: 38px; padding: 0 12px; background: #0E0C10; border: 1px solid #34303C;
+  color: #fff; font: 500 14px/1 Manrope, system-ui, sans-serif; outline: none; transition: border-color .2s; }
+.adm-input:focus { border-color: var(--red); }
+.adm-ghost { position: fixed; top: -300px; left: 0; padding: 10px 14px; background: var(--red); color: #fff;
+  font: 700 13px/1 Manrope, system-ui, sans-serif; white-space: nowrap; }
+
+.adm-toast { position: fixed; z-index: 1300; left: 50%; bottom: 24px; transform: translateX(-50%);
+  max-width: min(560px, calc(100vw - 32px)); padding: 13px 18px; background: #1D1B22; border: 1px solid #34303C;
+  border-left: 3px solid var(--adm-ok); color: #fff; font: 600 13px/1.45 Manrope, system-ui, sans-serif;
+  box-shadow: 0 18px 44px rgba(0,0,0,.5); animation: adm-toast .25s var(--ease); }
+.adm-toast.error { border-left-color: var(--red); }
+@keyframes adm-toast { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ── окна ── */
+.adm-modal { position: fixed; z-index: 1200; inset: 0; display: grid; place-items: center; padding: 24px;
+  background: rgba(6,5,8,.74); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  animation: adm-fade .2s var(--ease); }
+@keyframes adm-fade { from { opacity: 0; } }
+.adm-sheet { width: min(1200px, 100%); max-height: calc(100vh - 48px); overflow: auto; padding: 26px 28px 32px;
+  background: var(--adm-panel); border: 1px solid var(--adm-line); font-family: Manrope, system-ui, sans-serif;
+  color: var(--adm-text); overscroll-behavior: contain; }
+.adm-sheet.narrow { width: min(580px, 100%); }
+.adm-sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 8px; }
+.adm-h { margin: 0; color: #fff; font: 600 26px/1.06 Oswald, sans-serif; letter-spacing: -.01em; text-transform: uppercase; }
+.adm-sub { margin-top: 8px; max-width: 64ch; font-size: 13px; line-height: 1.5; color: var(--adm-mute); }
+.adm-group { margin: 24px 0 12px; color: var(--red-lt); font: 500 12px/1 Oswald, sans-serif;
+  letter-spacing: .14em; text-transform: uppercase; }
+.adm-lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(262px, 1fr)); gap: 14px; }
+.adm-lib-card { display: flex; flex-direction: column; overflow: hidden; background: var(--adm-panel-2);
+  border: 1px solid var(--adm-line); cursor: pointer; outline: none;
+  transition: border-color .2s, transform .2s, box-shadow .2s; }
+.adm-lib-card:hover, .adm-lib-card:focus-visible { border-color: var(--red); transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0,0,0,.35); }
+.adm-thumb { position: relative; display: block; height: 152px; overflow: hidden; background: var(--ink);
+  border-bottom: 1px solid var(--adm-line); }
+.adm-thumb-in { position: absolute; left: 0; top: 0; width: 1440px; transform: scale(.19); transform-origin: 0 0;
+  pointer-events: none; }
+.adm-thumb .rise, .adm-thumb .hero .shell > .shots { opacity: 1 !important; transform: none !important; transition: none !important; }
+.adm-lib-card b { display: block; padding: 13px 14px 0; font-size: 14px; color: #fff; }
+.adm-lib-hint { display: block; padding: 5px 14px 15px; font-size: 12px; line-height: 1.45; color: var(--adm-mute); }
+
+.adm-versions { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--adm-line); }
+.adm-versions li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid var(--adm-line); }
+.adm-versions b { display: block; font-size: 14px; color: #fff; }
+.adm-versions span { display: block; margin-top: 4px; font-size: 12px; color: var(--adm-mute); }
+.adm-versions li:first-child span { color: var(--adm-ok); }
+
+.adm-drawer { position: fixed; z-index: 1100; top: calc(var(--adm-h) + 10px); right: 10px; bottom: 10px; width: 300px;
+  display: flex; flex-direction: column; background: var(--adm-panel); border: 1px solid var(--adm-line);
+  box-shadow: 0 24px 60px rgba(0,0,0,.55); font-family: Manrope, system-ui, sans-serif; color: var(--adm-text);
+  animation: adm-slide .22s var(--ease); }
+@keyframes adm-slide { from { opacity: 0; transform: translateX(16px); } }
+.adm-drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 8px 2px 16px; }
+.adm-drawer-head b { font: 500 12px/1 Oswald, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.adm-hint { padding: 0 16px 12px; font-size: 12px; line-height: 1.45; color: var(--adm-dim); }
+.adm-layers { flex: 1; overflow: auto; list-style: none; margin: 0; padding: 0 8px 12px; overscroll-behavior: contain; }
+.adm-layers li { position: relative; display: flex; align-items: center; gap: 2px; padding: 2px 2px 2px 0; }
+.adm-layers li:hover { background: #1C1A21; }
+.adm-layers li.is-drag { opacity: .4; }
+.adm-layers li.over-before::before, .adm-layers li.over-after::before { content: ''; position: absolute; left: 4px; right: 4px;
+  height: 2px; background: var(--red); }
+.adm-layers li.over-before::before { top: -1px; }
+.adm-layers li.over-after::before { bottom: -1px; }
+.adm-layers .adm-grip { width: 22px; height: 32px; }
+.adm-layers .adm-grip .adm-i { width: 14px; height: 14px; }
+.adm-layers .adm-icon-btn { width: 32px; height: 32px; }
+.adm-layers .adm-icon-btn .adm-i { width: 15px; height: 15px; }
+.adm-layer-name { flex: 1; min-width: 0; padding: 9px 4px; background: none; border: 0; color: var(--adm-text);
+  font: 600 13px/1.2 Manrope, system-ui, sans-serif; text-align: left; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.adm-layer-name:hover { color: #fff; }
+.adm-layer-name i { margin-right: 9px; color: var(--adm-dim); font-style: normal; font-variant-numeric: tabular-nums; }
+.adm-layers li.is-hidden .adm-layer-name { color: var(--adm-dim); text-decoration: line-through; }
+
+.adm-phone { display: flex; flex-direction: column; height: min(940px, calc(100vh - 48px));
+  background: var(--adm-panel); border: 1px solid var(--adm-line); font-family: Manrope, system-ui, sans-serif; color: var(--adm-text); }
+.adm-phone-head { display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 10px 10px 10px 18px; border-bottom: 1px solid var(--adm-line); }
+.adm-phone-head b { display: block; font-size: 14px; color: #fff; }
+.adm-phone-head span { display: block; margin-top: 3px; font-size: 12px; color: var(--adm-mute); }
+.adm-phone-frame { flex: 1; min-height: 0; display: grid; place-items: center; padding: 16px 30px 22px; }
+.adm-phone-frame iframe { width: 410px; height: 100%; max-height: 864px; border: 10px solid #25222B;
+  border-radius: 36px; background: var(--ink); }
+
+/* ── вход и пустые состояния ── */
+.adm-login { min-height: 100vh; display: grid; place-items: center; padding: 24px; font-family: Manrope, system-ui, sans-serif; }
+.adm-card { width: min(390px, 100%); display: grid; gap: 14px; padding: 34px 30px 30px; background: var(--adm-panel);
+  border: 1px solid var(--adm-line); border-top: 3px solid var(--red); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.adm-login-logo { height: 34px; width: auto; margin-bottom: 10px; }
+.adm-card .adm-sub { margin-top: -6px; margin-bottom: 6px; }
+.adm-card .adm-input { height: 46px; }
+.adm-card .adm-btn { height: 46px; }
+.adm-err { font-size: 13px; line-height: 1.4; color: var(--red-lt); }
+.adm-state { min-height: calc(100vh - var(--adm-h)); display: grid; place-items: center; padding: 24px;
+  font: 600 14px/1.5 Manrope, system-ui, sans-serif; color: var(--adm-mute); text-align: center; }
+.adm-empty { padding: 56px 20px; border: 1px dashed var(--adm-line); text-align: center;
+  font: 500 14px/1.5 Manrope, system-ui, sans-serif; color: var(--adm-mute); }
+
+/* ── заявки ── */
+.adm-leads { width: min(1080px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 70px;
+  font-family: Manrope, system-ui, sans-serif; color: var(--adm-text); }
+.adm-leads-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.adm-leads .adm-h { font-size: 36px; }
+.adm-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 26px 0 16px; }
+.adm-chip { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px; background: #16141A;
+  border: 1px solid var(--adm-line); color: #BDBBC7; font: 600 13px/1 Manrope, system-ui, sans-serif; cursor: pointer;
+  transition: border-color .15s, color .15s, background-color .15s; }
+.adm-chip:hover { border-color: #4A4555; color: #fff; }
+.adm-chip i { font-style: normal; font-size: 11px; color: var(--adm-dim); }
+.adm-chip.on { background: #fff; border-color: #fff; color: var(--ink); }
+.adm-chip.on i { color: #6E6C79; }
+.adm-search { position: relative; display: flex; align-items: center; width: min(320px, 100%); margin-left: auto; }
+.adm-search .adm-i { position: absolute; left: 12px; width: 15px; height: 15px; color: var(--adm-dim); pointer-events: none; }
+.adm-search input { width: 100%; height: 36px; padding: 0 12px 0 36px; background: #0E0C10; border: 1px solid var(--adm-line);
+  color: #fff; font: 500 13px/1 Manrope, system-ui, sans-serif; outline: none; }
+.adm-search input:focus { border-color: var(--red); }
+.adm-lead-list { display: grid; gap: 10px; }
+.adm-lead { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 20px; padding: 16px 16px 16px 18px;
+  background: var(--adm-panel); border: 1px solid #25222B; border-left: 3px solid var(--red); }
+.adm-lead.s-work { border-left-color: var(--adm-warn); }
+.adm-lead.s-done { border-left-color: #3A3742; }
+.adm-lead.s-done .adm-lead-who b { color: var(--adm-mute); }
+.adm-lead-who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+.adm-lead-who b { font-size: 16px; font-weight: 700; color: #fff; }
+.adm-lead-who a { color: var(--red-lt); font-size: 15px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; }
+.adm-lead-who a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.adm-lead-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 7px; font-size: 13px; color: var(--adm-mute); }
+.adm-lead-meta time { color: var(--adm-dim); }
+.adm-lead-side { display: flex; align-items: flex-start; gap: 4px; }
+.adm-status { height: 34px; padding: 0 32px 0 12px; appearance: none; -webkit-appearance: none; cursor: pointer;
+  background: #1E1C23 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23BDBBC7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center;
+  border: 1px solid #34303C; color: #fff; font: 600 13px/1 Manrope, system-ui, sans-serif; outline: none; }
+.adm-status option { background: #16141A; color: #fff; }
+.adm-status.s-new { border-color: rgba(232,36,60,.65); }
+.adm-status.s-work { border-color: rgba(242,184,75,.65); }
+.adm-lead-ans { grid-column: 1 / -1; }
+.adm-lead-ans > button { display: inline-flex; align-items: center; gap: 6px; padding: 0; background: none; border: 0;
+  color: #C9C7D2; font: 600 13px/1 Manrope, system-ui, sans-serif; cursor: pointer; }
+.adm-lead-ans > button:hover { color: #fff; }
+.adm-lead-ans > button .adm-i { width: 14px; height: 14px; transition: transform .2s; }
+.adm-lead-ans > button.on .adm-i { transform: rotate(90deg); }
+.adm-lead-ans ol { display: grid; gap: 4px; margin: 10px 0 0; padding: 0; list-style: none; }
+.adm-lead-ans li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 9px 12px;
+  background: #0E0C10; font-size: 13px; line-height: 1.4; }
+.adm-lead-ans li span { color: var(--adm-mute); }
+.adm-lead-ans li b { color: #fff; font-weight: 600; }
+
+@media (max-width: 1100px) {
+  .adm-lbl { display: none; }
+  .adm-brand span { display: none; }
+  .adm-tabs button, .adm-seg button { padding: 0 10px; }
+}
+@media (max-width: 760px) {
+  .adm-lead { grid-template-columns: 1fr; }
+  .adm-search { width: 100%; margin-left: 0; }
+  .adm-lead-ans li { grid-template-columns: 1fr; gap: 3px; }
+  .adm-leads .adm-h { font-size: 28px; }
+}
+</style>
+<!--ADMIN:END-->
 <script type="application/ld+json">__JSONLD__</script>
 </head>
 <body>
@@ -1005,6 +1377,27 @@ const QUIZ_NOTE = [
   'Храните данные и историю заказов у себя, а не отдавайте клиента сторонним площадкам.',
 ];
 
+/* заготовки новых блоков: тексты-подсказки, которые меняют в админке */
+const X_CARDS = [
+  { t: 'Первое преимущество', d: 'Опишите пользу для клиента одним-двумя предложениями.' },
+  { t: 'Второе преимущество', d: 'Коротко и по делу: что человек получит и почему это важно.' },
+  { t: 'Третье преимущество', d: 'Заканчивайте конкретикой: цифрой, сроком или результатом.' },
+];
+
+const X_STATS = [
+  { n: '150 000 ₽', t: 'запуск приложения под вашим брендом' },
+  { n: '7 дней', t: 'от готового дизайна до сборки приложения' },
+  { n: '2 приложения', t: 'для ваших клиентов и для команды' },
+  { n: '6 млн ₽', t: 'вложено в разработку платформы' },
+];
+
+const X_LIST = [
+  'Клиентское приложение под вашим брендом',
+  'Админ-панель для команды',
+  'Бонусы, промокоды и push-уведомления',
+  'Публикация в App Store и Google Play',
+];
+
 /* ─────────── мелкие детали ─────────── */
 /* Иконки — набор Lucide (лицензия MIT), встроены как SVG: единый стиль без внешних файлов */
 const PATHS = {
@@ -1060,11 +1453,111 @@ const Ico = ({ name }) => (
   </svg>
 );
 
+/* ─────────── страница из блоков: тексты, порядок, картинки ─────────── */
+/* Всё, что меняют в админке, лежит в одном JSON на сервере: порядок блоков,
+   изменённые тексты, ссылки и картинки. Пока там пусто, компоненты показывают
+   тексты прямо из вёрстки — поэтому без правок сайт выглядит ровно как раньше. */
+const IS_ADMIN = false;
+const CONTENT_URL = 'https://glebslobodchikov.ru/appforse-leads/content.json';
+
+const BlockCtx = React.createContext({ id: '', data: {} });
+/* в админке — методы редактора, на сайте всегда null */
+const EditCtx = React.createContext(null);
+
+const getPath = (obj, path) => {
+  let v = obj;
+  const parts = String(path).split('.');
+  for (let i = 0; i < parts.length; i++) {
+    if (v == null) return undefined;
+    v = v[parts[i]];
+  }
+  return v;
+};
+
+/* перенос строки из админки превращается в тот же {' '}<br />, что в вёрстке:
+   на мобилке переносы в заголовках скрыты, и слова не должны слипаться */
+const renderText = s => {
+  const lines = String(s).split('\n');
+  if (lines.length === 1) return lines[0];
+  return lines.map((l, i) => (
+    <React.Fragment key={i}>{i ? ' ' : null}{i ? <br /> : null}{l}</React.Fragment>
+  ));
+};
+
+/* «отпечаток» детей: текст и теги без функций — чтобы не перерисовывать
+   текст, который сейчас правят, когда родитель обновился по своим делам */
+const sig = c => {
+  if (c == null || c === false || c === true) return '';
+  if (typeof c === 'string' || typeof c === 'number') return String(c);
+  if (Array.isArray(c)) return c.map(sig).join('');
+  if (c.props) return '<' + (typeof c.type === 'string' ? c.type : 'c') + '>' + sig(c.props.children);
+  return '';
+};
+
+/* Текст с ключом. На сайте — просто текст (или правка из админки вместо него),
+   в админке — поле, которое правится по клику. */
+const T = React.memo(function T({ k, link, children }) {
+  const blk = React.useContext(BlockCtx);
+  const ed = React.useContext(EditCtx);
+  const v = getPath(blk.data, k);
+  const shown = typeof v === 'string' ? renderText(v) : children;
+  if (!ed || !ed.editing) return shown;
+  return (
+    <EditText key={typeof v === 'string' ? 'v:' + v : 'd'} blk={blk.id} k={k} link={link} ed={ed}>
+      {shown}
+    </EditText>
+  );
+}, (a, b) => a.k === b.k && a.link === b.link && sig(a.children) === sig(b.children));
+
+/* кнопка-ссылка: текст и адрес меняются в админке */
+const A = ({ k, href, icon, children, ...rest }) => {
+  const blk = React.useContext(BlockCtx);
+  const h = getPath(blk.data, k + 'Href');
+  return (
+    <a href={typeof h === 'string' && h ? h : href} {...rest}>
+      {icon}<T k={k} link={k + 'Href'}>{children}</T>
+    </a>
+  );
+};
+
+const useBlockId = () => React.useContext(BlockCtx).id;
+
+/* список карточек/пунктов: пока его не трогали в админке — берём из вёрстки */
+const useList = (key, defaults) => {
+  const blk = React.useContext(BlockCtx);
+  const ed = React.useContext(EditCtx);
+  if (ed) ed.lists[blk.id + '/' + key] = defaults;
+  const v = blk.data[key];
+  return Array.isArray(v) ? v : defaults;
+};
+
+const useImg = (k, def) => {
+  const blk = React.useContext(BlockCtx);
+  const v = k ? getPath(blk.data, k) : null;
+  return typeof v === 'string' && v ? v : def;
+};
+
+/* кнопки «выше/ниже/удалить» у пункта списка и «+ добавить» — только в админке */
+const Item = ({ list, i }) => {
+  const ed = React.useContext(EditCtx);
+  const blk = React.useContext(BlockCtx);
+  if (!ed || !ed.editing) return null;
+  return <ItemTools blk={blk.id} list={list} i={i} ed={ed} />;
+};
+
+const AddItem = ({ list, make, label, as }) => {
+  const ed = React.useContext(EditCtx);
+  const blk = React.useContext(BlockCtx);
+  if (!ed || !ed.editing) return null;
+  return <AddItemBtn blk={blk.id} list={list} make={make} label={label} as={as} ed={ed} />;
+};
+
 /* Теги: подсветка-пилюля переезжает от тега к тегу.
    Приём из «Animated Tabs» (buildui.com) и Smooth Tabs (motion.dev): в Motion это
    общий layoutId, здесь то же самое без библиотеки — один элемент, который
    переставляется под активный тег, а переезд делает CSS-переход. */
-const Tags = ({ items }) => {
+const Tags = ({ items: defItems, k }) => {
+  const items = useList(k, defItems);
   const [hot, setHot] = useState(0);
   const wrap = useRef(null);
   const [box, setBox] = useState({ x: 0, y: 0, w: 0, h: 0, ready: false });
@@ -1095,7 +1588,7 @@ const Tags = ({ items }) => {
         width: box.w, height: box.h, opacity: box.ready ? 1 : 0,
       }} />
       {items.map((t, i) => (
-        <span className={'tag' + (i === hot ? ' hot' : '')} key={t}>{t}</span>
+        <span className={'tag' + (i === hot ? ' hot' : '')} key={i}><T k={k + '.' + i}>{t}</T></span>
       ))}
     </div>
   );
@@ -1153,12 +1646,17 @@ function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, 
 /* дизайнерские мокапы приходят уже готовым изображением: свой наклон,
    тень, подсветка и прозрачные поля вокруг — просто вписываем целиком,
    без рамки и без обрезки по площади */
-const Shot = ({ src, alt, cls, lazy }) => (
-  <div className={'shot ' + (cls || '')}>
-    <img src={src} alt={alt} decoding="async"
-         {...(lazy ? { loading: 'lazy' } : { fetchPriority: 'high' })} />
-  </div>
-);
+const Shot = ({ src, alt, cls, lazy, k }) => {
+  const url = useImg(k, src);
+  const ed = React.useContext(EditCtx);
+  return (
+    <div className={'shot ' + (cls || '')}>
+      <img src={url} alt={alt} decoding="async"
+           {...(lazy ? { loading: 'lazy' } : { fetchPriority: 'high' })} />
+      {ed && ed.editing && k ? <ImgTools k={k} ed={ed} /> : null}
+    </div>
+  );
+};
 
 /* ─────────── блоки ─────────── */
 /* Иконки соцсетей — набор Simple Icons (CC0) */
@@ -1203,6 +1701,8 @@ function useForm(rules, source, extra) {
     });
     setErr(next);
     if (Object.keys(next).length) return;
+    // в админке форма только показывает, как выглядит отправка
+    if (IS_ADMIN) { setSent(true); return; }
     const trap = f.elements.namedItem('website');
     const payload = Object.assign({
       name: f.elements.namedItem('name').value.trim(),
@@ -1342,8 +1842,8 @@ const Top = () => {
         </button>
         <nav>
           <div className="inner">
-            {NAV.map(([t, h]) => (
-              <a key={h} href={h} onClick={() => setOpen(false)}>{t}</a>
+            {useList('nav', NAV).map(([t, h], i) => (
+              <a key={h} href={h} onClick={() => setOpen(false)}><T k={'nav.' + i + '.0'}>{t}</T></a>
             ))}
           </div>
         </nav>
@@ -1527,30 +2027,30 @@ const Hero = () => (
   <section className="hero" id="top">
     <Rise as="div" className="shell" now>
       <div>
-        <div className="eyebrow">Готовое приложение под вашим брендом</div>
+        <div className="eyebrow"><T k="eyebrow">Готовое приложение под вашим брендом</T></div>
         <h1>
-          Готовое приложение для вашего магазина&nbsp;— <span className="circle">за 7 дней
+          <T k="title">Готовое приложение для вашего магазина&nbsp;— </T><span className="circle"><T k="mark">за 7 дней</T>
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
               <path d="M14 32C14 12 60 6 104 7c46 1 84 9 82 26-2 16-48 22-92 21C52 53 14 46 14 32z" />
             </svg>
           </span>
         </h1>
         <p className="lead">
-          Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
-          доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.
+          <T k="lead">Запустим приложение на нашей готовой платформе под вашим брендом: каталог, заказы,
+          доставка, оплата, бонусы, push-уведомления и клиентская база&nbsp;— без разработки с нуля.</T>
         </p>
         <div className="acts">
-          <a className="btn" href="#contact">Обсудить запуск</a>
-          <a className="btn ghost" href="#case">Посмотреть кейсы</a>
+          <A k="btn1" className="btn" href="#contact">Обсудить запуск</A>
+          <A k="btn2" className="btn ghost" href="#case">Посмотреть кейсы</A>
         </div>
         <div className="facts">
-          <div><b>150 000 ₽</b><span>запуск под вашим брендом</span></div>
-          <div><b>7 дней</b><span>и приложение уже в сторах</span></div>
+          <div><b><T k="f1n">150 000 ₽</T></b><span><T k="f1t">запуск под вашим брендом</T></span></div>
+          <div><b><T k="f2n">7 дней</T></b><span><T k="f2t">и приложение уже в сторах</T></span></div>
         </div>
       </div>
       <div className="shots">
-        <Shot src={SHOT_HERO_A} alt="Каталог в клиентском приложении" cls="a" />
-        <Shot src={SHOT_HERO_B} alt="Обработка заказа в приложении менеджера" cls="b" />
+        <Shot k="imgA" src={SHOT_HERO_A} alt="Каталог в клиентском приложении" cls="a" />
+        <Shot k="imgB" src={SHOT_HERO_B} alt="Обработка заказа в приложении менеджера" cls="b" />
       </div>
     </Rise>
   </section>
@@ -1562,20 +2062,22 @@ const Why = () => (
     <div className="red">
       <div className="shell">
         <Rise as="h2">
-          Вы уже заплатили{' '}<br />за привлечение клиента.{' '}<br />Теперь верните его снова.
+          <T k="title">Вы уже заплатили{' '}<br />за привлечение клиента.{' '}<br />Теперь верните его снова.</T>
         </Rise>
         <Rise as="p" className="lead" delay={80}>
-          Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится
-          снова тратить деньги на рекламу, чтобы вернуть тех, кто уже однажды у вас покупал.
+          <T k="lead">Клиент сделал покупку, но без собственного канала связи легко теряется. Приходится
+          снова тратить деньги на рекламу, чтобы вернуть тех, кто уже однажды у вас покупал.</T>
         </Rise>
         <div className="deck">
-          {WHY_CARDS.map((c, i) => (
-            <Rise className="card" key={c.t} delay={120 + i * 90}>
+          {useList('cards', WHY_CARDS).map((c, i) => (
+            <Rise className="card" key={i} delay={120 + i * 90}>
+              <Item list="cards" i={i} />
               <span className="num">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{c.t}</h3>
-              <p>{c.d}</p>
+              <h3><T k={'cards.' + i + '.t'}>{c.t}</T></h3>
+              <p><T k={'cards.' + i + '.d'}>{c.d}</T></p>
             </Rise>
           ))}
+          <AddItem list="cards" label="Карточка" make={() => ({ t: 'Новая карточка', d: 'Описание карточки' })} />
         </div>
       </div>
     </div>
@@ -1587,28 +2089,28 @@ const What = () => (
   <section className="dark" id="what">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Приложение для клиентов{' '}<br />и панель управления для вас
+        <T k="title">Приложение для клиентов{' '}<br />и панель управления для вас</T>
       </Rise>
       <Rise as="p" className="lead" delay={80}>
-        Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
-        товары и аналитику в одной системе.
+        <T k="lead">Клиент покупает в приложении. Команда управляет заказами. Собственник видит клиентов,
+        товары и аналитику в одной системе.</T>
       </Rise>
       <div className="duo">
         <Rise className="panel" delay={140}>
-          <h3>Клиентское приложение</h3>
-          <Tags items={['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']} />
-          <p>Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
+          <h3><T k="p1t">Клиентское приложение</T></h3>
+          <Tags k="p1tags" items={['Каталог', 'Корзина', 'Профиль', 'Бонусы', 'Избранное', 'История заказов']} />
+          <p><T k="p1d">Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
-             касаний, без звонков и переписки с менеджером.</p>
-          <div className="pic"><Shot src={SHOT_WHAT_A} alt="Бонусная программа в клиентском приложении" lazy /></div>
+             касаний, без звонков и переписки с менеджером.</T></p>
+          <div className="pic"><Shot k="p1img" src={SHOT_WHAT_A} alt="Бонусная программа в клиентском приложении" lazy /></div>
         </Rise>
         <Rise className="panel" delay={220}>
-          <h3>Управление бизнесом</h3>
-          <Tags items={['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']} />
-          <p>Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
+          <h3><T k="p2t">Управление бизнесом</T></h3>
+          <Tags k="p2tags" items={['Админ-панель', 'CRM', 'Аналитика', 'Склады', 'Push', 'Роли сотрудников']} />
+          <p><T k="p2d">Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
-             панели, без сторонних сервисов.</p>
-          <div className="pic"><Shot src={SHOT_WHAT_B} alt="Аналитика клиентов в панели управления" lazy /></div>
+             панели, без сторонних сервисов.</T></p>
+          <div className="pic"><Shot k="p2img" src={SHOT_WHAT_B} alt="Аналитика клиентов в панели управления" lazy /></div>
         </Rise>
       </div>
       <Magnet />
@@ -1625,10 +2127,10 @@ const Magnet = () => {
   return (
     <Rise className="magnet" id="magnet">
           <div>
-            <h2>Разберём ваш бизнес и&nbsp;покажем{' '}<br />точки роста повторных продаж</h2>
+            <h2><T k="mTitle">Разберём ваш бизнес и&nbsp;покажем{' '}<br />точки роста повторных продаж</T></h2>
             <p>
-              Посмотрим, как приложение может работать с&nbsp;вашей клиентской базой,
-              возвращать покупателей и&nbsp;автоматизировать повторные заказы.
+              <T k="mText">Посмотрим, как приложение может работать с&nbsp;вашей клиентской базой,
+              возвращать покупателей и&nbsp;автоматизировать повторные заказы.</T>
             </p>
           </div>
           <form className="form" noValidate onSubmit={submit}>
@@ -1637,7 +2139,7 @@ const Magnet = () => {
                    onInput={() => clear('name')} />
             <PhoneField err={err.phone} onFix={() => clear('phone')} />
             <button className="btn on-red" type="submit">
-              {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить разбор'}
+              {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : <T k="mBtn">{'Получить разбор'}</T>}
             </button>
             <label className="agree">
               <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -1657,21 +2159,24 @@ const Who = () => (
   <section className="dark" id="who">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Бизнесам, где важны повторные покупки{' '}<br />и своя клиентская база
+        <T k="title">Бизнесам, где важны повторные покупки{' '}<br />и своя клиентская база</T>
       </Rise>
       <div className="quad">
-        {AUDIENCE.map((a, i) => (
-          <Rise className="who" key={a.t} delay={60 + i * 80}>
+        {useList('items', AUDIENCE).map((a, i) => (
+          <Rise className="who" key={i} delay={60 + i * 80}>
+            <Item list="items" i={i} />
             <span className="ico"><Ico name={a.ico} /></span>
-            <h3>{a.t}</h3><p>{a.d}</p>
+            <h3><T k={'items.' + i + '.t'}>{a.t}</T></h3><p><T k={'items.' + i + '.d'}>{a.d}</T></p>
           </Rise>
         ))}
+        <AddItem list="items" label="Карточка" make={() => ({ ico: 'bag', t: 'Новая аудитория', d: 'Кому подходит и почему' })} />
       </div>
     </div>
   </section>
 );
 
 const How = () => {
+  const steps = useList('steps', STEPS);
   const wrap = useRef(null);
   const [active, setActive] = useState(-1);
   useEffect(() => {
@@ -1686,22 +2191,24 @@ const How = () => {
     items.forEach(el => io.observe(el));
     return () => io.disconnect();
   }, []);
-  const filled = (active + 1) / STEPS.length;
+  const filled = (active + 1) / steps.length;
   return (
     <section className="dark" id="how">
       <div className="shell">
         <Rise as="h2" className="wide">
-          Как ваше приложение появится{' '}<br />в App Store и Google Play
+          <T k="title">Как ваше приложение появится{' '}<br />в App Store и Google Play</T>
         </Rise>
         <div className="steps" ref={wrap}>
           <span className="rail" style={{ transform: 'scaleY(' + filled + ')' }} />
-          {STEPS.map((st, i) => (
-            <Rise className={'step' + (i <= active ? ' on' : '')} key={st.t} delay={40 + i * 70}>
+          {steps.map((st, i) => (
+            <Rise className={'step' + (i <= active ? ' on' : '')} key={i} delay={40 + i * 70}>
+              <Item list="steps" i={i} />
               <span className="n">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{st.t}</h3>
-              <p>{st.d}</p>
+              <h3><T k={'steps.' + i + '.t'}>{st.t}</T></h3>
+              <p><T k={'steps.' + i + '.d'}>{st.d}</T></p>
             </Rise>
           ))}
+          <AddItem list="steps" label="Шаг" make={() => ({ t: 'Новый шаг', d: 'Что происходит на этом шаге' })} />
         </div>
       </div>
     </section>
@@ -1712,25 +2219,25 @@ const Case = () => (
   <section className="dark" id="case">
     <div className="shell">
       <Rise as="h2" className="wide">
-        Приложение, которое уже работает{' '}<br />в реальном бизнесе
+        <T k="title">Приложение, которое уже работает{' '}<br />в реальном бизнесе</T>
       </Rise>
       <Rise as="p" className="lead" delay={80}>
-        «Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
-        приложение под брендом компании с каталогом, заказами, бонусами и повторными покупками.
+        <T k="lead">«Синица» — сервис доставки и розничной торговли. Для бизнеса запустили собственное
+        приложение под брендом компании с каталогом, заказами, бонусами и повторными покупками.</T>
       </Rise>
       <div className="cases">
         <Rise className="case" delay={140}>
-          <span className="kind">Доставка / розница</span>
-          <h3>«Синица»</h3>
-          <p>Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
-             Работает в нескольких городах.</p>
-          <div className="pic"><Shot src={SHOT_CASE_A} alt="Корзина в клиентском приложении «Синицы»" lazy /></div>
+          <span className="kind"><T k="k1">Доставка / розница</T></span>
+          <h3><T k="t1">«Синица»</T></h3>
+          <p><T k="d1">Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
+             Работает в нескольких городах.</T></p>
+          <div className="pic"><Shot k="img1" src={SHOT_CASE_A} alt="Корзина в клиентском приложении «Синицы»" lazy /></div>
         </Rise>
         <Rise className="case" delay={220}>
-          <span className="kind">Операционка</span>
-          <h3>Менеджерское приложение</h3>
-          <p>Заказы, клиенты, статусы и исполнение — в одном окне.</p>
-          <div className="pic"><Shot src={SHOT_CASE_B} alt="График продаж в менеджерском приложении" lazy /></div>
+          <span className="kind"><T k="k2">Операционка</T></span>
+          <h3><T k="t2">Менеджерское приложение</T></h3>
+          <p><T k="d2">Заказы, клиенты, статусы и исполнение — в одном окне.</T></p>
+          <div className="pic"><Shot k="img2" src={SHOT_CASE_B} alt="График продаж в менеджерском приложении" lazy /></div>
         </Rise>
       </div>
     </div>
@@ -1765,31 +2272,29 @@ const Founder = () => {
             )}
           </Rise>
           <div className="fv-head">
-            <Rise as="span" className="kicker">Слово основателя</Rise>
-            <Rise as="h2" className="wide" delay={60}>Почему собственное приложение{' '}<br />не обязано стоить миллионы</Rise>
+            <Rise as="span" className="kicker"><T k="kicker">Слово основателя</T></Rise>
+            <Rise as="h2" className="wide" delay={60}><T k="title">Почему собственное приложение{' '}<br />не обязано стоить миллионы</T></Rise>
           </div>
           <div className="fv-body">
             <Rise as="p" className="lead" delay={120}>
-              Каталог, корзина, оплата, доставка, бонусы, push-уведомления —
+              <T k="lead">Каталог, корзина, оплата, доставка, бонусы, push-уведомления —
               большинству розничных бизнесов нужен один и тот же базовый набор.
               Мы один раз построили и отладили платформу, а теперь разворачиваем
-              её под ваш бренд вместо разработки с нуля.
+              её под ваш бренд вместо разработки с нуля.</T>
             </Rise>
             <Rise className="fv-cmp" delay={180}>
               <div className="fv-col">
-                <b>Разработка с нуля</b>
+                <b><T k="c1t">Разработка с нуля</T></b>
                 <ul>
-                  <li>Аналитик, дизайнер, разработчики, тестировщик, менеджер</li>
-                  <li>Сотни и тысячи часов разработки</li>
-                  <li>Месяцы работы и бюджет в миллионы</li>
+                  {useList('c1', ["Аналитик, дизайнер, разработчики, тестировщик, менеджер", "Сотни и тысячи часов разработки", "Месяцы работы и бюджет в миллионы"]).map((t, i) => <li key={i}><Item list="c1" i={i} /><T k={'c1.' + i}>{t}</T></li>)}
+                  <AddItem as="li" list="c1" label="Пункт" make={() => 'Новый пункт'} />
                 </ul>
               </div>
               <div className="fv-col on">
-                <b>Готовая платформа</b>
+                <b><T k="c2t">Готовая платформа</T></b>
                 <ul>
-                  <li>Платформа уже разработана и отлажена</li>
-                  <li>Адаптируем её под ваш бренд и бизнес</li>
-                  <li>От 150 000 ₽ · сборка за 7 рабочих дней</li>
+                  {useList('c2', ["Платформа уже разработана и отлажена", "Адаптируем её под ваш бренд и бизнес", "От 150 000 ₽ · сборка за 7 рабочих дней"]).map((t, i) => <li key={i}><Item list="c2" i={i} /><T k={'c2.' + i}>{t}</T></li>)}
+                  <AddItem as="li" list="c2" label="Пункт" make={() => 'Новый пункт'} />
                 </ul>
               </div>
             </Rise>
@@ -1805,41 +2310,42 @@ const Price = () => (
     <Torn d={TORN_C} dir="down" />
     <div className="red">
       <div className="shell">
-        <Rise as="h2">Стоимость запуска</Rise>
+        <Rise as="h2"><T k="title">Стоимость запуска</T></Rise>
         <Rise as="p" className="lead" delay={80}>
-          Готовое решение под вашим брендом — всё необходимое для запуска собственного
-          мобильного приложения в одном пакете.
+          <T k="lead">Готовое решение под вашим брендом — всё необходимое для запуска собственного
+          мобильного приложения в одном пакете.</T>
         </Rise>
         <div className="price">
           <Rise className="box" delay={140}>
             <div>
-            <span className="tagline">Запуск платформы</span>
-            <div className="sum">150 000 ₽</div>
-            <h3>В стоимость входит</h3>
+            <span className="tagline"><T k="tagline">Запуск платформы</T></span>
+            <div className="sum"><T k="sum">150 000 ₽</T></div>
+            <h3><T k="incTitle">В стоимость входит</T></h3>
             <ul style={{ marginTop: 14 }}>
-              {INCLUDED.map(t => <li key={t}><Check />{t}</li>)}
+              {useList('inc', INCLUDED).map((t, i) => <li key={i}><Item list="inc" i={i} /><Check /><T k={'inc.' + i}>{t}</T></li>)}
+              <AddItem as="li" list="inc" label="Пункт" make={() => 'Новый пункт'} />
             </ul>
-            <a className="btn" href="#contact">Обсудить запуск</a>
+            <A k="btn" className="btn" href="#contact">Обсудить запуск</A>
             </div>
             <div className="collage">
-              <Shot src={SHOT_PRICE_A} alt="Push-уведомление клиенту" cls="a" lazy />
-              <Shot src={SHOT_PRICE_B} alt="Дашборд с заказами и статистикой" cls="b" lazy />
+              <Shot k="imgA" src={SHOT_PRICE_A} alt="Push-уведомление клиенту" cls="a" lazy />
+              <Shot k="imgB" src={SHOT_PRICE_B} alt="Дашборд с заказами и статистикой" cls="b" lazy />
             </div>
           </Rise>
           <Rise className="extra" delay={220}>
             <div className="item">
-              <b>Техническая поддержка</b>
-              <p>От 25 000 ₽/мес. По желанию, если хотите передать нам обслуживание платформы.</p>
+              <b><T k="e1t">Техническая поддержка</T></b>
+              <p><T k="e1d">От 25 000 ₽/мес. По желанию, если хотите передать нам обслуживание платформы.</T></p>
             </div>
             <div className="item">
-              <b>Индивидуальные доработки</b>
-              <p>Функции и интеграции под задачи вашего бизнеса. Считаем отдельно.</p>
+              <b><T k="e2t">Индивидуальные доработки</T></b>
+              <p><T k="e2d">Функции и интеграции под задачи вашего бизнеса. Считаем отдельно.</T></p>
             </div>
             <div className="item">
-              <b>Демо-версия</b>
-              <p>Скачайте демо клиентского приложения и посмотрите, как это выглядит
-                 для конечного покупателя.</p>
-              <a className="btn ghost" href={TG} style={{ marginTop: 20 }}>Скачать демо-приложение</a>
+              <b><T k="e3t">Демо-версия</T></b>
+              <p><T k="e3d">Скачайте демо клиентского приложения и посмотрите, как это выглядит
+                 для конечного покупателя.</T></p>
+              <A k="demoBtn" className="btn ghost" href={TG} style={{ marginTop: 20 }}>Скачать демо-приложение</A>
             </div>
           </Rise>
         </div>
@@ -1851,19 +2357,19 @@ const Price = () => (
 
 /* та же форма и валидация, что в Contact/Magnet — только компактнее и без
    лид-магнитного заголовка, потому что результат теста уже всё объяснил */
-const QuizForm = ({ answers }) => {
+const QuizForm = ({ answers, questions }) => {
   const { err, sent, sending, failed, submit, clear } = useForm([
     ['name', filled, 'Как к вам обращаться?'],
     ['phone', phoneOk, 'Оставьте номер телефона целиком'],
     ['agree', checked, 'Нужно согласие на обработку данных'],
-  ], 'Квиз → Обсудить мой бизнес', () => ({ answers: QUIZ_Q.map((q, i) => ({ q: q.t, a: answers[i + 1] || '—' })) }));
+  ], 'Квиз → Обсудить мой бизнес', () => ({ answers: questions.map((q, i) => ({ q: q.t, a: answers[i + 1] || '—' })) }));
   return (
     <form className="form qz-form" noValidate onSubmit={submit}>
       <input className="hp-field" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
       <Field name="name" placeholder="Ваше имя" err={err.name} onInput={() => clear('name')} />
       <PhoneField err={err.phone} onFix={() => clear('phone')} />
       <button className="btn" type="submit">
-        {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Обсудить мой бизнес'}
+        {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : <T k="formBtn">{'Обсудить мой бизнес'}</T>}
       </button>
       <label className="agree">
         <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -1879,7 +2385,9 @@ const QuizForm = ({ answers }) => {
 };
 
 const Quiz = () => {
-  const total = QUIZ_Q.length;
+  const Q = useList('q', QUIZ_Q);
+  const NOTES = useList('notes', QUIZ_NOTE);
+  const total = Q.length;
   const [step, setStep] = useState(1);        // 1..total — вопросы (без интро), total+1 — результат
   const [dir, setDir] = useState(1);
   const [answers, setAnswers] = useState({});
@@ -1888,7 +2396,7 @@ const Quiz = () => {
   useEffect(() => {
     if (step >= 1 && step <= total) {
       const saved = answers[step];
-      setPicked(saved ? QUIZ_Q[step - 1].a.indexOf(saved) : -1);
+      setPicked(saved ? Q[step - 1].a.indexOf(saved) : -1);
     }
   }, [step]);
 
@@ -1919,7 +2427,7 @@ const Quiz = () => {
   const choose = i => setPicked(i);
   const next = () => {
     if (picked === -1) return;
-    setAnswers(prev => Object.assign({}, prev, { [step]: QUIZ_Q[step - 1].a[picked] }));
+    setAnswers(prev => Object.assign({}, prev, { [step]: Q[step - 1].a[picked] }));
     setDir(1);
     setStep(s => s + 1);
   };
@@ -1931,17 +2439,17 @@ const Quiz = () => {
   const filledCount = Math.min(step, total);
   const pct = Math.round((filledCount / total) * 100);
   const lastAns = answers[total];
-  const noteIdx = lastAns ? Math.max(0, QUIZ_Q[total - 1].a.indexOf(lastAns)) : 0;
+  const noteIdx = lastAns ? Math.max(0, Q[total - 1].a.indexOf(lastAns)) : 0;
 
   return (
     <section className="dark" id="quiz">
       <div className="shell">
         <div className="qz-layout">
           <div className="qz-side">
-            <Rise as="span" className="kicker">Экспресс-проверка</Rise>
-            <Rise as="h2" delay={40}>Подходит ли вашему бизнесу{' '}<br />собственное приложение?</Rise>
+            <Rise as="span" className="kicker"><T k="kicker">Экспресс-проверка</T></Rise>
+            <Rise as="h2" delay={40}><T k="title">Подходит ли вашему бизнесу{' '}<br />собственное приложение?</T></Rise>
             <Rise as="p" className="lead" delay={90}>
-              Ответьте на 5 вопросов — покажем, какие функции AppForse можно использовать именно в вашем бизнесе.
+              <T k="lead">Ответьте на 5 вопросов — покажем, какие функции AppForse можно использовать именно в вашем бизнесе.</T>
             </Rise>
           </div>
 
@@ -1951,7 +2459,7 @@ const Quiz = () => {
                 {step <= total ? ('Вопрос ' + step + ' из ' + total) : 'Готово'}
               </span>
               <div className="qz-dashes">
-                {QUIZ_Q.map((_, i) => (
+                {Q.map((_, i) => (
                   <span key={i} className={'dash' + (i < filledCount ? ' on' : '')} />
                 ))}
               </div>
@@ -1960,28 +2468,28 @@ const Quiz = () => {
 
             {step >= 1 && step <= total && (
               <div className={'qz-panel' + (dir < 0 ? ' back' : '')} key={'q' + step}>
-                <h3>{QUIZ_Q[step - 1].t}</h3>
-                {QUIZ_Q[step - 1].h && <p className="qz-help">{QUIZ_Q[step - 1].h}</p>}
+                <h3><T k={'q.' + (step - 1) + '.t'}>{Q[step - 1].t}</T></h3>
+                {Q[step - 1].h && <p className="qz-help"><T k={'q.' + (step - 1) + '.h'}>{Q[step - 1].h}</T></p>}
 
-                {QUIZ_Q[step - 1].ic ? (
+                {Q[step - 1].ic ? (
                   <div className="qz-grid">
-                    {QUIZ_Q[step - 1].a.map((label, i) => (
+                    {Q[step - 1].a.map((label, i) => (
                       <button type="button" key={label}
                               className={'qz-card' + (picked === i ? ' on' : '')}
                               onClick={() => choose(i)}>
-                        <span className="qz-ico"><Ico name={QUIZ_Q[step - 1].ic[i]} /></span>
-                        <span className="qz-label">{label}</span>
+                        <span className="qz-ico"><Ico name={Q[step - 1].ic[i]} /></span>
+                        <span className="qz-label"><T k={'q.' + (step - 1) + '.a.' + i}>{label}</T></span>
                         {picked === i && <span className="qz-badge"><Check /></span>}
                       </button>
                     ))}
                   </div>
                 ) : (
                   <div className="qz-opts">
-                    {QUIZ_Q[step - 1].a.map((label, i) => (
+                    {Q[step - 1].a.map((label, i) => (
                       <button type="button" key={label}
                               className={'qz-opt' + (picked === i ? ' on' : '')}
                               onClick={() => choose(i)}>
-                        <span className="qz-dot" />{label}
+                        <span className="qz-dot" /><T k={'q.' + (step - 1) + '.a.' + i}>{label}</T>
                       </button>
                     ))}
                   </div>
@@ -2000,16 +2508,16 @@ const Quiz = () => {
               <div className={'qz-panel qz-result' + (dir < 0 ? ' back' : '')} key="result">
                 <div className="qz-recap">
                   <b>{lastAns || 'Ваш приоритет'}</b>
-                  <p>{QUIZ_NOTE[noteIdx]}</p>
+                  <p><T k={'notes.' + noteIdx}>{NOTES[noteIdx]}</T></p>
                 </div>
-                <h4 className="qz-cta-h display">Готовы показать, как это будет работать у вас</h4>
+                <h4 className="qz-cta-h display"><T k="ctaTitle">Готовы показать, как это будет работать у вас</T></h4>
                 <p className="qz-cta-p">
-                  Оставьте контакты — уточним задачи вашего бизнеса и покажем, какие
+                  <T k="ctaText">Оставьте контакты — уточним задачи вашего бизнеса и покажем, какие
                   возможности AppForse можно использовать для повторных продаж и работы
-                  с клиентами.
+                  с клиентами.</T>
                 </p>
-                <QuizForm answers={answers} />
-                <button type="button" className="qz-back" onClick={restart}>Пройти ещё раз</button>
+                <QuizForm answers={answers} questions={Q} />
+                <button type="button" className="qz-back" onClick={restart}><T k="restart">Пройти ещё раз</T></button>
               </div>
             )}
           </Rise>
@@ -2021,19 +2529,23 @@ const Quiz = () => {
 
 const Faq = () => {
   const [open, setOpen] = useState(0);
+  const items = useList('items', FAQ);
+  const ed = React.useContext(EditCtx);
   return (
     <section className="dark" id="faq">
       <div className="shell">
-        <Rise as="h2">Отвечаем на частые вопросы</Rise>
+        <Rise as="h2"><T k="title">Отвечаем на частые вопросы</T></Rise>
         <div className="faq">
-          {FAQ.map(([q, a], i) => (
-            <Rise className="q" key={q} data-open={open === i ? '1' : '0'} delay={30 + i * 40}>
+          {items.map(([q, a], i) => (
+            <Rise className="q" key={i} data-open={open === i || (ed && ed.editing) ? '1' : '0'} delay={30 + i * 40}>
+              <Item list="items" i={i} />
               <button type="button" aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>
-                {q}<span className="mark" aria-hidden="true" />
+                <T k={'items.' + i + '.0'}>{q}</T><span className="mark" aria-hidden="true" />
               </button>
-              <div className="body"><div><p>{a}</p></div></div>
+              <div className="body"><div><p><T k={'items.' + i + '.1'}>{a}</T></p></div></div>
             </Rise>
           ))}
+          <AddItem list="items" label="Вопрос" make={() => ['Новый вопрос?', 'Ответ на вопрос']} />
         </div>
       </div>
     </section>
@@ -2051,21 +2563,21 @@ const Contact = () => {
       <Torn d={TORN_C} dir="down" />
       <div className="red">
         <div className="shell">
-          <Rise as="h2">Узнайте, каким будет ваше приложение</Rise>
+          <Rise as="h2"><T k="title">Узнайте, каким будет ваше приложение</T></Rise>
           <Rise as="p" className="lead" delay={80}>
-            Разберём ваш бизнес и&nbsp;покажем, как&nbsp;готовая платформа будет
-            работать с&nbsp;вашими товарами, заказами и&nbsp;клиентами.
+            <T k="lead">Разберём ваш бизнес и&nbsp;покажем, как&nbsp;готовая платформа будет
+            работать с&nbsp;вашими товарами, заказами и&nbsp;клиентами.</T>
           </Rise>
           <div className="contact">
             <Rise className="box" delay={140}>
-              <h3>Оставить заявку</h3>
+              <h3><T k="formTitle">Оставить заявку</T></h3>
               <form className="form" noValidate onSubmit={submit}>
                 <input className="hp-field" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
                 <Field name="name" placeholder="Ваше имя" err={err.name}
                        onInput={() => clear('name')} />
                 <PhoneField err={err.phone} onFix={() => clear('phone')} />
                 <button className="btn" type="submit">
-                  {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : 'Получить предложение'}
+                  {sent ? 'Заявка отправлена' : sending ? 'Отправляем…' : <T k="btn">{'Получить предложение'}</T>}
                 </button>
                 <label className="agree">
                   <input type="checkbox" name="agree" onChange={() => clear('agree')} />
@@ -2079,11 +2591,9 @@ const Contact = () => {
               </form>
             </Rise>
             <Rise className="box aside" delay={220}>
-              <h3>Или сразу в Telegram</h3>
-              <p>Если удобнее списаться напрямую — без формы.</p>
-              <a className="btn" href={TG} target="_blank" rel="noopener">
-                <TgIcon />Написать в Telegram
-              </a>
+              <h3><T k="asideTitle">Или сразу в Telegram</T></h3>
+              <p><T k="asideText">Если удобнее списаться напрямую — без формы.</T></p>
+              <A k="asideBtn" className="btn" href={TG} target="_blank" rel="noopener" icon={<TgIcon />}>Написать в Telegram</A>
             </Rise>
           </div>
         </div>
@@ -2099,52 +2609,1277 @@ const Foot = () => (
         <a href="#top" aria-label="Наверх, к началу страницы">
           <img className="logo" src={LOGO} alt="AppForse" />
         </a>
-        <p className="tag">Мобильная торговля под вашим брендом</p>
+        <p className="tag"><T k="footTag">Мобильная торговля под вашим брендом</T></p>
       </div>
       <div>
-        <h4>Навигация</h4>
-        <ul>{NAV.filter(([, h]) => h !== '#contacts')
-          .map(([t, h]) => <li key={h}><a href={h}>{t}</a></li>)}</ul>
+        <h4><T k="footNav">Навигация</T></h4>
+        <ul>{useList('nav', NAV).map(([t, h], i) => (h === '#contacts' ? null
+          : <li key={h}><a href={h}><T k={'nav.' + i + '.0'}>{t}</T></a></li>))}</ul>
       </div>
       <div>
-        <h4>Контакты</h4>
+        <h4><T k="footContacts">Контакты</T></h4>
         <Social />
-        <ul><li><a href="#contact">Оставить заявку</a></li></ul>
+        <ul><li><a href="#contact"><T k="footLead">Оставить заявку</T></a></li></ul>
       </div>
     </div>
     <div className="rule">
       <div className="shell">
-        <span>© 2026 AppForse</span>
-        <a href="privacy.html">Политика обработки персональных данных</a>
-        <a className="by" href={DEV} target="_blank" rel="noopener">Разработка сайта</a>
+        <span><T k="copy">© 2026 AppForse</T></span>
+        <a href="privacy.html"><T k="privacy">Политика обработки персональных данных</T></a>
+        <a className="by" href={DEV} target="_blank" rel="noopener"><T k="dev">Разработка сайта</T></a>
       </div>
     </div>
   </footer>
 );
 
-const App = () => (
-  <React.Fragment>
-    <ParticleField />
-    <Top /><Hero /><Why /><What /><Founder /><Who /><Quiz /><How /><Case />
-    <Price /><Faq /><Contact /><Foot />
-  </React.Fragment>
+/* ─────────── новые блоки: добавляются из библиотеки в админке ─────────── */
+const XText = () => (
+  <section className="dark x-block" id={useBlockId()}>
+    <div className="shell">
+      <Rise as="span" className="kicker"><T k="kicker">Подзаголовок блока</T></Rise>
+      <Rise as="h2" className="wide" delay={40}><T k="title">Заголовок нового блока{' '}<br />в две строки</T></Rise>
+      <Rise as="p" className="lead" delay={80}>
+        <T k="text">Коротко объясните, о чём этот блок. Два-три предложения читаются лучше, чем длинный абзац.</T>
+      </Rise>
+    </div>
+  </section>
 );
 
-/* Страницу рисуем, когда шрифты уже скачаны. Иначе текст на долю секунды
-   появляется запасным шрифтом и потом «прыгает» на Oswald/Manrope.
-   На сайте ровно эти начертания; дольше 2 с не ждём — на плохом интернете
-   лучше показать текст запасным шрифтом, чем пустой экран. */
+const XCards = () => (
+  <section className="x-block" id={useBlockId()}>
+    <Torn d={TORN_A} dir="down" />
+    <div className="red">
+      <div className="shell">
+        <Rise as="h2"><T k="title">Три причины{' '}<br />выбрать нас</T></Rise>
+        <Rise as="p" className="lead" delay={80}>
+          <T k="lead">Подводка к карточкам: одно предложение о главном, что объединяет пункты ниже.</T>
+        </Rise>
+        <div className="deck">
+          {useList('cards', X_CARDS).map((c, i) => (
+            <Rise className="card" key={i} delay={120 + i * 90}>
+              <Item list="cards" i={i} />
+              <span className="num">{String(i + 1).padStart(2, '0')}</span>
+              <h3><T k={'cards.' + i + '.t'}>{c.t}</T></h3>
+              <p><T k={'cards.' + i + '.d'}>{c.d}</T></p>
+            </Rise>
+          ))}
+          <AddItem list="cards" label="Карточка" make={() => ({ t: 'Новая карточка', d: 'Описание карточки' })} />
+        </div>
+      </div>
+    </div>
+    <Torn d={TORN_B} dir="up" />
+  </section>
+);
+
+const XStats = () => (
+  <section className="dark x-block" id={useBlockId()}>
+    <div className="shell">
+      <Rise as="h2" className="wide"><T k="title">AppForse в цифрах</T></Rise>
+      <div className="x-stats">
+        {useList('stats', X_STATS).map((s, i) => (
+          <Rise className="x-stat" key={i} delay={60 + i * 70}>
+            <Item list="stats" i={i} />
+            <b><T k={'stats.' + i + '.n'}>{s.n}</T></b>
+            <span><T k={'stats.' + i + '.t'}>{s.t}</T></span>
+          </Rise>
+        ))}
+        <AddItem list="stats" label="Цифра" make={() => ({ n: '100%', t: 'подпись к цифре' })} />
+      </div>
+    </div>
+  </section>
+);
+
+const XMedia = () => (
+  <section className="dark x-block" id={useBlockId()}>
+    <div className="shell x-media">
+      <div>
+        <Rise as="span" className="kicker"><T k="kicker">Как это выглядит</T></Rise>
+        <Rise as="h2" delay={40}><T k="title">Покажите продукт{' '}<br />на скриншотах</T></Rise>
+        <Rise as="p" className="lead" delay={80}>
+          <T k="lead">Расскажите, что видно на экранах и какую задачу это решает для бизнеса.</T>
+        </Rise>
+        <Rise className="acts" delay={120}>
+          <A k="btn" className="btn" href="#contact">Обсудить запуск</A>
+        </Rise>
+      </div>
+      <Rise className="shots" delay={100}>
+        <Shot k="imgA" src={SHOT_WHAT_A} alt="" cls="a" lazy />
+        <Shot k="imgB" src={SHOT_WHAT_B} alt="" cls="b" lazy />
+      </Rise>
+    </div>
+  </section>
+);
+
+const XQuote = () => (
+  <section className="dark x-block" id={useBlockId()}>
+    <div className="shell">
+      <Rise className="x-quote">
+        <span className="kicker"><T k="kicker">Отзыв клиента</T></span>
+        <blockquote>
+          <T k="text">«Здесь будет живой отзыв: что изменилось в бизнесе после запуска приложения»</T>
+        </blockquote>
+        <div className="x-quote-by">
+          <b><T k="name">Имя Фамилия</T></b>
+          <span><T k="role">Должность, компания</T></span>
+        </div>
+      </Rise>
+    </div>
+  </section>
+);
+
+const XCta = () => (
+  <section className="x-block" id={useBlockId()}>
+    <Torn d={TORN_C} dir="down" />
+    <div className="red">
+      <div className="shell x-cta">
+        <div>
+          <Rise as="h2"><T k="title">Готовы запустить{' '}<br />своё приложение?</T></Rise>
+          <Rise as="p" className="lead" delay={80}>
+            <T k="lead">Оставьте заявку — разберём ваш бизнес и покажем, как платформа будет работать у вас.</T>
+          </Rise>
+        </div>
+        <Rise className="acts" delay={140}>
+          <A k="btn" className="btn on-red" href="#contact">Оставить заявку</A>
+          <A k="btn2" className="btn x-ghost" href={TG} target="_blank" rel="noopener">Написать в Telegram</A>
+        </Rise>
+      </div>
+    </div>
+    <Torn d={TORN_D} dir="up" />
+  </section>
+);
+
+const XList = () => (
+  <section className="dark x-block" id={useBlockId()}>
+    <div className="shell">
+      <Rise as="h2" className="wide"><T k="title">Что вы получаете</T></Rise>
+      <Rise as="p" className="lead" delay={60}><T k="lead">Одно предложение-подводка к списку.</T></Rise>
+      <ul className="x-list">
+        {useList('items', X_LIST).map((t, i) => (
+          <Rise as="li" key={i} delay={80 + i * 50}>
+            <Item list="items" i={i} /><Check /><T k={'items.' + i}>{t}</T>
+          </Rise>
+        ))}
+        <AddItem as="li" list="items" label="Пункт" make={() => 'Новый пункт'} />
+      </ul>
+    </div>
+  </section>
+);
+
+/* Все блоки страницы. lib — новые, из библиотеки; остальные — блоки сайта,
+   их тоже можно добавить второй раз или вернуть после удаления. */
+const BLOCKS = {
+  hero:    { C: Hero,    name: 'Первый экран',        hint: 'Заголовок, кнопки, цифры и два скриншота' },
+  why:     { C: Why,     name: 'Зачем приложение',    hint: 'Красный блок с тремя карточками' },
+  what:    { C: What,    name: 'Возможности',         hint: 'Две панели с тегами и форма разбора' },
+  founder: { C: Founder, name: 'Слово основателя',    hint: 'Видео и сравнение подходов' },
+  who:     { C: Who,     name: 'Для кого',            hint: 'Четыре карточки с иконками' },
+  quiz:    { C: Quiz,    name: 'Квиз',                hint: 'Пять вопросов и форма в конце' },
+  how:     { C: How,     name: 'Как запустим',        hint: 'Шаги с линией прогресса' },
+  case:    { C: Case,    name: 'Кейс',                hint: 'Две карточки со скриншотами' },
+  price:   { C: Price,   name: 'Стоимость',           hint: 'Цена, состав и допуслуги' },
+  faq:     { C: Faq,     name: 'Вопросы',             hint: 'Раскрывающиеся ответы' },
+  contact: { C: Contact, name: 'Заявка',              hint: 'Форма и кнопка в Telegram' },
+  x_text:  { C: XText,   name: 'Заголовок и текст',   hint: 'Подзаголовок, заголовок и абзац', lib: true },
+  x_cards: { C: XCards,  name: 'Карточки на красном', hint: 'Три карточки с номерами', lib: true },
+  x_stats: { C: XStats,  name: 'Цифры',               hint: 'Крупные цифры с подписями', lib: true },
+  x_media: { C: XMedia,  name: 'Скриншоты и текст',   hint: 'Текст с кнопкой и два скриншота', lib: true },
+  x_quote: { C: XQuote,  name: 'Отзыв',               hint: 'Цитата клиента с именем', lib: true },
+  x_cta:   { C: XCta,    name: 'Призыв к действию',   hint: 'Красный блок с двумя кнопками', lib: true },
+  x_list:  { C: XList,   name: 'Список с галочками',  hint: 'Пункты в две колонки', lib: true },
+};
+
+const DEFAULT_ORDER = [
+  ['top', 'hero'], ['why', 'why'], ['what', 'what'], ['founder', 'founder'], ['who', 'who'],
+  ['quiz', 'quiz'], ['how', 'how'], ['case', 'case'], ['price', 'price'], ['faq', 'faq'],
+  ['contact', 'contact'],
+];
+const defaultPage = () => ({
+  v: 1, chrome: {}, blocks: DEFAULT_ORDER.map(([id, type]) => ({ id, type, data: {} })),
+});
+
+const isObj = x => !!x && typeof x === 'object' && !Array.isArray(x);
+/* из сервера может прийти что угодно — берём только известные блоки */
+const cleanPage = p => {
+  if (!isObj(p) || !Array.isArray(p.blocks)) return null;
+  return {
+    v: 1,
+    chrome: isObj(p.chrome) ? p.chrome : {},
+    blocks: p.blocks
+      .filter(b => isObj(b) && BLOCKS[b.type] && typeof b.id === 'string' && b.id)
+      .map(b => ({ id: b.id, type: b.type, hidden: !!b.hidden, data: isObj(b.data) ? b.data : {} })),
+  };
+};
+
+const Page = ({ page }) => {
+  const chrome = React.useMemo(() => ({ id: 'chrome', data: page.chrome }), [page.chrome]);
+  return (
+    <React.Fragment>
+      <BlockCtx.Provider value={chrome}><Top /></BlockCtx.Provider>
+      {page.blocks.filter(b => !b.hidden).map(b => {
+        const B = BLOCKS[b.type].C;
+        return <BlockCtx.Provider key={b.id} value={b}><B /></BlockCtx.Provider>;
+      })}
+      <BlockCtx.Provider value={chrome}><Foot /></BlockCtx.Provider>
+    </React.Fragment>
+  );
+};
+
+let loadedPage = null;
+const App = ({ initial }) => {
+  const [page, setPage] = useState(initial);
+  useEffect(() => {
+    window.__setPage = p => { const c = cleanPage(p); if (c) setPage(c); };
+    if (loadedPage && loadedPage !== initial) setPage(loadedPage);
+    /* мобильный предпросмотр в админке показывает черновик, ещё не сохранённый */
+    const onMsg = e => {
+      if (e.origin === location.origin && e.data && e.data.type === 'appforse-draft') window.__setPage(e.data.page);
+    };
+    window.addEventListener('message', onMsg);
+    if (window.parent !== window) window.parent.postMessage({ type: 'appforse-ready' }, location.origin);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  return (
+    <React.Fragment>
+      <ParticleField />
+      <Page page={page} />
+    </React.Fragment>
+  );
+};
+
+/*ADMIN:START*/
+/* ═══════════ АДМИНКА ═══════════
+   Страница рисуется теми же компонентами, что и сайт, только тексты становятся
+   полями: тыкнул — правишь. Блоки перетаскиваются, все действия копятся
+   в истории (отменить/повторить) и уходят на сервер кнопкой «Сохранить». */
+const API_URL = 'https://glebslobodchikov.ru/appforse-leads/api.php';
+const TOKEN_KEY = 'appforse_admin_token';
+
+const store = {
+  get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* приватный режим */ } },
+  del: k => { try { localStorage.removeItem(k); } catch (e) { /* приватный режим */ } },
+};
+
+const api = (action, body) => fetch(API_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+  body: JSON.stringify(Object.assign({ action: action, token: store.get(TOKEN_KEY) || '' }, body || {})),
+}).then(r => r.json().catch(() => ({})).then(j => {
+  if (r.status === 401) { const e = new Error('auth'); e.auth = true; throw e; }
+  if (!r.ok || !j.ok) throw new Error(j.error || ('HTTP ' + r.status));
+  return j;
+}), () => { throw new Error('network'); });
+
+const ERRORS = {
+  network: 'Нет связи с сервером. Проверьте интернет и повторите',
+  wrong: 'Неверный пароль',
+  rate: 'Слишком много попыток. Подождите 15 минут',
+  too_large: 'Файл больше 5 МБ — сожмите его и загрузите снова',
+  type: 'Нужна картинка в формате PNG, JPG или WebP',
+  page: 'Сервер не принял страницу. Обновите админку и повторите',
+};
+const errText = e => ERRORS[e && e.message] || ('Не получилось: ' + (e && e.message));
+
+const fmtDate = s => {
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return String(s);
+  return d.toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+};
+
+const clone = x => JSON.parse(JSON.stringify(x));
+const setPath = (obj, path, value) => {
+  const parts = String(path).split('.');
+  let o = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (o[parts[i]] == null || typeof o[parts[i]] !== 'object') o[parts[i]] = /^\d+$/.test(parts[i + 1]) ? [] : {};
+    o = o[parts[i]];
+  }
+  o[parts[parts.length - 1]] = value;
+};
+
+/* Типограф для правок: тот же набор правил, что у typo.py в вёрстке.
+   Предлог не остаётся в конце строки, тире не начинает строку,
+   число не отрывается от единицы. */
+const NB = ' ';
+const SHORT_WORDS = new Set(('в во на но и а с со к ко о об обо от ото до за из изо по при для без над под ' +
+  'про у не ни что как же бы ли то их его её или да чем уже там где чтобы если ' +
+  'все всё это так тех кто ещё был была было были есть').split(' '));
+const typoLine = t => {
+  t = t.replace(/(?<![\wЀ-ӿ])([\wЀ-ӿ]{1,6}) /g,
+    (m, w) => (SHORT_WORDS.has(w.toLowerCase()) ? w + NB : m));
+  t = t.replace(/ —/g, NB + '—');
+  const parts = t.split(' ');
+  if (parts.length > 1 && parts[parts.length - 1] && parts[parts.length - 2].indexOf(NB) < 0) {
+    const last = parts.pop();
+    parts[parts.length - 1] += NB + last;
+    t = parts.join(' ');
+  }
+  t = t.replace(/(\d) (?=[\dЀ-ӿ₽])/g, '$1' + NB);
+  return t.replace(/App Store/g, 'App' + NB + 'Store').replace(/Google Play/g, 'Google' + NB + 'Play');
+};
+const typo = s => String(s).split('\n').map(typoLine).join('\n');
+
+/* текст из поля: <br> и новые строки браузера — в \n, пробелы схлопываем,
+   неразрывные пробелы не трогаем */
+const readText = el => {
+  let out = '';
+  const walk = node => {
+    node.childNodes.forEach(c => {
+      if (c.nodeType === 3) out += c.nodeValue;
+      else if (c.nodeName === 'BR') out += '\n';
+      else if (c.nodeType === 1 && !c.hasAttribute('data-adm-ui')) {
+        if ((c.nodeName === 'DIV' || c.nodeName === 'P') && out && out[out.length - 1] !== '\n') out += '\n';
+        walk(c);
+      }
+    });
+  };
+  walk(el);
+  return out.replace(/[ \t\r]*\n[ \t\r]*/g, '\n').replace(/\n{2,}/g, '\n')
+    .replace(/[ \t\r]+/g, ' ').replace(/^[ \n]+|[ \n]+$/g, '');
+};
+
+/* иконки админки — Lucide (MIT), как и на сайте */
+const ADM_ICONS = {
+  grip: [['circle', { cx: 9, cy: 5, r: 1 }], ['circle', { cx: 9, cy: 12, r: 1 }], ['circle', { cx: 9, cy: 19, r: 1 }],
+    ['circle', { cx: 15, cy: 5, r: 1 }], ['circle', { cx: 15, cy: 12, r: 1 }], ['circle', { cx: 15, cy: 19, r: 1 }]],
+  up: [['path', { d: 'm18 15-6-6-6 6' }]],
+  down: [['path', { d: 'm6 9 6 6 6-6' }]],
+  copy: [['rect', { width: 14, height: 14, x: 8, y: 8, rx: 2, ry: 2 }],
+    ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }]],
+  eye: [['path', { d: 'M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0' }],
+    ['circle', { cx: 12, cy: 12, r: 3 }]],
+  eyeOff: [['path', { d: 'M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49' }],
+    ['path', { d: 'M14.084 14.158a3 3 0 0 1-4.242-4.242' }],
+    ['path', { d: 'M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143' }],
+    ['path', { d: 'm2 2 20 20' }]],
+  reset: [['path', { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }], ['path', { d: 'M3 3v5h5' }]],
+  trash: [['path', { d: 'M3 6h18' }], ['path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }],
+    ['path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2' }], ['path', { d: 'M10 11v6' }], ['path', { d: 'M14 11v6' }]],
+  plus: [['path', { d: 'M5 12h14' }], ['path', { d: 'M12 5v14' }]],
+  undo: [['path', { d: 'M9 14 4 9l5-5' }], ['path', { d: 'M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5 5.5 5.5 0 0 1-5.5 5.5H11' }]],
+  redo: [['path', { d: 'm15 14 5-5-5-5' }], ['path', { d: 'M20 9H9.5A5.5 5.5 0 0 0 4 14.5 5.5 5.5 0 0 0 9.5 20H13' }]],
+  layers: [['path', { d: 'M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z' }],
+    ['path', { d: 'm22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65' }], ['path', { d: 'm22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65' }]],
+  history: [['path', { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }], ['path', { d: 'M3 3v5h5' }],
+    ['path', { d: 'M12 7v5l4 2' }]],
+  logout: [['path', { d: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' }], ['path', { d: 'm16 17 5-5-5-5' }], ['path', { d: 'M21 12H9' }]],
+  external: [['path', { d: 'M15 3h6v6' }], ['path', { d: 'M10 14 21 3' }],
+    ['path', { d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6' }]],
+  pencil: [['path', { d: 'M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z' }],
+    ['path', { d: 'm15 5 4 4' }]],
+  image: [['rect', { width: 18, height: 18, x: 3, y: 3, rx: 2, ry: 2 }], ['circle', { cx: 9, cy: 9, r: 2 }],
+    ['path', { d: 'm21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21' }]],
+  link: [['path', { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' }],
+    ['path', { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' }]],
+  inbox: [['path', { d: 'M22 12h-6l-2 3h-4l-2-3H2' }],
+    ['path', { d: 'M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z' }]],
+  page: [['rect', { width: 18, height: 18, x: 3, y: 3, rx: 2, ry: 2 }], ['path', { d: 'M3 9h18' }], ['path', { d: 'M9 21V9' }]],
+  refresh: [['path', { d: 'M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8' }], ['path', { d: 'M21 3v5h-5' }],
+    ['path', { d: 'M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16' }], ['path', { d: 'M8 16H3v5' }]],
+  search: [['circle', { cx: 11, cy: 11, r: 8 }], ['path', { d: 'm21 21-4.3-4.3' }]],
+  x: [['path', { d: 'M18 6 6 18' }], ['path', { d: 'm6 6 12 12' }]],
+  chevron: [['path', { d: 'm9 18 6-6-6-6' }]],
+  phone: SHAPES.smartphone,
+};
+const AI = ({ n }) => (
+  <svg className="adm-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {ADM_ICONS[n].map(([tag, at], i) => React.createElement(tag, Object.assign({ key: i }, at)))}
+  </svg>
+);
+
+/* ── поле текста на странице ─────────────────────────────────────────── */
+/* Детей запоминаем при появлении поля: пока человек печатает, React не должен
+   сверять и переписывать текст внутри. Когда правка сохранилась, у поля
+   меняется key — и оно рисуется заново уже с новым текстом. */
+const EditText = ({ blk, k, link, ed, children }) => {
+  const ref = useRef(null);
+  const frozen = useRef(children);
+  const start = useRef(null);
+  const [pop, setPop] = useState(false);
+  useEffect(() => {
+    // внутри <button> браузеры плохо правят текст на месте — такие правим в плашке
+    if (ref.current && ref.current.parentElement && ref.current.parentElement.closest('button')) setPop(true);
+  }, []);
+
+  if (pop) {
+    return (
+      <span ref={ref} className="adm-t adm-t-pop" title="Нажмите, чтобы изменить текст"
+            onClick={e => {
+              e.preventDefault(); e.stopPropagation();
+              ed.openBar({ kind: 'text', blk, k, el: ref.current, value: readText(ref.current) });
+            }}>
+        {frozen.current}
+      </span>
+    );
+  }
+  return (
+    <span ref={ref} className="adm-t" contentEditable suppressContentEditableWarning spellCheck={false}
+          onFocus={e => { start.current = readText(e.currentTarget); }}
+          onInput={() => ed.touch()}
+          onClick={e => {
+            e.stopPropagation();
+            if (link) ed.openBar({ kind: 'link', blk, k: link, el: ref.current });
+          }}
+          onKeyDown={e => {
+            if (e.key === 'Escape') { e.preventDefault(); e.currentTarget.blur(); }
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              if (!link) document.execCommand('insertLineBreak');
+            }
+          }}
+          onPaste={e => {
+            e.preventDefault();
+            const t = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
+            document.execCommand('insertText', false, t.replace(/\r/g, ''));
+          }}
+          onBlur={e => {
+            const now = readText(e.currentTarget);
+            if (now === start.current) { ed.touch(false); return; }
+            if (!now) { ed.say('Пустой текст не сохраняем — верните хотя бы слово или скройте блок', 'error'); ed.touch(false); return; }
+            ed.setText(blk, k, typo(now));
+          }}>
+      {frozen.current}
+    </span>
+  );
+};
+
+const stop = fn => e => { e.preventDefault(); e.stopPropagation(); fn(); };
+
+const ItemTools = ({ blk, list, i, ed }) => (
+  <span className="adm-item" data-adm-ui contentEditable={false}>
+    <button type="button" title="Раньше" onClick={stop(() => ed.listMove(blk, list, i, -1))}><AI n="up" /></button>
+    <button type="button" title="Позже" onClick={stop(() => ed.listMove(blk, list, i, 1))}><AI n="down" /></button>
+    <button type="button" className="del" title="Удалить пункт" onClick={stop(() => ed.listRemove(blk, list, i))}><AI n="x" /></button>
+  </span>
+);
+
+const AddItemBtn = ({ blk, list, make, label, as, ed }) => {
+  const Tag = as || 'div';
+  return (
+    <Tag className="adm-add-item" data-adm-ui>
+      <button type="button" onClick={stop(() => ed.listAdd(blk, list, make))}><AI n="plus" />{label || 'Добавить'}</button>
+    </Tag>
+  );
+};
+
+const ImgTools = ({ k, ed }) => {
+  const blk = React.useContext(BlockCtx);
+  const inp = useRef(null);
+  const [busy, setBusy] = useState(false);
+  const has = typeof getPath(blk.data, k) === 'string';
+  const pick = e => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) { ed.say(ERRORS.too_large, 'error'); return; }
+    const r = new FileReader();
+    r.onload = () => {
+      setBusy(true);
+      api('upload', { name: f.name, data: r.result })
+        .then(j => { ed.setText(blk.id, k, j.url); ed.say('Картинка заменена'); })
+        .catch(ed.fail).then(() => setBusy(false));
+    };
+    r.readAsDataURL(f);
+  };
+  return (
+    <span className="adm-img" data-adm-ui>
+      <button type="button" onClick={stop(() => inp.current && inp.current.click())}>
+        <AI n="image" />{busy ? 'Загружаем…' : 'Заменить'}
+      </button>
+      {has && (
+        <button type="button" title="Вернуть исходную картинку" onClick={stop(() => ed.setText(blk.id, k, undefined))}>
+          <AI n="reset" />
+        </button>
+      )}
+      <input ref={inp} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={pick} />
+    </span>
+  );
+};
+
+/* ── плашка под полем: ссылка кнопки или текст кнопки-<button> ─────────── */
+const FloatBar = ({ bar, value, onCommit, onClose }) => {
+  const [val, setVal] = useState(value || '');
+  const box = useRef(null);
+  const inp = useRef(null);
+  useEffect(() => {
+    if (bar.kind === 'text' && inp.current) { inp.current.focus(); inp.current.select(); }
+    const down = e => {
+      const own = (bar.anchor && bar.anchor.contains(e.target)) || (bar.el && bar.el.contains(e.target));
+      if (box.current && !box.current.contains(e.target) && !own) onClose();
+    };
+    const key = e => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('mousedown', down);
+    document.addEventListener('keydown', key);
+    return () => { document.removeEventListener('mousedown', down); document.removeEventListener('keydown', key); };
+  }, []);
+  const style = { top: bar.top, left: bar.left };
+  const isLink = bar.kind === 'link';
+  return (
+    <div ref={box} className="adm-float" style={style}>
+      <span className="adm-float-ico"><AI n={isLink ? 'link' : 'pencil'} /></span>
+      <label className="adm-float-label">{isLink ? 'Куда ведёт кнопка' : 'Текст кнопки'}</label>
+      <input ref={inp} className="adm-input" value={val}
+             placeholder={isLink ? '#contact, https://… или tel:+7…' : 'Текст кнопки'}
+             onChange={e => setVal(e.target.value)} onBlur={() => onCommit(val)}
+             onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); onCommit(val); onClose(); } }} />
+      {isLink && <span className="adm-float-hint">#contact — к форме заявки, #price — к цене</span>}
+    </div>
+  );
+};
+
+/* ── библиотека блоков ─────────────────────────────────────────────── */
+const Library = ({ onPick, onClose }) => {
+  const types = Object.keys(BLOCKS);
+  const groups = [
+    ['Новые блоки', types.filter(t => BLOCKS[t].lib)],
+    ['Блоки сайта', types.filter(t => !BLOCKS[t].lib)],
+  ];
+  return (
+    <div className="adm-modal" data-own-scroll onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="adm-sheet" data-own-scroll>
+        <div className="adm-sheet-head">
+          <div>
+            <h2 className="adm-h">Добавить блок</h2>
+            <p className="adm-sub">Все блоки в стиле сайта. Тексты, пункты и картинки меняются после вставки — прямо на странице.</p>
+          </div>
+          <button type="button" className="adm-icon-btn" title="Закрыть" onClick={onClose}><AI n="x" /></button>
+        </div>
+        <EditCtx.Provider value={null}>
+          {groups.map(([title, list]) => (
+            <section key={title}>
+              <h3 className="adm-group">{title}</h3>
+              <div className="adm-lib">
+                {list.map(t => (
+                  <div key={t} role="button" tabIndex={0} className="adm-lib-card" onClick={() => onPick(t)}
+                       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(t); } }}>
+                    <span className="adm-thumb" aria-hidden="true">
+                      <span className="adm-thumb-in">
+                        <BlockCtx.Provider value={{ id: 'preview-' + t, type: t, data: {} }}>
+                          {React.createElement(BLOCKS[t].C)}
+                        </BlockCtx.Provider>
+                      </span>
+                    </span>
+                    <b>{BLOCKS[t].name}</b>
+                    <span className="adm-lib-hint">{BLOCKS[t].hint}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </EditCtx.Provider>
+      </div>
+    </div>
+  );
+};
+
+/* ── структура страницы: список блоков сбоку ───────────────────────── */
+const Layers = ({ page, onMove, onJump, onHide, onClose }) => {
+  const [from, setFrom] = useState(null);
+  const [over, setOver] = useState(null);
+  const fromRef = useRef(null);
+  const last = page.blocks.length - 1;
+  const end = () => { fromRef.current = null; setFrom(null); setOver(null); };
+  return (
+    <aside className="adm-drawer" data-own-scroll>
+      <div className="adm-drawer-head">
+        <b>Структура страницы</b>
+        <button type="button" className="adm-icon-btn" title="Закрыть" onClick={onClose}><AI n="x" /></button>
+      </div>
+      <p className="adm-hint">Перетащите блок в списке, чтобы поменять порядок. Клик по названию — перейти к блоку.</p>
+      <ol className="adm-layers">
+        {page.blocks.map((b, i) => (
+          <li key={b.id} draggable
+              className={(over === i ? 'over-before ' : '') + (over === i + 1 && i === last ? 'over-after ' : '')
+                + (b.hidden ? 'is-hidden ' : '') + (from === i ? 'is-drag' : '')}
+              onDragStart={e => { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', b.id); } catch (err) { /* IE */ } fromRef.current = i; setFrom(i); }}
+              onDragOver={e => {
+                if (fromRef.current == null) return;
+                e.preventDefault();
+                const r = e.currentTarget.getBoundingClientRect();
+                const idx = e.clientY < r.top + r.height / 2 ? i : i + 1;
+                if (idx !== over) setOver(idx);
+              }}
+              onDrop={e => {
+                e.preventDefault();
+                if (fromRef.current != null) {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  onMove(page.blocks[fromRef.current].id, e.clientY < r.top + r.height / 2 ? i : i + 1);
+                }
+                end();
+              }}
+              onDragEnd={end}>
+            <span className="adm-grip"><AI n="grip" /></span>
+            <button type="button" className="adm-layer-name" onClick={() => onJump(b.id)}>
+              <i>{String(i + 1).padStart(2, '0')}</i>{BLOCKS[b.type].name}
+            </button>
+            <button type="button" className="adm-icon-btn" title={b.hidden ? 'Показать на сайте' : 'Скрыть с сайта'}
+                    onClick={() => onHide(b.id)}>
+              <AI n={b.hidden ? 'eyeOff' : 'eye'} />
+            </button>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  );
+};
+
+/* ── история сохранений ────────────────────────────────────────────── */
+const Versions = ({ fail, onOpen, onClose }) => {
+  const [list, setList] = useState(null);
+  const [busy, setBusy] = useState('');
+  useEffect(() => {
+    api('versions').then(j => setList(j.versions)).catch(e => { fail(e); setList([]); });
+  }, []);
+  const open = id => {
+    setBusy(id);
+    api('version', { id }).then(j => { onOpen(j.page); onClose(); }).catch(fail).then(() => setBusy(''));
+  };
+  return (
+    <div className="adm-modal" data-own-scroll onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="adm-sheet narrow" data-own-scroll>
+        <div className="adm-sheet-head">
+          <div>
+            <h2 className="adm-h">История сохранений</h2>
+            <p className="adm-sub">Каждое сохранение запоминается. Откройте старую версию — она встанет в редактор, а на сайт попадёт после «Сохранить».</p>
+          </div>
+          <button type="button" className="adm-icon-btn" title="Закрыть" onClick={onClose}><AI n="x" /></button>
+        </div>
+        {list === null ? <p className="adm-empty">Загружаем…</p>
+          : !list.length ? <p className="adm-empty">Сохранений пока не было. Сайт показывает исходную вёрстку.</p>
+          : (
+            <ul className="adm-versions">
+              {list.map((v, i) => (
+                <li key={v.id}>
+                  <div><b>{fmtDate(v.time)}</b><span>{i === 0 ? 'Сейчас на сайте' : 'Прошлая версия'}</span></div>
+                  {i > 0 && (
+                    <button type="button" className="adm-btn" disabled={!!busy} onClick={() => open(v.id)}>
+                      {busy === v.id ? 'Открываем…' : 'Открыть'}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+      </div>
+    </div>
+  );
+};
+
+/* ── мобильная версия: настоящий сайт в окне 390 px с черновиком ───── */
+const MobilePreview = ({ page, onClose }) => {
+  const frame = useRef(null);
+  const [ready, setReady] = useState(false);
+  const send = () => {
+    const w = frame.current && frame.current.contentWindow;
+    if (w) w.postMessage({ type: 'appforse-draft', page: page }, location.origin);
+  };
+  useEffect(() => {
+    const onMsg = e => {
+      if (e.origin === location.origin && e.data && e.data.type === 'appforse-ready') { setReady(true); send(); }
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  });
+  useEffect(() => { if (ready) send(); }, [page, ready]);
+  return (
+    <div className="adm-modal" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="adm-phone">
+        <div className="adm-phone-head">
+          <div><b>Мобильная версия</b><span>390 px · показывает черновик, даже несохранённый</span></div>
+          <button type="button" className="adm-icon-btn" title="Закрыть" onClick={onClose}><AI n="x" /></button>
+        </div>
+        <div className="adm-phone-frame">
+          <iframe ref={frame} src="index.html?preview=1" title="Мобильная версия сайта" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── заявки ───────────────────────────────────────────────────────── */
+const LEAD_STATUS = [['new', 'Новая'], ['work', 'В работе'], ['done', 'Закрыта']];
+
+const Leads = ({ fail, onCount }) => {
+  const [leads, setLeads] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [q, setQ] = useState('');
+  const [open, setOpen] = useState({});
+  const load = () => api('leads').then(j => {
+    setLeads(j.leads);
+    onCount(j.leads.filter(l => l.status === 'new').length);
+  }).catch(fail);
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 60000);
+    return () => clearInterval(t);
+  }, []);
+  const setStatus = (id, status) => {
+    setLeads(ls => ls.map(l => (l.id === id ? Object.assign({}, l, { status }) : l)));
+    api('lead_status', { id, status }).then(load).catch(e => { fail(e); load(); });
+  };
+  const remove = id => {
+    if (!window.confirm('Удалить заявку из админки? Вернуть её будет нельзя.')) return;
+    setLeads(ls => ls.filter(l => l.id !== id));
+    api('lead_status', { id, status: 'deleted' }).then(load).catch(e => { fail(e); load(); });
+  };
+  const all = leads || [];
+  const count = k => (k === 'all' ? all.length : all.filter(l => l.status === k).length);
+  const needle = q.trim().toLowerCase();
+  const shown = all.filter(l => (filter === 'all' || l.status === filter)
+    && (!needle || (l.name + ' ' + l.phone + ' ' + l.source).toLowerCase().indexOf(needle) >= 0));
+  return (
+    <div className="adm-leads">
+      <div className="adm-leads-head">
+        <div>
+          <h1 className="adm-h">Заявки</h1>
+          <p className="adm-sub">Все формы сайта: разбор бизнеса, квиз и форма внизу. Эти же заявки приходят в Телеграм-бота и на почту.</p>
+        </div>
+        <button type="button" className="adm-btn" onClick={load}><AI n="refresh" />Обновить</button>
+      </div>
+      <div className="adm-filters">
+        {[['all', 'Все']].concat(LEAD_STATUS).map(([k, t]) => (
+          <button type="button" key={k} className={'adm-chip' + (filter === k ? ' on' : '')} onClick={() => setFilter(k)}>
+            {t}<i>{count(k)}</i>
+          </button>
+        ))}
+        <label className="adm-search">
+          <AI n="search" />
+          <input placeholder="Имя, телефон или форма" value={q} onChange={e => setQ(e.target.value)} />
+        </label>
+      </div>
+      {leads === null ? <p className="adm-empty">Загружаем заявки…</p>
+        : !shown.length ? (
+          <p className="adm-empty">
+            {all.length ? 'Под этот фильтр заявок нет' : 'Заявок пока нет. Как только кто-то оставит контакты на сайте, заявка появится здесь.'}
+          </p>
+        ) : (
+          <div className="adm-lead-list">
+            {shown.map(l => (
+              <article key={l.id} className={'adm-lead s-' + l.status}>
+                <div>
+                  <div className="adm-lead-who">
+                    <b>{l.name}</b>
+                    <a href={'tel:' + String(l.phone).replace(/[^\d+]/g, '')}>{l.phone}</a>
+                  </div>
+                  <div className="adm-lead-meta"><span>{l.source}</span><time>{fmtDate(l.time)}</time></div>
+                </div>
+                <div className="adm-lead-side">
+                  <select className={'adm-status s-' + l.status} value={l.status} aria-label="Статус заявки"
+                          onChange={e => setStatus(l.id, e.target.value)}>
+                    {LEAD_STATUS.map(([k, t]) => <option key={k} value={k}>{t}</option>)}
+                  </select>
+                  <button type="button" className="adm-icon-btn" title="Удалить заявку" onClick={() => remove(l.id)}>
+                    <AI n="trash" />
+                  </button>
+                </div>
+                {l.answers && l.answers.length > 0 && (
+                  <div className="adm-lead-ans">
+                    <button type="button" className={open[l.id] ? 'on' : ''}
+                            onClick={() => setOpen(o => Object.assign({}, o, { [l.id]: !o[l.id] }))}>
+                      <AI n="chevron" />Ответы квиза · {l.answers.length}
+                    </button>
+                    {open[l.id] && (
+                      <ol>{l.answers.map((a, i) => <li key={i}><span>{a[0]}</span><b>{a[1]}</b></li>)}</ol>
+                    )}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+    </div>
+  );
+};
+
+/* ── вход ─────────────────────────────────────────────────────────── */
+const Login = ({ onToken }) => {
+  const [pass, setPass] = useState('');
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const submit = e => {
+    e.preventDefault();
+    if (!pass || busy) return;
+    setBusy(true);
+    setErr('');
+    api('login', { password: pass }).then(j => onToken(j.token)).catch(x => setErr(errText(x))).then(() => setBusy(false));
+  };
+  return (
+    <div className="adm-login">
+      <form className="adm-card" onSubmit={submit}>
+        <img className="adm-login-logo" src={LOGO} alt="AppForse" />
+        <h1 className="adm-h">Вход в админку</h1>
+        <p className="adm-sub">Тексты и блоки сайта, заявки с форм</p>
+        <input className="adm-input" type="password" autoFocus autoComplete="current-password"
+               placeholder="Пароль" value={pass} onChange={e => setPass(e.target.value)} />
+        {err && <p className="adm-err" role="alert">{err}</p>}
+        <button className="adm-btn primary" disabled={busy || !pass}>{busy ? 'Проверяем…' : 'Войти'}</button>
+      </form>
+    </div>
+  );
+};
+
+/* ── сама админка ─────────────────────────────────────────────────── */
+const Admin = ({ onLogout }) => {
+  const [tab, setTab] = useState('page');
+  const [page, setPage] = useState(null);
+  const [saved, setSaved] = useState('');
+  const [editing, setEditing] = useState(true);
+  const [pending, setPending] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [loadErr, setLoadErr] = useState('');
+  const [toast, setToast] = useState(null);
+  const [lib, setLib] = useState(null);
+  const [layers, setLayers] = useState(false);
+  const [versions, setVersions] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [bar, setBar] = useState(null);
+  const [newLeads, setNewLeads] = useState(0);
+  const [dragId, setDragId] = useState(null);
+  const [drop, setDrop] = useState(null);
+  const [, bump] = useState(0);
+  const pageRef = useRef(null);
+  const hist = useRef({ past: [], future: [] });
+  const lists = useRef({}).current;
+  const ghost = useRef(null);
+
+  const say = (text, kind) => setToast({ text, kind: kind || 'ok', at: Date.now() });
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(null), toast.kind === 'error' ? 4600 : 2800);
+    return () => clearTimeout(t);
+  }, [toast]);
+  const fail = e => { if (e && e.auth) { onLogout(); return; } say(errText(e), 'error'); };
+
+  const put = p => { pageRef.current = p; setPage(p); };
+
+  useEffect(() => {
+    api('content')
+      .then(j => { const p = cleanPage(j.page) || defaultPage(); put(p); setSaved(JSON.stringify(p)); })
+      .catch(e => { if (e.auth) onLogout(); else setLoadErr(errText(e)); });
+    api('leads').then(j => setNewLeads(j.leads.filter(l => l.status === 'new').length)).catch(() => {});
+  }, []);
+
+  /* любое изменение: копия страницы → правка → старая версия в историю */
+  const change = fn => {
+    const cur = pageRef.current;
+    if (!cur) return;
+    const next = clone(cur);
+    if (fn(next) === false) return;
+    if (JSON.stringify(next) === JSON.stringify(cur)) return;
+    const h = hist.current;
+    h.past.push(cur);
+    if (h.past.length > 100) h.past.shift();
+    h.future = [];
+    put(next);
+  };
+  const undo = () => {
+    const h = hist.current;
+    if (!h.past.length) return;
+    h.future.unshift(pageRef.current);
+    put(h.past.pop());
+    bump(x => x + 1);
+  };
+  const redo = () => {
+    const h = hist.current;
+    if (!h.future.length) return;
+    h.past.push(pageRef.current);
+    put(h.future.shift());
+    bump(x => x + 1);
+  };
+
+  const dataOf = (p, id) => {
+    if (id === 'chrome') return p.chrome;
+    const b = p.blocks.find(x => x.id === id);
+    return b ? b.data : null;
+  };
+  /* список из вёрстки становится своим при первой правке любого пункта */
+  const own = (id, d, key) => {
+    if (d[key] === undefined && lists[id + '/' + key]) d[key] = clone(lists[id + '/' + key]);
+    return Array.isArray(d[key]) ? d[key] : null;
+  };
+
+  const fns = {
+    setText: (id, path, value) => {
+      setPending(false);
+      change(p => {
+        const d = dataOf(p, id);
+        if (!d) return false;
+        const head = String(path).split('.')[0];
+        if (String(path).indexOf('.') > 0) own(id, d, head);
+        if (value === undefined) {
+          if (String(path).indexOf('.') > 0) return false;
+          delete d[path];
+          return undefined;
+        }
+        setPath(d, path, value);
+        return undefined;
+      });
+    },
+    listAdd: (id, key, make) => change(p => {
+      const d = dataOf(p, id);
+      const list = d && own(id, d, key);
+      if (!list) return false;
+      list.push(make());
+      return undefined;
+    }),
+    listRemove: (id, key, i) => change(p => {
+      const d = dataOf(p, id);
+      const list = d && own(id, d, key);
+      if (!list) return false;
+      if (list.length <= 1) { say('Последний пункт не удалить — лучше скройте весь блок', 'error'); return false; }
+      list.splice(i, 1);
+      return undefined;
+    }),
+    listMove: (id, key, i, dir) => change(p => {
+      const d = dataOf(p, id);
+      const list = d && own(id, d, key);
+      const j = i + dir;
+      if (!list || j < 0 || j >= list.length) return false;
+      const t = list[i]; list[i] = list[j]; list[j] = t;
+      return undefined;
+    }),
+    openBar: b => {
+      // место плашки считаем сразу: после сохранения текста поле перерисуется
+      const r = b.el.getBoundingClientRect();
+      setBar(Object.assign({}, b, {
+        anchor: b.el.closest('a'),
+        top: r.bottom + window.pageYOffset + 10,
+        left: Math.max(12, Math.min(r.left + window.pageXOffset,
+          window.pageXOffset + document.documentElement.clientWidth - 384)),
+      }));
+    },
+    touch: on => setPending(on !== false),
+    say, fail,
+  };
+  const fnRef = useRef(fns);
+  fnRef.current = fns;
+  const ed = React.useMemo(() => ({
+    editing, lists,
+    setText: (a, b, c) => fnRef.current.setText(a, b, c),
+    listAdd: (a, b, c) => fnRef.current.listAdd(a, b, c),
+    listRemove: (a, b, c) => fnRef.current.listRemove(a, b, c),
+    listMove: (a, b, c, d) => fnRef.current.listMove(a, b, c, d),
+    openBar: b => fnRef.current.openBar(b),
+    touch: on => fnRef.current.touch(on),
+    say: (a, b) => fnRef.current.say(a, b),
+    fail: e => fnRef.current.fail(e),
+  }), [editing]);
+
+  /* ── блоки ── */
+  const newId = type => type.replace(/_/g, '-') + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const jump = id => {
+    const el = document.querySelector('[data-blk="' + id + '"]');
+    if (!el) return;
+    // верх блока с его панелью не должен прятаться под шапкой админки и шапкой сайта
+    const head = document.querySelector('.adm-page .top');
+    const off = 56 + (head ? head.offsetHeight : 0) + 28;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - off, behavior: 'smooth' });
+  };
+  const moveTo = (id, index) => change(p => {
+    const from = p.blocks.findIndex(b => b.id === id);
+    if (from < 0) return false;
+    let to = index;
+    if (to > from) to -= 1;
+    if (to === from) return false;
+    p.blocks.splice(to, 0, p.blocks.splice(from, 1)[0]);
+    return undefined;
+  });
+  const shift = (i, dir) => change(p => {
+    const j = i + dir;
+    if (j < 0 || j >= p.blocks.length) return false;
+    const t = p.blocks[i]; p.blocks[i] = p.blocks[j]; p.blocks[j] = t;
+    return undefined;
+  });
+  const dup = i => {
+    change(p => { const b = clone(p.blocks[i]); b.id = newId(b.type); p.blocks.splice(i + 1, 0, b); });
+    say('Блок продублирован — копия стоит сразу под ним');
+  };
+  const toggleHide = id => change(p => {
+    const b = p.blocks.find(x => x.id === id);
+    if (!b) return false;
+    b.hidden = !b.hidden;
+    return undefined;
+  });
+  const resetBlock = i => {
+    if (!window.confirm('Вернуть блоку исходные тексты, пункты и картинки?')) return;
+    change(p => { p.blocks[i].data = {}; });
+  };
+  const remove = i => {
+    const name = BLOCKS[pageRef.current.blocks[i].type].name;
+    change(p => { p.blocks.splice(i, 1); });
+    say('Блок «' + name + '» удалён. Вернуть — Ctrl+Z');
+  };
+  const insert = type => {
+    const at = lib == null ? pageRef.current.blocks.length : lib;
+    const id = newId(type);
+    setLib(null);
+    change(p => { p.blocks.splice(at, 0, { id, type, data: {} }); });
+    setTimeout(() => jump(id), 60);
+  };
+
+  /* ── перетаскивание прямо на странице ── */
+  /* кого тащим — держим в ref: события перетаскивания приходят раньше,
+     чем React успевает перерисовать состояние */
+  const dragRef = useRef(null);
+  const startDrag = (e, id, name) => {
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', id); } catch (err) { /* старые браузеры */ }
+    if (ghost.current) { ghost.current.textContent = name; e.dataTransfer.setDragImage(ghost.current, 18, 18); }
+    dragRef.current = id;
+    setBar(null);
+    setDragId(id);
+  };
+  const endDrag = () => { dragRef.current = null; setDragId(null); setDrop(null); };
+  const dropIndex = (e, i) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    return e.clientY < r.top + r.height / 2 ? i : i + 1;
+  };
+  const over = (e, i) => {
+    if (!dragRef.current) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const idx = dropIndex(e, i);
+    if (idx !== drop) setDrop(idx);
+  };
+  const dropHere = (e, i) => {
+    if (!dragRef.current) return;
+    e.preventDefault();
+    moveTo(dragRef.current, dropIndex(e, i));
+    endDrag();
+  };
+  useEffect(() => {
+    if (!dragId) return undefined;
+    // у края окна страница сама едет — блок можно утащить далеко
+    const onOver = e => {
+      if (e.clientY < 130) window.scrollBy(0, -26);
+      else if (e.clientY > window.innerHeight - 70) window.scrollBy(0, 26);
+    };
+    document.addEventListener('dragover', onOver);
+    return () => document.removeEventListener('dragover', onOver);
+  }, [dragId]);
+
+  /* ── сохранение ── */
+  const dirty = !!page && (pending || JSON.stringify(page) !== saved);
+  const save = () => {
+    const a = document.activeElement;
+    if (a && a.isContentEditable) a.blur();
+    const cur = pageRef.current;
+    if (!cur || saving) return;
+    if (JSON.stringify(cur) === saved) { setPending(false); return; }
+    setSaving(true);
+    api('save', { pageJson: JSON.stringify(cur) })
+      .then(() => { setSaved(JSON.stringify(cur)); setPending(false); say('Сохранено. Сайт уже показывает новую версию'); })
+      .catch(fail).then(() => setSaving(false));
+  };
+
+  useEffect(() => {
+    const onKey = e => {
+      if (!(e.ctrlKey || e.metaKey) || tab !== 'page') return;
+      const k = (e.key || '').toLowerCase();
+      const a = document.activeElement;
+      const typing = a && (a.isContentEditable || a.tagName === 'INPUT' || a.tagName === 'TEXTAREA');
+      if (k === 's' || k === 'ы') { e.preventDefault(); save(); return; }
+      if (typing) return;
+      if ((k === 'z' || k === 'я') && !e.shiftKey) { e.preventDefault(); undo(); }
+      else if (k === 'y' || k === 'н' || ((k === 'z' || k === 'я') && e.shiftKey)) { e.preventDefault(); redo(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
+  useEffect(() => {
+    const onLeave = e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } };
+    window.addEventListener('beforeunload', onLeave);
+    return () => window.removeEventListener('beforeunload', onLeave);
+  }, [dirty]);
+
+  /* в режиме правки ссылки не уводят со страницы, а формы не отправляются */
+  useEffect(() => {
+    if (!editing || tab !== 'page') return undefined;
+    const onClick = e => { if (e.target.closest && e.target.closest('.adm-page a')) e.preventDefault(); };
+    const onSubmit = e => { if (e.target.closest && e.target.closest('.adm-page')) e.preventDefault(); };
+    document.addEventListener('click', onClick, true);
+    document.addEventListener('submit', onSubmit, true);
+    return () => {
+      document.removeEventListener('click', onClick, true);
+      document.removeEventListener('submit', onSubmit, true);
+    };
+  }, [editing, tab]);
+
+  const chrome = React.useMemo(() => ({ id: 'chrome', data: page ? page.chrome : {} }), [page && page.chrome]);
+  const h = hist.current;
+
+  const blocksView = page && page.blocks.map((b, i) => {
+    if (!editing && b.hidden) return null;
+    const def = BLOCKS[b.type];
+    const B = def.C;
+    const body = <BlockCtx.Provider value={b}><B /></BlockCtx.Provider>;
+    if (!editing) return <React.Fragment key={b.id}>{body}</React.Fragment>;
+    const cls = 'adm-blk' + (b.hidden ? ' is-hidden' : '') + (dragId === b.id ? ' is-drag' : '')
+      + (drop === i ? ' drop-before' : '') + (drop === i + 1 && i === page.blocks.length - 1 ? ' drop-after' : '');
+    return (
+      <div key={b.id} className={cls} data-blk={b.id} onDragOver={e => over(e, i)} onDrop={e => dropHere(e, i)}>
+        <div className="adm-bar" data-adm-ui>
+          <span className="adm-grip" draggable title="Потяните, чтобы переставить блок"
+                onDragStart={e => startDrag(e, b.id, def.name)} onDragEnd={endDrag}>
+            <AI n="grip" />
+          </span>
+          <span className="adm-bar-name">{def.name}</span>
+          {b.hidden && <span className="adm-badge">Скрыт</span>}
+          <span className="adm-bar-sep" />
+          <button type="button" title="Выше" disabled={i === 0} onClick={() => shift(i, -1)}><AI n="up" /></button>
+          <button type="button" title="Ниже" disabled={i === page.blocks.length - 1} onClick={() => shift(i, 1)}><AI n="down" /></button>
+          <button type="button" title="Дублировать" onClick={() => dup(i)}><AI n="copy" /></button>
+          <button type="button" title={b.hidden ? 'Показать на сайте' : 'Скрыть с сайта'} onClick={() => toggleHide(b.id)}>
+            <AI n={b.hidden ? 'eyeOff' : 'eye'} />
+          </button>
+          <button type="button" title="Вернуть исходные тексты" onClick={() => resetBlock(i)}><AI n="reset" /></button>
+          <button type="button" className="del" title="Удалить блок" onClick={() => remove(i)}><AI n="trash" /></button>
+        </div>
+        {body}
+        <button type="button" className="adm-ins" data-adm-ui title="Добавить блок сюда" onClick={() => setLib(i + 1)}>
+          <AI n="plus" />Блок
+        </button>
+      </div>
+    );
+  });
+
+  const closeText = () => { const a = document.activeElement; if (a && a.isContentEditable) a.blur(); };
+
+  return (
+    <EditCtx.Provider value={tab === 'page' && page ? ed : null}>
+      <div className={'adm-root' + (tab === 'page' ? ' is-page' : ' is-leads')}>
+        <header className="adm-top">
+          <div className="adm-brand"><img src={LOGO} alt="AppForse" /><span>Админка</span></div>
+          <nav className="adm-tabs">
+            <button type="button" className={tab === 'page' ? 'on' : ''} onClick={() => setTab('page')}>
+              <AI n="page" /><span className="adm-lbl">Страница</span>
+            </button>
+            <button type="button" className={tab === 'leads' ? 'on' : ''} onClick={() => { closeText(); setBar(null); setTab('leads'); }}>
+              <AI n="inbox" /><span className="adm-lbl">Заявки</span>{newLeads > 0 && <i className="adm-count">{newLeads}</i>}
+            </button>
+          </nav>
+          {tab === 'page' && page ? (
+            <div className="adm-tools">
+              <div className="adm-seg" role="group" aria-label="Режим">
+                <button type="button" className={editing ? 'on' : ''} onClick={() => setEditing(true)}>
+                  <AI n="pencil" /><span className="adm-lbl">Правка</span>
+                </button>
+                <button type="button" className={!editing ? 'on' : ''} onClick={() => { closeText(); setBar(null); setEditing(false); }}>
+                  <AI n="eye" /><span className="adm-lbl">Просмотр</span>
+                </button>
+              </div>
+              <span className="adm-divider" />
+              <button type="button" className="adm-icon-btn" title="Отменить · Ctrl+Z" disabled={!h.past.length} onClick={undo}><AI n="undo" /></button>
+              <button type="button" className="adm-icon-btn" title="Повторить · Ctrl+Shift+Z" disabled={!h.future.length} onClick={redo}><AI n="redo" /></button>
+              <span className="adm-divider" />
+              <button type="button" className={'adm-icon-btn' + (layers ? ' on' : '')} title="Структура страницы" onClick={() => setLayers(v => !v)}><AI n="layers" /></button>
+              <button type="button" className="adm-icon-btn" title="Мобильная версия" onClick={() => { closeText(); setMobile(true); }}><AI n="phone" /></button>
+              <button type="button" className="adm-icon-btn" title="История сохранений" onClick={() => setVersions(true)}><AI n="history" /></button>
+              <a className="adm-icon-btn" href="index.html" target="_blank" rel="noopener" title="Открыть сайт в новой вкладке"><AI n="external" /></a>
+              <button type="button" className={'adm-btn primary adm-save' + (dirty ? ' is-dirty' : '')}
+                      disabled={!dirty || saving} onMouseDown={e => e.preventDefault()} onClick={save} title="Ctrl+S">
+                {saving ? 'Сохраняем…' : dirty ? 'Сохранить' : 'Сохранено'}
+              </button>
+            </div>
+          ) : <div className="adm-tools" />}
+          <button type="button" className="adm-icon-btn" title="Выйти"
+                  onClick={() => { if (dirty && !window.confirm('Есть несохранённые изменения. Выйти без сохранения?')) return; onLogout(); }}>
+            <AI n="logout" />
+          </button>
+        </header>
+
+        {tab === 'leads' ? <Leads fail={fail} onCount={setNewLeads} />
+          : !page ? <div className="adm-state">{loadErr || 'Загружаем страницу…'}</div>
+          : (
+            <div className={'adm-page' + (editing ? ' adm-edit' : '')}>
+              <ParticleField />
+              <BlockCtx.Provider value={chrome}><Top /></BlockCtx.Provider>
+              {blocksView}
+              {editing && (
+                <div className="adm-end" data-adm-ui>
+                  <button type="button" className="adm-btn" onClick={() => setLib(page.blocks.length)}><AI n="plus" />Добавить блок в конец</button>
+                </div>
+              )}
+              <BlockCtx.Provider value={chrome}><Foot /></BlockCtx.Provider>
+            </div>
+          )}
+
+        {tab === 'page' && page && layers && (
+          <Layers page={page} onClose={() => setLayers(false)} onMove={moveTo} onJump={jump} onHide={toggleHide} />
+        )}
+        {lib != null && <Library onPick={insert} onClose={() => setLib(null)} />}
+        {versions && (
+          <Versions fail={fail} onClose={() => setVersions(false)}
+                    onOpen={p => {
+                      const c = cleanPage(p);
+                      if (!c) { say('Эта версия повреждена и не открывается', 'error'); return; }
+                      change(x => { x.chrome = c.chrome; x.blocks = c.blocks; });
+                      say('Версия открыта в редакторе. Чтобы вернуть её на сайт — «Сохранить»');
+                    }} />
+        )}
+        {mobile && page && <MobilePreview page={page} onClose={() => setMobile(false)} />}
+        {bar && tab === 'page' && editing && page && (
+          <FloatBar key={bar.kind + '|' + bar.blk + '|' + bar.k} bar={bar}
+                    value={bar.kind === 'link'
+                      ? (bar.anchor ? bar.anchor.getAttribute('href') : '')
+                      : bar.value}
+                    onCommit={v => {
+                      const t = String(v).trim();
+                      if (bar.kind === 'link') {
+                        if (t && (!bar.anchor || bar.anchor.getAttribute('href') !== t)) fns.setText(bar.blk, bar.k, t);
+                      } else if (t && t !== bar.value) {
+                        fns.setText(bar.blk, bar.k, typo(t));
+                      }
+                    }}
+                    onClose={() => setBar(null)} />
+        )}
+        {toast && <div key={toast.at} className={'adm-toast ' + toast.kind} role="status">{toast.text}</div>}
+        <div ref={ghost} className="adm-ghost" aria-hidden="true" />
+      </div>
+    </EditCtx.Provider>
+  );
+};
+
+const AdminApp = () => {
+  const [token, setToken] = useState(() => store.get(TOKEN_KEY));
+  if (!token) return <Login onToken={t => { store.set(TOKEN_KEY, t); setToken(t); }} />;
+  return <Admin onLogout={() => { store.del(TOKEN_KEY); setToken(null); }} />;
+};
+/*ADMIN:END*/
+
+/* Страницу рисуем, когда шрифты уже скачаны и пришли правки из админки.
+   Иначе текст на долю секунды появляется запасным шрифтом и «прыгает»,
+   или сначала мелькает старый текст. Дольше 2,5 с не ждём — на плохом
+   интернете лучше показать страницу как есть, а правки подставить следом. */
 const SITE_FONTS = [
   ['400 16px Manrope', 'Ая Az ₽'],
   ['500 16px Oswald',  'Ая Az'],
   ['600 16px Oswald',  'Ая Az ₽'],
   ['700 16px Oswald',  'Ая Az ₽'],
 ];
-const fontsReady = document.fonts && document.fonts.load
-  ? Promise.all(SITE_FONTS.map(([f, s]) => document.fonts.load(f, s))).catch(() => {})
-  : Promise.resolve();
-Promise.race([fontsReady, new Promise(r => setTimeout(r, 2000))]).then(() =>
-  ReactDOM.createRoot(document.getElementById('root')).render(<App />));
+/*ADMIN:START*/
+if (IS_ADMIN) {
+  ReactDOM.createRoot(document.getElementById('root')).render(<AdminApp />);
+} else
+/*ADMIN:END*/
+{
+  const fontsReady = document.fonts && document.fonts.load
+    ? Promise.all(SITE_FONTS.map(([f, s]) => document.fonts.load(f, s))).catch(() => {})
+    : Promise.resolve();
+  const contentReady = (window.fetch
+    ? fetch(CONTENT_URL, { mode: 'cors', credentials: 'omit', cache: 'no-cache' })
+        .then(r => (r.ok ? r.json() : null)).then(cleanPage).catch(() => null)
+    : Promise.resolve(null));
+  contentReady.then(p => {
+    loadedPage = p;
+    if (p && window.__setPage) window.__setPage(p);
+  });
+  Promise.race([Promise.all([fontsReady, contentReady]), new Promise(r => setTimeout(r, 2500))])
+    .then(() => ReactDOM.createRoot(document.getElementById('root'))
+      .render(<App initial={loadedPage || defaultPage()} />));
+}
 </script>
 
 <script>
@@ -2206,6 +3941,8 @@ Promise.race([fontsReady, new Promise(r => setTimeout(r, 2000))]).then(() =>
   function onWheel(e){
     // не трогаем: зум (ctrl+wheel) и когда открыт попап/меню (body overflow:hidden)
     if(e.ctrlKey || document.body.style.overflow === 'hidden') return;
+    // окна админки прокручиваются сами, страницу под ними не трогаем
+    if(e.target.closest && e.target.closest('[data-own-scroll]')) return;
     var d = e.deltaY;
     if(e.deltaMode === 1) d *= 40;                 // строки → пиксели
     else if(e.deltaMode === 2) d *= window.innerHeight;
@@ -2220,6 +3957,7 @@ Promise.race([fontsReady, new Promise(r => setTimeout(r, 2000))]).then(() =>
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.addEventListener('click', function (e) {
+    if (e.defaultPrevented) return;
     var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
     if (!a) return;
     var id = a.getAttribute('href');
