@@ -102,9 +102,15 @@ print('admin.html собран:', len(admin) // 1024, 'KB')
 
 # страница политики: подставляем только логотип
 priv = io.open(os.path.join(BASE, 'privacy_template.html'), encoding='utf-8').read()
-priv = priv.replace('__LOGO__', a['logo'])
+priv = priv.replace('__LOGO__', img['logo'])
 io.open(os.path.join(BASE, 'privacy.html'), 'w', encoding='utf-8').write(inline_fonts(priv))
 print('privacy.html собран:', len(priv) // 1024, 'KB')
+
+# согласие на обработку данных: отдельный документ, как требует закон с 01.09.2025
+cons = io.open(os.path.join(BASE, 'consent_template.html'), encoding='utf-8').read()
+cons = cons.replace('__LOGO__', img['logo'])
+io.open(os.path.join(BASE, 'consent.html'), 'w', encoding='utf-8').write(inline_fonts(cons))
+print('consent.html собран:', len(cons) // 1024, 'KB')
 
 # страница 404: две сборки — рядом с сайтом и в корне репозитория,
 # чтобы Pages подхватывал её на любом несуществующем адресе
@@ -146,5 +152,5 @@ def node(script, *args):
 
 
 # сжатие: пробелы и комментарии не нужны браузеру, а страница легчает вдвое
-for page in ('index.html', 'admin.html', 'privacy.html', '404.html'):
+for page in ('index.html', 'admin.html', 'privacy.html', 'consent.html', '404.html'):
     node('minify.js', page)

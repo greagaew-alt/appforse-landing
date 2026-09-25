@@ -2199,9 +2199,7 @@ const Magnet = () => {
             </button>
             <label className="agree">
               <input type="checkbox" name="agree" onChange={() => clear('agree')} />
-              <span>Согласен на обработку персональных данных
-                и принимаю <a href="privacy.html" target="_blank"
-                rel="noopener">политику конфиденциальности</a>.</span>
+              <span>Даю <a href="consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой обработки данных</a>.</span>
             </label>
             {err.agree && <span className="err">{err.agree}</span>}
             {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
@@ -2429,9 +2427,7 @@ const QuizForm = ({ answers, questions }) => {
       </button>
       <label className="agree">
         <input type="checkbox" name="agree" onChange={() => clear('agree')} />
-        <span>Согласен на обработку персональных данных
-          и принимаю <a href="privacy.html" target="_blank"
-          rel="noopener">политику конфиденциальности</a>.</span>
+        <span>Даю <a href="consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой обработки данных</a>.</span>
       </label>
       {err.agree && <span className="err">{err.agree}</span>}
       {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
@@ -2637,9 +2633,7 @@ const Contact = () => {
                 </button>
                 <label className="agree">
                   <input type="checkbox" name="agree" onChange={() => clear('agree')} />
-                  <span>Согласен на обработку персональных данных
-                    и принимаю <a href="privacy.html" target="_blank"
-                    rel="noopener">политику конфиденциальности</a>.</span>
+                  <span>Даю <a href="consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой обработки данных</a>.</span>
                 </label>
                 {err.agree && <span className="err">{err.agree}</span>}
                 {sent && <p className="note">Спасибо, свяжемся в течение рабочего дня.</p>}
@@ -2681,6 +2675,7 @@ const Foot = () => (
     <div className="rule">
       <div className="shell">
         <span><T k="copy">© 2026 AppForse</T></span>
+        <a href="consent.html"><T k="consentLink">Согласие на обработку данных</T></a>
         <a href="privacy.html"><T k="privacy">Политика обработки персональных данных</T></a>
         <a className="by" href={DEV} target="_blank" rel="noopener">Разработка сайта</a>
       </div>

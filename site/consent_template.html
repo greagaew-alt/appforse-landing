@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Согласие на обработку персональных данных AppForse: какие данные передаются, для каких целей, на какой срок и как отозвать согласие.">
+<link rel="canonical" href="https://greagaew-alt.github.io/appforse-landing/site/consent.html">
+<title>Согласие на обработку персональных данных — AppForse</title>
+<meta name="robots" content="noindex">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/oswald-700-cyrillic.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="fonts/manrope-400-cyrillic.woff2">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root {
+  --ink: #0E0C10; --ink-lift: #16141A; --ink-line: #262626;
+  --paper: #FFFFFF; --muted: #929292; --muted-lo: #A9A9BA; --muted-hi: #6E6E7A;
+  --red: #E8243C; --red-dk: #B3182C; --red-lt: #FF5468;
+  --fs-h1: clamp(28px, 2.60vw, 50px);
+  --fs-h2: clamp(18px, 1.25vw, 24px);
+  --fs-lead: clamp(15px, 0.89vw, 17px);
+  --fs-body: clamp(14px, 0.83vw, 16px);
+  --fs-cap: clamp(12px, 0.68vw, 13px);
+  --shell: 1505px; --text: 78ch;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--ink); color: var(--paper);
+  font-family: Manrope, system-ui, sans-serif; font-size: var(--fs-body);
+  -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--red-lt); outline-offset: 3px; }
+.shell { width: min(var(--shell), calc(100% - clamp(40px, 4.2vw, 80px))); margin: 0 auto; }
+
+.top { border-bottom: 1px solid #1F1D24; }
+.top .shell { display: flex; align-items: center; gap: 24px; padding: 24px 0; }
+/* inline-flex убирает зазор под картинкой и даёт ссылкам нормальную высоту нажатия */
+.top a { display: inline-flex; align-items: center; }
+.top .logo { height: clamp(32px, 2.34vw, 45px); width: auto; }
+.top a.back { margin-left: auto; display: inline-flex; align-items: center; min-height: 44px;
+  padding: 8px 6px; font-family: Oswald, sans-serif; font-size: var(--fs-cap);
+  font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color .2s var(--ease); }
+.top a.back:hover { color: var(--paper); }
+
+main { padding: clamp(40px, 4.2vw, 80px) 0 clamp(48px, 5.2vw, 100px); }
+h1 { font-family: Oswald, sans-serif; font-weight: 700; text-transform: uppercase;
+  font-size: var(--fs-h1); line-height: .96; letter-spacing: -.02em;
+  margin: 0 0 18px; max-width: 20ch; text-wrap: balance; }
+.date { font-size: var(--fs-cap); color: var(--muted-hi); letter-spacing: .04em;
+  text-transform: uppercase; font-family: Oswald, sans-serif; }
+.intro { font-size: var(--fs-lead); line-height: 1.55; color: var(--muted-lo);
+  max-width: 74ch; margin: 26px 0 0; text-wrap: pretty; }
+
+h2 { font-family: Oswald, sans-serif; font-weight: 600; text-transform: uppercase;
+  font-size: var(--fs-h2); line-height: 1.2; letter-spacing: -.01em;
+  margin: clamp(34px, 3.1vw, 60px) 0 16px; max-width: 46ch; text-wrap: balance; }
+h2 .n { color: var(--red); margin-right: 12px; }
+p, li { font-size: var(--fs-body); line-height: 1.65; color: var(--muted-lo);
+  max-width: var(--text); text-wrap: pretty; }
+p + p { margin-top: 12px; }
+ul, ol { margin: 14px 0 0; padding-left: 22px; display: grid; gap: 10px; }
+li::marker { color: var(--red); }
+b, strong { color: var(--paper); font-weight: 600; }
+a { color: var(--paper); text-underline-offset: 3px; }
+.fill { color: var(--red-lt); border-bottom: 1px dashed rgba(255,84,104,.6); }
+
+.card { background: var(--ink-lift); border: 1px solid #1F1D24;
+  padding: clamp(20px, 1.9vw, 36px); margin-top: 20px; max-width: var(--text); }
+.card dl { margin: 0; display: grid; grid-template-columns: minmax(0, 22ch) 1fr;
+  gap: 12px clamp(16px, 1.6vw, 30px); }
+.card dt { font-size: var(--fs-cap); letter-spacing: .06em; text-transform: uppercase;
+  font-family: Oswald, sans-serif; color: var(--muted-hi); padding-top: 2px; }
+.card dd { margin: 0; font-size: var(--fs-body); line-height: 1.5; color: var(--paper); }
+@media (max-width: 700px) { .card dl { grid-template-columns: 1fr; gap: 4px 0; }
+  .card dd { margin-bottom: 10px; } }
+
+.foot { border-top: 1px solid #1F1D24; }
+.foot .shell { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
+  padding: 26px 0; font-size: var(--fs-cap); color: var(--muted-hi); }
+.foot a { color: var(--muted-lo); text-decoration: none; padding: 12px 8px;
+  display: inline-flex; align-items: center; min-height: 44px; }
+.foot a:hover { color: var(--paper); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="shell">
+    <a href="index.html"><img class="logo" src="__LOGO__" alt="AppForse" width="420" height="221"></a>
+    <a class="back" href="index.html">← На главную</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <span class="date">Редакция от 26 сентября 2026 года</span>
+    <h1>Согласие на обработку персональных данных</h1>
+    <p class="intro">
+      Текст согласия, которое пользователь даёт перед отправкой формы на сайте AppForse.
+      Согласие оформлено отдельным документом и не входит в состав иных соглашений
+      и документов.
+    </p>
+
+    <h2><span class="n">1</span>Кому даётся согласие</h2>
+    <div class="card">
+      <dl>
+        <dt>Наименование</dt>
+        <dd>Индивидуальный предприниматель Филина Анастасия Константиновна</dd>
+        <dt>ИНН</dt>
+        <dd>222409894314</dd>
+        <dt>ОГРНИП</dt>
+        <dd>325220200129143</dd>
+        <dt>Адрес</dt>
+        <dd><span class="fill">[юридический / почтовый адрес — уточняется]</span></dd>
+        <dt>Электронная почта</dt>
+        <dd><span class="fill">[адрес электронной почты для обращений — уточняется]</span></dd>
+        <dt>Телефон</dt>
+        <dd><span class="fill">[телефон — уточняется]</span></dd>
+        <dt>Сайт</dt>
+        <dd>https://greagaew-alt.github.io/appforse-landing/site/</dd>
+      </dl>
+    </div>
+
+    <h2><span class="n">2</span>Текст согласия</h2>
+    <p>Отправляя форму на сайте и проставляя отметку в поле «Даю согласие на обработку
+      персональных данных», я, субъект персональных данных, свободно, своей волей
+      и в своём интересе даю Оператору согласие на обработку моих персональных данных
+      на условиях, изложенных ниже.</p>
+
+    <h2><span class="n">3</span>Перечень персональных данных</h2>
+    <ul>
+      <li>имя, которое я указал в форме;</li>
+      <li>номер телефона;</li>
+      <li>ответы на вопросы теста на сайте, если я его прошёл;</li>
+      <li>сведения о том, из какой формы отправлено обращение, дата и время отправки.</li>
+    </ul>
+
+    <h2><span class="n">4</span>Цели обработки</h2>
+    <ul>
+      <li>связь со мной по оставленному обращению;</li>
+      <li>консультация и подготовка коммерческого предложения по услугам Оператора;</li>
+      <li>заключение и исполнение договора, если я приму решение им воспользоваться.</li>
+    </ul>
+
+    <h2><span class="n">5</span>Перечень действий и способы обработки</h2>
+    <p>5.1. Согласие даётся на совершение следующих действий: сбор, запись,
+      систематизация, накопление, хранение, уточнение (обновление, изменение),
+      извлечение, использование, передача (предоставление, доступ), блокирование,
+      удаление, уничтожение персональных данных.</p>
+    <p>5.2. Обработка ведётся смешанным способом: с использованием средств автоматизации
+      и без них. Решения, порождающие юридические последствия, исключительно
+      на основании автоматизированной обработки не принимаются.</p>
+
+    <h2><span class="n">6</span>Передача третьим лицам</h2>
+    <p>6.1. Я согласен, что мои данные могут быть переданы в объёме, указанном в разделе 3,
+      следующим лицам: хостинг-провайдеру (хранение заявок на сервере в России),
+      сервису обмена сообщениями Telegram и провайдеру электронной почты —
+      для уведомления Оператора о моём обращении.</p>
+    <p>6.2. Серверы сервиса обмена сообщениями и почтового сервиса могут находиться
+      за пределами Российской Федерации, поэтому такая передача является трансграничной,
+      и я даю на неё согласие.</p>
+
+    <h2><span class="n">7</span>Срок действия и порядок отзыва</h2>
+    <p>7.1. Согласие действует с момента отправки формы до его отзыва, но не дольше
+      1 (одного) года с даты моего последнего обращения к Оператору.</p>
+    <p>7.2. Согласие может быть отозвано в любой момент: достаточно направить заявление
+      в свободной форме на адрес электронной почты или почтовый адрес Оператора,
+      указанные в разделе 1.</p>
+    <p>7.3. После получения отзыва Оператор прекращает обработку и уничтожает данные
+      в срок, не превышающий 30 (тридцати) дней, если иное не предусмотрено законом.</p>
+
+    <h2><span class="n">8</span>Подтверждение</h2>
+    <p>8.1. Я подтверждаю, что ознакомлен с
+      <a href="privacy.html">Политикой обработки персональных данных</a>,
+      мне понятны мои права, предусмотренные Федеральным законом от 27.07.2006 № 152-ФЗ
+      «О персональных данных», и порядок их реализации.</p>
+    <p>8.2. Я подтверждаю, что указанные мной данные принадлежат мне
+      либо я имею право их предоставить.</p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <span>© 2026 AppForse</span>
+    <a href="index.html">Вернуться на сайт</a>
+  </div>
+</footer>
+
+</body>
+</html>
