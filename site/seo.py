@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Структурированные данные, robots и карта сайта.
 Разметка собирается из тех же текстов, что видит человек, — чтобы не разъезжались."""
-import io, os, re, json
+import datetime, io, os, re, json
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 SITE = 'https://greagaew-alt.github.io/appforse-landing/site/'
@@ -40,7 +40,8 @@ graph = [
     {"@type": "WebPage", "@id": SITE + "#page", "url": SITE,
      "name": "Мобильное приложение под вашим брендом за 7 дней — AppForse",
      "isPartOf": {"@id": SITE + "#site"}, "about": {"@id": SITE + "#org"},
-     "inLanguage": "ru-RU", "primaryImageOfPage": SITE + "og.jpg"},
+     "inLanguage": "ru-RU", "primaryImageOfPage": SITE + "og.jpg",
+     "dateModified": datetime.date.today().isoformat()},
     {"@type": "Service", "@id": SITE + "#service",
      "name": "Запуск мобильного приложения под брендом заказчика",
      "serviceType": "Разработка мобильного приложения на готовой платформе",
@@ -75,16 +76,25 @@ io.open(p, 'w', encoding='utf-8').write(html.replace('__JSONLD__', ld))
 
 # ── robots и карта сайта ──
 io.open(os.path.join(BASE, 'robots.txt'), 'w', encoding='utf-8').write(
-    "User-agent: *\nAllow: /\nDisallow: /privacy.html\n\nSitemap: " + SITE + "sitemap.xml\n")
+    "User-agent: *\nAllow: /\n"
+    "Disallow: /appforse-landing/site/admin.html\n\n"
+    "Sitemap: " + SITE + "sitemap.xml\n")
 
+today = datetime.date.today().isoformat()
 io.open(os.path.join(BASE, 'sitemap.xml'), 'w', encoding='utf-8').write(
     '<?xml version="1.0" encoding="UTF-8"?>\n'
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     '  <url>\n'
     '    <loc>' + SITE + '</loc>\n'
-    '    <lastmod>2026-08-31</lastmod>\n'
+    '    <lastmod>' + today + '</lastmod>\n'
     '    <changefreq>monthly</changefreq>\n'
     '    <priority>1.0</priority>\n'
+    '  </url>\n'
+    '  <url>\n'
+    '    <loc>' + SITE + 'privacy.html</loc>\n'
+    '    <lastmod>' + today + '</lastmod>\n'
+    '    <changefreq>yearly</changefreq>\n'
+    '    <priority>0.2</priority>\n'
     '  </url>\n'
     '</urlset>\n')
 

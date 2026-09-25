@@ -1,0 +1,10 @@
+{
+  "name": "appforse-landing",
+  "private": true,
+  "description": "Сборка лендинга AppForse: компиляция JSX и сжатие страниц",
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.36.0"
+  }
+}

@@ -4,11 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Мобильное приложение под вашим брендом за 7 дней — AppForse</title>
-<meta name="description" content="Запустим приложение для вашего магазина на готовой платформе: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, публикация в App Store и Google Play за 7 дней.">
+<meta name="description" content="Запустим приложение для вашего магазина под вашим брендом: каталог, заказы, доставка, оплата, бонусы, push и CRM. 150 000 ₽, публикация за 7 дней.">
 <link rel="canonical" href="https://greagaew-alt.github.io/appforse-landing/site/">
 <meta name="theme-color" content="#0E0C10">
-<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="favicon-16.png" sizes="16x16">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AppForse">
@@ -27,19 +30,17 @@
 <!-- все начертания, которые есть на сайте: качаем сразу, параллельно с React -->
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-cyrillic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/manrope-400-latin-ext.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-cyrillic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-500-latin.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-cyrillic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-600-latin-ext.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-cyrillic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/oswald-700-latin-ext.woff2">
 <link rel="stylesheet" href="fonts.css">
 <link rel="preconnect" href="https://glebslobodchikov.ru" crossorigin>
-<link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_A__" fetchpriority="high">
-<link rel="preload" as="image" type="image/webp" href="__SHOT_HERO_B__" fetchpriority="high">
+<link rel="preload" as="script" href="vendor/react.production.min.js">
+<link rel="preload" as="script" href="vendor/react-dom.production.min.js">
+__HERO_PRELOAD__
 <style>
 /* ═══════════════════════════════════════════════════════════
    ДИЗАЙН-СИСТЕМА APPFORSE
@@ -922,8 +923,8 @@ form.form input.hp-field { position: absolute; left: 0; top: 0; width: 1px; min-
 .x-rev-who b { display: block; font: 600 var(--fs-h3)/1.2 Oswald, sans-serif; text-transform: uppercase; color: var(--paper); }
 .x-rev-role { display: block; margin-top: 4px; font-size: var(--fs-body); line-height: 1.4; color: var(--muted-lo); }
 .x-rev-dots { display: flex; gap: 6px; margin-top: 18px; }
-.x-rev-dots button { flex: 1; height: 20px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
-.x-rev-dots button::before { content: ''; position: absolute; left: 0; right: 0; top: 8px; height: 4px;
+.x-rev-dots button { flex: 1; height: 28px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
+.x-rev-dots button::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 4px;
   background: #232128; transition: background-color .3s var(--ease); }
 .x-rev-dots button.on::before { background: var(--red); }
 
@@ -1295,6 +1296,7 @@ form.form input.hp-field { position: absolute; left: 0; top: 0; width: 1px; min-
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
+const IMG_SIZES = __IMG_SIZES__;
 const LOGO   = "__LOGO__";
 /* дизайнерские мокапы под каждый блок свои — клиентское приложение
    и внутренняя часть (менеджер/CRM), без нашей рамки iPhone поверх:
@@ -1688,12 +1690,18 @@ function Rise({ as: Tag = 'div', delay = 0, now = false, className = '', style, 
 /* дизайнерские мокапы приходят уже готовым изображением: свой наклон,
    тень, подсветка и прозрачные поля вокруг — просто вписываем целиком,
    без рамки и без обрезки по площади */
-const Shot = ({ src, alt, cls, lazy, k }) => {
+const Shot = ({ src, alt, cls, lazy, k, sizes }) => {
   const url = useImg(k, src);
   const ed = React.useContext(EditCtx);
+  /* размеры берём из сборки: браузер сразу знает пропорции и не дёргает вёрстку,
+     а телефонам отдаём уменьшенную копию вместо полноразмерной */
+  const m = IMG_SIZES[url];
   return (
     <div className={'shot ' + (cls || '')}>
       <img src={url} alt={alt} decoding="async"
+           {...(m ? { width: m.w, height: m.h } : {})}
+           {...(m && m.sm ? { srcSet: m.sm + ' ' + m.smw + 'w, ' + m.md + ' ' + m.mdw + 'w, ' + url + ' ' + m.w + 'w',
+                              sizes: sizes || '(max-width: 760px) 45vw, 380px' } : {})}
            {...(lazy ? { loading: 'lazy' } : { fetchPriority: 'high' })} />
       {ed && ed.editing && k ? <ImgTools k={k} ed={ed} /> : null}
     </div>
@@ -1876,7 +1884,7 @@ const Top = () => {
     <header className={'top' + (stuck ? ' stuck' : '') + (open ? ' open' : '')} ref={bar}>
       <div className="shell">
         <a href="#top" onClick={() => setOpen(false)}>
-          <img className="logo" src={LOGO} alt="AppForse" />
+          <img className="logo" src={LOGO} alt="AppForse" width="420" height="221" />
         </a>
         <button className="burger" type="button" aria-label="Меню"
                 aria-expanded={open} onClick={() => setOpen(v => !v)}>
@@ -2026,8 +2034,11 @@ const ParticleField = () => {
 
     measure();
     seed();
-    start();
-    setOn(true);
+    /* фон рисуем, когда браузер освободится: он не должен соревноваться
+       с первым экраном за процессор на телефоне */
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(() => { start(); setOn(true); }, { timeout: 1500 })
+      : window.setTimeout(() => { start(); setOn(true); }, 600);
 
     let resizeTimer = 0;
     const onResize = () => {
@@ -2053,6 +2064,8 @@ const ParticleField = () => {
     document.addEventListener('visibilitychange', onHide);
 
     return () => {
+      if (window.cancelIdleCallback && window.requestIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       stop();
       window.clearTimeout(resizeTimer);
       window.removeEventListener('resize', onResize);
@@ -2144,7 +2157,7 @@ const What = () => (
           <p><T k="p1d">Покупатель открывает каталог, собирает заказ, платит и копит бонусы —
              всё в одном приложении под вашим брендом. Повторный заказ занимает пару
              касаний, без звонков и переписки с менеджером.</T></p>
-          <div className="pic"><Shot k="p1img" src={SHOT_WHAT_A} alt="Бонусная программа в клиентском приложении" lazy /></div>
+          <div className="pic"><Shot sizes="(max-width: 900px) 300px, 310px" k="p1img" src={SHOT_WHAT_A} alt="Бонусная программа в клиентском приложении" lazy /></div>
         </Rise>
         <Rise className="panel" delay={220}>
           <h3><T k="p2t">Управление бизнесом</T></h3>
@@ -2152,7 +2165,7 @@ const What = () => (
           <p><T k="p2d">Команда ведёт заказы и видит остатки, вы — клиентскую базу и аналитику.
              Push-рассылки, роли сотрудников и несколько точек настраиваются в той же
              панели, без сторонних сервисов.</T></p>
-          <div className="pic"><Shot k="p2img" src={SHOT_WHAT_B} alt="Аналитика клиентов в панели управления" lazy /></div>
+          <div className="pic"><Shot sizes="(max-width: 900px) 300px, 310px" k="p2img" src={SHOT_WHAT_B} alt="Аналитика клиентов в панели управления" lazy /></div>
         </Rise>
       </div>
       <Magnet />
@@ -2273,13 +2286,13 @@ const Case = () => (
           <h3><T k="t1">«Синица»</T></h3>
           <p><T k="d1">Клиентское приложение: каталог, заказ, бонусы, профиль, повторные покупки.
              Работает в нескольких городах.</T></p>
-          <div className="pic"><Shot k="img1" src={SHOT_CASE_A} alt="Корзина в клиентском приложении «Синицы»" lazy /></div>
+          <div className="pic"><Shot sizes="(max-width: 900px) 300px, 310px" k="img1" src={SHOT_CASE_A} alt="Корзина в клиентском приложении «Синицы»" lazy /></div>
         </Rise>
         <Rise className="case" delay={220}>
           <span className="kind"><T k="k2">Операционка</T></span>
           <h3><T k="t2">Менеджерское приложение</T></h3>
           <p><T k="d2">Заказы, клиенты, статусы и исполнение — в одном окне.</T></p>
-          <div className="pic"><Shot k="img2" src={SHOT_CASE_B} alt="График продаж в менеджерском приложении" lazy /></div>
+          <div className="pic"><Shot sizes="(max-width: 900px) 300px, 310px" k="img2" src={SHOT_CASE_B} alt="График продаж в менеджерском приложении" lazy /></div>
         </Rise>
       </div>
     </div>
@@ -2370,8 +2383,8 @@ const Price = () => (
             <A k="btn" className="btn" href="#contact">Обсудить запуск</A>
             </div>
             <div className="collage">
-              <Shot k="imgA" src={SHOT_PRICE_A} alt="Push-уведомление клиенту" cls="a" lazy />
-              <Shot k="imgB" src={SHOT_PRICE_B} alt="Дашборд с заказами и статистикой" cls="b" lazy />
+              <Shot sizes="(max-width: 760px) 45vw, 270px" k="imgA" src={SHOT_PRICE_A} alt="Push-уведомление клиенту" cls="a" lazy />
+              <Shot sizes="(max-width: 760px) 45vw, 270px" k="imgB" src={SHOT_PRICE_B} alt="Дашборд с заказами и статистикой" cls="b" lazy />
             </div>
           </Rise>
           <Rise className="extra" delay={220}>
@@ -2649,7 +2662,7 @@ const Foot = () => (
     <div className="shell">
       <div className="brand">
         <a href="#top" aria-label="Наверх, к началу страницы">
-          <img className="logo" src={LOGO} alt="AppForse" />
+          <img className="logo" src={LOGO} alt="AppForse" width="420" height="221" />
         </a>
         <p className="tag"><T k="footTag">Мобильная торговля под вашим брендом</T></p>
       </div>
@@ -3984,11 +3997,13 @@ const AdminApp = () => {
    Иначе текст на долю секунды появляется запасным шрифтом и «прыгает»,
    или сначала мелькает старый текст. Дольше 2,5 с не ждём — на плохом
    интернете лучше показать страницу как есть, а правки подставить следом. */
+/* ждём кириллицу и латиницу первого экрана; ₽ живёт в отдельном файле
+   шрифта и догружается следом — ради него держать страницу пустой незачем */
 const SITE_FONTS = [
-  ['400 16px Manrope', 'Ая Az ₽'],
+  ['400 16px Manrope', 'Ая Az'],
   ['500 16px Oswald',  'Ая Az'],
-  ['600 16px Oswald',  'Ая Az ₽'],
-  ['700 16px Oswald',  'Ая Az ₽'],
+  ['600 16px Oswald',  'Ая Az'],
+  ['700 16px Oswald',  'Ая Az'],
 ];
 /*ADMIN:START*/
 if (IS_ADMIN) {
@@ -4007,7 +4022,10 @@ if (IS_ADMIN) {
     loadedPage = p;
     if (p && window.__setPage) window.__setPage(p);
   });
-  Promise.race([Promise.all([fontsReady, contentReady]), new Promise(r => setTimeout(r, 2500))])
+  /* правки из админки ждём коротко: на медленном интернете лучше показать
+     страницу сразу, а правки подставить, как только ответит сервер */
+  const contentSoon = Promise.race([contentReady, new Promise(r => setTimeout(r, 900))]);
+  Promise.race([Promise.all([fontsReady, contentSoon]), new Promise(r => setTimeout(r, 2500))])
     .then(() => ReactDOM.createRoot(document.getElementById('root'))
       .render(<App initial={loadedPage || defaultPage()} />));
 }
