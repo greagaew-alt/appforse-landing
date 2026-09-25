@@ -54,7 +54,8 @@ __HERO_PRELOAD__
   --paper:      #FFFFFF;
   --muted:      #929292;   /* приглушённый текст на плашке */
   --muted-lo:   #A9A9BA;   /* текст на тёмном */
-  --muted-hi:   #6E6E7A;   /* мелкие подписи */
+  --muted-hi:   #82828F;   /* мелкие подписи: светлее прежнего #6E6E7A — тот давал
+                              контраст 3.86 при норме 4.5, подписи в подвале не читались */
   --red:        #E8243C;
   --red-dk:     #B3182C;
   --red-lt:     #FF5468;
@@ -1830,7 +1831,7 @@ const PhoneField = ({ err, onFix }) => {
     <div className="field">
       <div className="phone">
         <span className="ghost" aria-hidden="true"><i>{shown}</i>{tail}</span>
-        <input name="phone" type="tel" inputMode="tel" autoComplete="tel"
+        <input name="phone" type="tel" inputMode="tel" autoComplete="tel" aria-label="Телефон"
                className={err ? 'bad' : ''} value={val} onChange={change}
                onKeyDown={keyDown} onInvalid={e => e.preventDefault()}
                onBlur={() => { if (!val) setVal('+7 '); }} />
@@ -2959,10 +2960,12 @@ const Page = ({ page }) => {
   return (
     <React.Fragment>
       <BlockCtx.Provider value={chrome}><Top /></BlockCtx.Provider>
-      {page.blocks.filter(b => !b.hidden).map(b => {
-        const B = BLOCKS[b.type].C;
-        return <BlockCtx.Provider key={b.id} value={b}><B /></BlockCtx.Provider>;
-      })}
+      <main>
+        {page.blocks.filter(b => !b.hidden).map(b => {
+          const B = BLOCKS[b.type].C;
+          return <BlockCtx.Provider key={b.id} value={b}><B /></BlockCtx.Provider>;
+        })}
+      </main>
       <BlockCtx.Provider value={chrome}><Foot /></BlockCtx.Provider>
     </React.Fragment>
   );
@@ -3940,7 +3943,7 @@ const Admin = ({ onLogout }) => {
             <div className={'adm-page' + (editing ? ' adm-edit' : '')}>
               <ParticleField />
               <BlockCtx.Provider value={chrome}><Top /></BlockCtx.Provider>
-              {blocksView}
+              <main>{blocksView}</main>
               {editing && (
                 <div className="adm-end" data-adm-ui>
                   <button type="button" className="adm-btn" onClick={() => setLib(page.blocks.length)}><AI n="plus" />Добавить блок в конец</button>
